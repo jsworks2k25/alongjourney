@@ -1,4 +1,4 @@
-## 🎓 docs/Reflection.md — 项目反思 Final Reflection
+## 项目反思 Final Reflection
 
 ### 1. 初衷回顾 / Initial Goal
 - 最初的目标与愿景：
