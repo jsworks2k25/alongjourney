@@ -1,4 +1,4 @@
-## 🛠 docs/Devlog.md — 开发日志 Development Log
+## 开发日志 Development Log
 
 ### 日志格式 / Entry Format
 #### YYYY-MM-DD
