@@ -3,7 +3,8 @@
 ## 时间线 / Development Timeline
 
 ### 灵感与策划：
-
+#### 2025-06-09
+Document drafts created.
 
 ### 原型阶段：
 
