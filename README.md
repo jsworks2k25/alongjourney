@@ -1,11 +1,11 @@
-# 🎮 项目名称 / Project Title
+# 项目名称 / Project Title
 
 > 一款使用 Unity 引擎开发的独立游戏，融合原创机制与哲学史述。
 > An indie game developed in Unity, combining original gameplay mechanics with philosophical storytelling.
 
 ---
 
-## 📌 游戏简介 / Game Overview
+## 游戏简介 / Game Overview
 
 * **类型 / Genre**：平台跳跃 / 史述解谜 / 模拟系统（可根据项目修改）
 * **玩法核心 / Core Gameplay**：玩家通过【修改规则 / 操控空间 / 决策分支】影响世界
@@ -14,22 +14,22 @@
 
 ---
 
-## ✨ 游戏特色 / Key Features
+## 游戏特色 / Key Features
 
-* 🧠 融合哲理的游戏机制与史述
+* 融合哲理的游戏机制与史述
   Deeply integrated philosophical mechanics and narrative
-* 🎲 原创交互系统（如规则修改、身份变换）
+* 原创交互系统（如规则修改、身份变换）
   Original interactive systems such as rule-editing or identity shifts
-* 🎨 独立美术风格与音效设计
+* 独立美术风格与音效设计
   Custom visual style and sound design
-* 🛠️ 完全由 Unity 引擎驱动，强调系统架构
+* 完全由 Unity 引擎驱动，强调系统架构
   Fully Unity-powered, with an emphasis on system architecture
 
 ---
 
-## 📅 开发进度 / Development Timeline
+## 开发进度 / Development Timeline
 
-### ✅ 阶段一：灵感与策划 / Phase 1: Ideation & Planning
+### 阶段一：灵感与策划 / Phase 1: Ideation & Planning
 
 * [x] 明确核心概念与世界观
   Define game concept and worldview
@@ -38,7 +38,7 @@
 * [x] 确立哲学议题与表达方式
   Define core philosophical theme
 
-### 🧪 阶段二：原型开发 / Phase 2: Prototype Development
+### 阶段二：原型开发 / Phase 2: Prototype Development
 
 * [ ] 实现基础操作与场景搭建
   Implement basic movement and environment
@@ -47,7 +47,7 @@
 * [ ] 初步用户测试与反馈
   Conduct initial playtests
 
-### 🏗️ 阶段三：系统开发 / Phase 3: Core Systems
+### 阶段三：系统开发 / Phase 3: Core Systems
 
 * [ ] 搭建 UI / 存档 / 剧情模块
   Develop UI, Save System, Narrative Tools
@@ -56,7 +56,7 @@
 * [ ] 整合美术资源与音效
   Integrate art and audio assets
 
-### 🧼 阶段四：优化与测试 / Phase 4: Polish & Testing
+### 阶段四：优化与测试 / Phase 4: Polish & Testing
 
 * [ ] 多轮内部测试与调优
   Conduct multiple playtest rounds
@@ -65,7 +65,7 @@
 * [ ] 增强游戏引导与手感
   Enhance onboarding and UX
 
-### 🚀 阶段五：发布与展示 / Phase 5: Release & Showcase
+### 阶段五：发布与展示 / Phase 5: Release & Showcase
 
 * [ ] 上传到 Itch.io / Steam（视情况）
   Publish to Itch.io / Steam
@@ -76,7 +76,7 @@
 
 ---
 
-## ⚙️ 技术栏 / Tech Stack
+## 技术栏 / Tech Stack
 
 | 类型 / Type          | 工具 / Tool                        |
 | ------------------ | -------------------------------- |
@@ -88,20 +88,20 @@
 
 ---
 
-## 🧐 面向招生官的亮点 / Highlights for Admissions
+## 面向招生官的亮点 / Highlights for Admissions
 
-* 🔧 **编程能力 / Technical Proficiency**：
+* **编程能力 / Technical Proficiency**：
   原创机制、模块化结构、数据驱动开发
-* 🤩 **创造表达 / Creative Expression**：
+* **创造表达 / Creative Expression**：
   将复杂主题转化为互动体验
-* 🗂️ **项目管理 / Project Management**：
+* **项目管理 / Project Management**：
   明确分工、按阶段开发、使用版本控制
-* 📚 **反思与文档 / Reflection & Documentation**：
+* **反思与文档 / Reflection & Documentation**：
   完整记录开发过程，表达开发理念与挑战
 
 ---
 
-## 📄 附加资源 / Additional Docs
+## 附加资源 / Additional Docs
 
 * [`docs/GDD.md`](./docs/GDD.md)：游戏设计文档 / Game Design Document
 * [`docs/Devlog.md`](./docs/Devlog.md)：开发日志 / Development Log
@@ -109,7 +109,7 @@
 
 ---
 
-## 📬 联系方式 / Contact
+## 联系方式 / Contact
 
 * 开发者 / Developers：Stan & Jack
 * 邮箱 / Email：[youremail@example.com](mailto:youremail@example.com)
