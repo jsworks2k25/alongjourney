@@ -5,6 +5,13 @@
 
 ---
 
+## 游戏设计文档 / Game Design Document
+* [`docs/GDD.md`](./docs/GDD.md)
+## 开发日志 / Development Log
+* [`docs/Devlog.md`](./docs/Devlog.md)
+
+---
+
 ## 游戏简介 / Game Overview
 
 * **类型 / Genre**：平台跳跃 / 史述解谜 / 模拟系统（可根据项目修改）
