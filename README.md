@@ -5,10 +5,8 @@
 
 ---
 
-
-## 链接！
-### 游戏设计文档 / Game Design Document [`docs/GDD.md`](./docs/GDD.md)
-### 开发日志 / Development Log [`docs/Devlog.md`](./docs/Devlog.md)
+## 游戏设计文档 / Game Design Document [`docs/GDD.md`](./docs/GDD.md)
+## 开发日志 / Development Log [`docs/Devlog.md`](./docs/Devlog.md)
 
 ---
 
