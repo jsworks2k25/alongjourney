@@ -1,4 +1,4 @@
-## 📘 docs/GDD.md — 游戏设计文档 Game Design Document (GDD)
+## 游戏设计文档 Game Design Document (GDD)
 
 ### 1. 游戏概述 / Game Overview
 - 游戏名称：
