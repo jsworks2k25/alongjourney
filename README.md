@@ -5,6 +5,10 @@
 
 ---
 
+## GOOGLE DRIVE: https://drive.google.com/drive/folders/1JxQtAn7uOHykelvt85-YNNnM-vz1oXzR
+
+---
+
 ## 游戏设计文档 / Game Design Document [`docs/GDD.md`](./docs/GDD.md)
 ## 开发日志 / Development Log [`docs/Devlog.md`](./docs/Devlog.md)
 
