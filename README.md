@@ -6,8 +6,7 @@
 ---
 
 ## GOOGLE DRIVE: 
-[`https://drive.google.com/drive/folders/1JxQtAn7uOHykelvt85-YNNnM-vz1oXzR`]
-
+[`谷歌共享`](https://drive.google.com/drive/folders/1JxQtAn7uOHykelvt85-YNNnM-vz1oXzR)
 ---
 
 ## 游戏设计文档 / Game Design Document [`docs/GDD.md`](./docs/GDD.md)
