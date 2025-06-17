@@ -121,7 +121,10 @@
 
 ## 联系方式 / Contact
 
-* 开发者 / Developers：Stan & Jack
+* 开发者 / Developers：
+  Jack wan
+  Stan Wan
+  Qijiao Liu
 * 邮箱 / Email：[youremail@example.com](mailto:youremail@example.com)
 * 项目博客 / Devlog Blog：\[链接 / Link]
 
