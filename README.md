@@ -121,11 +121,11 @@
 
 ## 联系方式 / Contact
 
-* 开发者 / Developers：
-* **Jack wan**
-* **Stan Wan**
-* **Qijia Liu**
-* 邮箱 / Email：[youremail@example.com](mailto:youremail@example.com)
+### 开发者 / Developers：
+* Jack wan
+* Stan Wan
+* Qijia Liu
+### 邮箱 / Email：[youremail@example.com](mailto:youremail@example.com)
 * 项目博客 / Devlog Blog：\[链接 / Link]
 
 ---
