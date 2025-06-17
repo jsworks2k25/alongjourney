@@ -121,12 +121,13 @@
 
 ## 联系方式 / Contact
 
-* 开发者 / Developers：
-  Jack Wan, 
-  Stan Wan,
-  Qijia Liu
-* 邮箱 / Email：[stanwan375@gmail.com](mailto:stawnan375@gmail.com)
-* 项目博客 / Devlog Blog：\[链接 / Link]
+### 开发者 / Developers：
+* Jack Wan: Script, AI design, musics & sound effects
+* Qijia Liu: Mechanics, Gameplay design
+* Stan Wan: Scripting assistance, Artworks, UI
+
+### 邮箱 / Email：[stanwan375@gmail.com](mailto:stawnan375@gmail.com)
+### 项目博客 / Devlog Blog：\[链接 / Link]
 
 ---
 
