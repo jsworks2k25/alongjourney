@@ -8,7 +8,9 @@ Document drafts created.
 #### 2025-06-16
 整理了所玩过的游戏的机制，讨论了游戏玩法设计灵感，搭建项目制作环境。
 Organized the mechanics of the games played, discussed gameplay design inspirations, and built the project production environment.
-
+#### 2025-07-03
+敲定了游戏的雏形，制定游戏最初机制与目标：通过搭建路线运送物资。
+The prototype of the game was finalized to develop the initial mechanics and objectives of the game: transporting supplies by building routes.
 ### 原型阶段：
 
 
