@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=4 uid="uid://du4uisvl0wd7j"]
+
+[ext_resource type="Texture2D" uid="uid://sbgi8is1elfp" path="res://Sprites/grass.png" id="1_ncet0"]
+[ext_resource type="Texture2D" uid="uid://cwflcpmni1ck8" path="res://Sprites/empty.png" id="2_2tjqw"]
+[ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://player/player.tscn" id="3_2tjqw"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6xd2x"]
+texture = ExtResource("1_ncet0")
+texture_region_size = Vector2i(32, 32)
+0:0/next_alternative_id = 2
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -8, -16, 0, 0, 8, 16, 0)
+0:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u0ttf"]
+texture = ExtResource("2_2tjqw")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_gp2vx"]
+tile_shape = 1
+tile_size = Vector2i(32, 16)
+physics_layer_0/collision_layer = 1
+sources/1 = SubResource("TileSetAtlasSource_6xd2x")
+sources/2 = SubResource("TileSetAtlasSource_u0ttf")
+
+[node name="Node2D" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+texture_filter = 1
+tile_map_data = PackedByteArray("AAD/////AQAAAAAAAAAAAP7/AQAAAAAAAAAAAP//AQAAAAAAAAABAP7/AQAAAAAAAAAAAP3/AQAAAAAAAAD///7/AQAAAAAAAAD///3/AQAAAAAAAAAAAPz/AQAAAAAAAAD///v/AQAAAAAAAAD///z/AQAAAAAAAAD+//3/AQAAAAAAAAAAAAAAAQAAAAAAAAD+//7/AQAAAAAAAAD+////AQAAAAAAAAD//wAAAQAAAAAAAAD//wEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAEAAQAAAAAAAAABAAAAAQAAAAAAAAABAP//AQAAAAAAAAACAP7/AQAAAAAAAAABAP3/AQAAAAAAAAABAPz/AQAAAAAAAAAAAPv/AQAAAAAAAAAAAPr/AQAAAAAAAAD///n/AQAAAAAAAAD///r/AQAAAAAAAAD+//v/AQAAAAAAAAD+//z/AQAAAAAAAAD9//3/AQAAAAAAAAD9//7/AQAAAAAAAAD9////AQAAAAAAAAD+/wAAAQAAAAAAAAD+/wEAAQAAAAAAAAD//wIAAQAAAAAAAAD//wMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAMAAQAAAAAAAAABAAIAAQAAAAAAAAABAAEAAQAAAAAAAAACAAAAAQAAAAAAAAACAP//AQAAAAAAAAD8////AQAAAAAAAAD9/wAAAQAAAAAAAAD9/wEAAQAAAAAAAAD+/wIAAQAAAAAAAAD+/wMAAQAAAAAAAAD//wQAAQAAAAAAAAD//wUAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_gp2vx")
+
+[node name="player" parent="." instance=ExtResource("3_2tjqw")]
+
+[node name="Camera2D" type="Camera2D" parent="player"]
+offset = Vector2(0, -10)
+zoom = Vector2(3, 3)
