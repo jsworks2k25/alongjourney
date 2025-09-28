@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="js_game_project"
+<<<<<<< HEAD
 run/main_scene="uid://du4uisvl0wd7j"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
@@ -18,3 +19,7 @@ config/icon="res://icon.svg"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
+=======
+config/features=PackedStringArray("4.5", "Forward Plus")
+config/icon="res://icon.svg"
+>>>>>>> 1eacbb7f02d51e51acdfcc40a7630bdfe253f175
