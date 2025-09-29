@@ -1,39 +1,98 @@
-# 项目名称 / Project Title
+# A Long Journey
 
-> 一款使用？？？引擎开发的独立游戏，融合原创机制与哲学史述。
-> An indie game developed in ？？？, combining original gameplay mechanics with philosophical storytelling.
+> An 2D indie game under development, it would combine elements of RPG, Rogue-like and strategy. We hope the AI will be the highlight of our project 
+
+---
+## Git 使用指南 - tt可以看这（
+
+> 虽然大部分时候可以用GitHub Desktop，但是有时候还是指令更靠谱一点
+
+打开git bash（git的终端， 就是输指令的地方）
+* 右键选中文件夹 - Git Bash Here
+* 或者在windows搜索Git Bash - 打开后输入
+```bash
+cd Users/jackwan/alongjouney/ # 这是一个例子，替换成你本地的文件路径
+```
+### 🔹 每次开始工作前
+```bash
+# 确保在 dev 分支
+git checkout dev
+
+# 获取远程最新进度
+git pull origin dev
+
+# 获取到本地文件出了点问题，新建个文件夹到GitHub - Code - Copy URL
+git clone https://github.com/jsworks2k25/alongjourney.git
+```
 
 ---
 
-## 云文档链接 [`GOOGLE DRIVE`](https://drive.google.com/drive/folders/1JxQtAn7uOHykelvt85-YNNnM-vz1oXzR)
-### 笔记在这里：[`NOTES`](https://docs.google.com/document/d/147iZcOra20UWhKqCKJOMAbO4X2SaxZbts095-1C1R3A/edit?usp=drive_link) 
+### 🔹 提交更改
+```bash
+# 查看修改了哪些文件
+git status
+
+# 添加所有更改到暂存区
+git add -A
+
+# 提交更改：-m 后面是commit message，记得一定加引号
+git commit -m "feat: 添加玩家移动场景"
+```
 
 ---
 
-## 游戏设计文档 / Game Design Document [`docs/GDD.md`](./docs/GDD.md)
-## 开发日志 / Development Log [`docs/Devlog.md`](./docs/Devlog.md)
+### 🔹 推送到远程
+```bash
+# 推送到 dev 分支
+git push origin dev
+```
 
 ---
 
-## 游戏简介 / Game Overview
+### 🔹 创建功能分支（推荐做法）
+如果要做新功能或大修改：  
+```bash
+# 从 dev 创建新分支
+git checkout dev
+git pull origin dev
+git checkout -b feature/jump-mechanic
 
-* **类型 / Genre**：平台跳跃 / 史述解谜 / 模拟系统（可根据项目修改）
-* **玩法核心 / Core Gameplay**：玩家通过【修改规则 / 操控空间 / 决策分支】影响世界
-* **哲学主题 / Philosophical Theme**：关于【自由与控制、记忆与身份、算法与正义】
-* **目标平台 / Target Platforms**：PC / Mac / Web / Mobile（可选）
+# 开发并提交后推送
+git push origin feature/jump-mechanic
+```
+然后在 GitHub 上发起 Pull Request 合并回 `dev`。  
 
 ---
 
-## 游戏特色 / Key Features
+### 🔹 常见问题
+- **忘记切分支就在 main 上开发了**  
+  ```bash
+  git checkout -b hotfix/move-from-main
+  git push origin hotfix/move-from-main
+  ```
+  然后用 PR 合并。  
 
-* 融合哲理的游戏机制与史述
-  Deeply integrated philosophical mechanics and narrative
-* 原创交互系统（如规则修改、身份变换）
-  Original interactive systems such as rule-editing or identity shifts
-* 独立美术风格与音效设计
-  Custom visual style and sound design
-* 完全由 Unity 引擎驱动，强调系统架构
-  Fully Unity-powered, with an emphasis on system architecture
+- **远程和本地冲突**  
+  ```bash
+  git pull origin dev
+  # 按提示解决冲突，然后：
+  git add -A
+  git commit
+  git push origin dev
+  ```
+
+- **彻底覆盖远程分支（需小心！）**  
+  如果确认本地版本才是对的：  
+  ```bash
+  git push origin dev --force
+  ```
+
+---
+
+## 链接 / Links
+* 云文档链接 [`GOOGLE DRIVE`](https://drive.google.com/drive/folders/1JxQtAn7uOHykelvt85-YNNnM-vz1oXzR)
+* 游戏设计文档 / Game Design Document [`docs/GDD.md`](./docs/GDD.md)
+* 开发日志 / Development Log [`docs/Devlog.md`](./docs/Devlog.md)
 
 ---
 
@@ -127,7 +186,6 @@
 * Stan Wan: Scripting assistance, Artworks, UI
 
 ### 邮箱 / Email：[stanwan375@gmail.com](mailto:stawnan375@gmail.com)
-### 项目博客 / Devlog Blog：\[链接 / Link]
 
 ---
 
