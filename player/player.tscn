@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bo677htw67u60"]
+
+[ext_resource type="Script" uid="uid://ck10uoissx2rp" path="res://player/player.gd" id="1_rkbax"]
+[ext_resource type="Texture2D" uid="uid://b726vfn2sui3m" path="res://player/sunknight.png" id="2_g1dw6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yw30f"]
+size = Vector2(8, 2)
+
+[node name="player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_rkbax")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_yw30f")
+disabled = true
+
+[node name="Sunknight" type="Sprite2D" parent="."]
+z_index = 1
+texture_filter = 1
+position = Vector2(0, -14)
+texture = ExtResource("2_g1dw6")
