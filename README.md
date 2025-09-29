@@ -1,4 +1,4 @@
-# A Long Journey
+# A LONG JOURNEY
 
 > An 2D indie game under development, it would combine elements of RPG, Rogue-like and strategy. We hope the AI will be the highlight of our project 
 
@@ -13,7 +13,7 @@
 ```bash
 cd Users/jackwan/alongjouney/ # 这是一个例子，替换成你本地的文件路径
 ```
-### 🔹 每次开始工作前
+### 每次开始工作前
 ```bash
 # 确保在 dev 分支
 git checkout dev
@@ -27,7 +27,7 @@ git clone https://github.com/jsworks2k25/alongjourney.git
 
 ---
 
-### 🔹 提交更改
+### 提交更改
 ```bash
 # 查看修改了哪些文件
 git status
@@ -41,7 +41,7 @@ git commit -m "feat: 添加玩家移动场景"
 
 ---
 
-### 🔹 推送到远程
+### 推送到远程
 ```bash
 # 推送到 dev 分支
 git push origin dev
@@ -49,7 +49,7 @@ git push origin dev
 
 ---
 
-### 🔹 创建功能分支（推荐做法）
+### 创建功能分支（推荐做法）
 如果要做新功能或大修改：  
 ```bash
 # 从 dev 创建新分支
@@ -64,15 +64,15 @@ git push origin feature/jump-mechanic
 
 ---
 
-### 🔹 常见问题
-- **忘记切分支就在 main 上开发了**  
+### 常见问题
+**忘记切分支就在 main 上开发了**  
   ```bash
   git checkout -b hotfix/move-from-main
   git push origin hotfix/move-from-main
   ```
   然后用 PR 合并。  
 
-- **远程和本地冲突**  
+**远程和本地冲突**  
   ```bash
   git pull origin dev
   # 按提示解决冲突，然后：
@@ -81,7 +81,7 @@ git push origin feature/jump-mechanic
   git push origin dev
   ```
 
-- **彻底覆盖远程分支（需小心！）**  
+**彻底覆盖远程分支（需小心！）**  
   如果确认本地版本才是对的：  
   ```bash
   git push origin dev --force
