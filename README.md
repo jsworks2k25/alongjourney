@@ -25,8 +25,6 @@ git pull origin dev
 git clone https://github.com/jsworks2k25/alongjourney.git
 ```
 
----
-
 ### 提交更改
 ```bash
 # 查看修改了哪些文件
@@ -39,15 +37,12 @@ git add -A
 git commit -m "feat: 添加玩家移动场景"
 ```
 
----
 
 ### 推送到远程
 ```bash
 # 推送到 dev 分支
 git push origin dev
 ```
-
----
 
 ### 创建功能分支（推荐做法）
 如果要做新功能或大修改：  
@@ -61,8 +56,6 @@ git checkout -b feature/jump-mechanic
 git push origin feature/jump-mechanic
 ```
 然后在 GitHub 上发起 Pull Request 合并回 `dev`。  
-
----
 
 ### 常见问题
 **忘记切分支就在 main 上开发了**  
@@ -142,31 +135,6 @@ git push origin feature/jump-mechanic
   Release devlogs and final reflection
 * [ ] 准备展示资料与宣传片
   Prepare presentation and trailer
-
----
-
-## 技术栏 / Tech Stack
-
-| 类型 / Type          | 工具 / Tool                        |
-| ------------------ | -------------------------------- |
-| 引擎 / Engine        | Unity (C#)                       |
-| 图像 / Graphics      | Aseprite / Photoshop / Blender   |
-| 音效 / Audio         | Bfxr / Audacity / 自录             |
-| 项目管理 / PM          | GitHub Projects / Trello         |
-| 协作 / Collaboration | Git + GitHub / Notion / Markdown |
-
----
-
-## 面向招生官的亮点 / Highlights for Admissions
-
-* **编程能力 / Technical Proficiency**：
-  原创机制、模块化结构、数据驱动开发
-* **创造表达 / Creative Expression**：
-  将复杂主题转化为互动体验
-* **项目管理 / Project Management**：
-  明确分工、按阶段开发、使用版本控制
-* **反思与文档 / Reflection & Documentation**：
-  完整记录开发过程，表达开发理念与挑战
 
 ---
 
