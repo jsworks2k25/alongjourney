@@ -5,9 +5,9 @@
 ---
 
 ## 链接 / Links
-[`Assets`](https://drive.google.com/drive/folders/1W9W6cMNDFmN9C8jCZCxo74k9-5rACcPb) - 素材 / Assets 
-[`docs/GDD.md`](./docs/GDD.md) - 游戏设计文档 / Game Design Document 
-[`docs/Devlog.md`](./docs/Devlog.md) - 开发日志 / Development Log 
+[`Assets`](https://drive.google.com/drive/folders/1W9W6cMNDFmN9C8jCZCxo74k9-5rACcPb) - 素材 / Assets  
+[`docs/GDD.md`](./docs/GDD.md) - 游戏设计文档 / Game Design Document  
+[`docs/Devlog.md`](./docs/Devlog.md) - 开发日志 / Development Log   
 
 
 ---
