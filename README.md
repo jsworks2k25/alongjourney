@@ -5,9 +5,9 @@
 ---
 
 ## 链接 / Links
-* [`Assets`](https://drive.google.com/drive/folders/1W9W6cMNDFmN9C8jCZCxo74k9-5rACcPb) - 素材 / Assets 
-* [`docs/GDD.md`](./docs/GDD.md) - 游戏设计文档 / Game Design Document 
-* [`docs/Devlog.md`](./docs/Devlog.md) - 开发日志 / Development Log 
+[`Assets`](https://drive.google.com/drive/folders/1W9W6cMNDFmN9C8jCZCxo74k9-5rACcPb) - 素材 / Assets 
+[`docs/GDD.md`](./docs/GDD.md) - 游戏设计文档 / Game Design Document 
+[`docs/Devlog.md`](./docs/Devlog.md) - 开发日志 / Development Log 
 
 
 ---
@@ -126,9 +126,8 @@ git push origin feature/jump-mechanic
 ### 邮箱 / Email：[stanwan375@gmail.com](mailto:stawnan375@gmail.com)
 
 ### 开发者 / Developers：
-* Jack Wan: Script, AI design, musics & sound effects
-* Qijia Liu: Mechanics, Gameplay design
-* Stan Wan: Scripting assistance, Artworks, UI
+* Jack: Script, AI design, musics & sound effects
+* Stan: Scripting assistance, Artworks, UI
 
 ---
 
