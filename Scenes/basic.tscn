@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=4 uid="uid://du4uisvl0wd7j"]
 
-[ext_resource type="Texture2D" uid="uid://sbgi8is1elfp" path="res://Sprites/grass.png" id="1_ncet0"]
-[ext_resource type="Texture2D" uid="uid://cwflcpmni1ck8" path="res://Sprites/empty.png" id="2_2tjqw"]
-[ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://player/player.tscn" id="3_2tjqw"]
+[ext_resource type="Texture2D" uid="uid://sbgi8is1elfp" path="res://sprites/grass.png" id="1_ncet0"]
+[ext_resource type="Texture2D" uid="uid://cwflcpmni1ck8" path="res://sprites/empty.png" id="2_2tjqw"]
+[ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://scenes/player.tscn" id="3_2tjqw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6xd2x"]
 texture = ExtResource("1_ncet0")
@@ -27,14 +27,15 @@ sources/2 = SubResource("TileSetAtlasSource_u0ttf")
 
 [node name="Node2D" type="Node2D"]
 
+[node name="player" parent="." instance=ExtResource("3_2tjqw")]
+z_index = 1
+
+[node name="Camera2D" type="Camera2D" parent="player"]
+offset = Vector2(0, -10)
+zoom = Vector2(3, 3)
+
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 y_sort_enabled = true
 texture_filter = 1
 tile_map_data = PackedByteArray("AAD/////AQAAAAAAAAAAAP7/AQAAAAAAAAAAAP//AQAAAAAAAAABAP7/AQAAAAAAAAAAAP3/AQAAAAAAAAD///7/AQAAAAAAAAD///3/AQAAAAAAAAAAAPz/AQAAAAAAAAD///v/AQAAAAAAAAD///z/AQAAAAAAAAD+//3/AQAAAAAAAAAAAAAAAQAAAAAAAAD+//7/AQAAAAAAAAD+////AQAAAAAAAAD//wAAAQAAAAAAAAD//wEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAEAAQAAAAAAAAABAAAAAQAAAAAAAAABAP//AQAAAAAAAAACAP7/AQAAAAAAAAABAP3/AQAAAAAAAAABAPz/AQAAAAAAAAAAAPv/AQAAAAAAAAAAAPr/AQAAAAAAAAD///n/AQAAAAAAAAD///r/AQAAAAAAAAD+//v/AQAAAAAAAAD+//z/AQAAAAAAAAD9//3/AQAAAAAAAAD9//7/AQAAAAAAAAD9////AQAAAAAAAAD+/wAAAQAAAAAAAAD+/wEAAQAAAAAAAAD//wIAAQAAAAAAAAD//wMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAMAAQAAAAAAAAABAAIAAQAAAAAAAAABAAEAAQAAAAAAAAACAAAAAQAAAAAAAAACAP//AQAAAAAAAAD8////AQAAAAAAAAD9/wAAAQAAAAAAAAD9/wEAAQAAAAAAAAD+/wIAAQAAAAAAAAD+/wMAAQAAAAAAAAD//wQAAQAAAAAAAAD//wUAAQAAAAAAAAD//wcAAQAAAAAAAAAAAAYAAQAAAAAAAAAAAAUAAQAAAAAAAAABAAQAAQAAAAAAAAABAAMAAQAAAAAAAAACAAIAAQAAAAAAAAACAAEAAQAAAAAAAAADAAAAAQAAAAAAAAD//wYAAQAAAAAAAAD+/wUAAQAAAAAAAAD+/wQAAQAAAAAAAAD9/wMAAQAAAAAAAAD9/wIAAQAAAAAAAAD8/wEAAQAAAAAAAAD8/wAAAQAAAAAAAAD7////AQAAAAAAAAD8//7/AQAAAAAAAAD8//3/AQAAAAAAAAD9//z/AQAAAAAAAAD9//v/AQAAAAAAAAD+//r/AQAAAAAAAAD+//n/AQAAAAAAAAD///j/AQAAAAAAAAD///f/AQAAAAAAAAAAAPj/AQAAAAAAAAAAAPn/AQAAAAAAAAABAPr/AQAAAAAAAAABAPv/AQAAAAAAAAACAPz/AQAAAAAAAAACAP3/AQAAAAAAAAADAP7/AQAAAAAAAAADAP//AQAAAAAAAAA=")
 tile_set = SubResource("TileSet_gp2vx")
-
-[node name="player" parent="." instance=ExtResource("3_2tjqw")]
-
-[node name="Camera2D" type="Camera2D" parent="player"]
-offset = Vector2(0, -10)
-zoom = Vector2(3, 3)
