@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("js_game_project")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c867e8ce6d6700d60de1803e7d7841cd1d7f160")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+271e899051548e166fec7b216c50146448ccc322")]
 [assembly: System.Reflection.AssemblyProductAttribute("js_game_project")]
 [assembly: System.Reflection.AssemblyTitleAttribute("js_game_project")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
