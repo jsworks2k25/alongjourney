@@ -4,7 +4,7 @@ using System;
 public partial class Movement : CharacterBody2D
 {
     [Export]
-    public int Speed { get; set; } = 150;
+    public int Speed { get; set; } = 100;
 
     private AnimatedSprite2D body;
     private Vector2 isoVec = new Vector2(1f, 0.5f);

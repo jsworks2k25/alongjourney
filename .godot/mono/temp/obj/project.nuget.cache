@@ -1,15 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "LtOeTKLtW9c=",
+  "dgSpecHash": "03uTb1fG0lw=",
   "success": true,
   "projectFilePath": "C:\\Users\\stanw\\Godot_Workspace\\alongjourney\\js_game_project.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\stanw\\.nuget\\packages\\godot.sourcegenerators\\4.5.0\\godot.sourcegenerators.4.5.0.nupkg.sha512",
     "C:\\Users\\stanw\\.nuget\\packages\\godotsharp\\4.5.0\\godotsharp.4.5.0.nupkg.sha512",
-    "C:\\Users\\stanw\\.nuget\\packages\\godotsharpeditor\\4.5.0\\godotsharpeditor.4.5.0.nupkg.sha512",
-    "C:\\Users\\stanw\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.20\\microsoft.netcore.app.ref.8.0.20.nupkg.sha512",
-    "C:\\Users\\stanw\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.20\\microsoft.windowsdesktop.app.ref.8.0.20.nupkg.sha512",
-    "C:\\Users\\stanw\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.20\\microsoft.aspnetcore.app.ref.8.0.20.nupkg.sha512"
+    "C:\\Users\\stanw\\.nuget\\packages\\godotsharpeditor\\4.5.0\\godotsharpeditor.4.5.0.nupkg.sha512"
   ],
   "logs": []
 }
