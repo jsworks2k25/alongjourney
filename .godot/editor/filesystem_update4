@@ -1,2 +1,1 @@
-res://scripts/Player.cs
-res://scripts/Movement.cs
+res://scenes/basic.tscn
