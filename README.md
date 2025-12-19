@@ -38,7 +38,7 @@ git clone https://github.com/jsworks2k25/alongjourney.git
 git status
 
 # 添加所有更改到暂存区
-git add -A
+git add .
 
 # 提交更改：-m 后面是commit message，记得一定加引号
 git commit -m "feat: 添加玩家移动场景"

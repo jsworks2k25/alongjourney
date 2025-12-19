@@ -3,7 +3,7 @@
 .export/                   # 导出缓存 (Godot 4.3+)
 .godot/                    # 本地项目缓存
 
-# Build outputs
+# Build outputs (通用)
 *.exe
 *.apk
 *.aab
@@ -21,3 +21,20 @@ Thumbs.db
 # User-specific Godot editor settings
 .editor_settings-3.tres
 .editor_settings-4.tres
+
+# C# 脚本的临时 UID 文件
+*.cs.uid
+
+# Visual Studio / IDE 生成的临时配置文件夹
+.vs/
+.vscode/
+.idea/
+
+# C# 编译产生的二进制文件和中间文件
+bin/
+obj/
+.mono/
+
+# 如果你不需要上传解决方案文件 (通常保留 .sln 和 .csproj 是好的，但 *.user 必须忽略)
+*.sln.DotSettings.user
+*.csproj.user

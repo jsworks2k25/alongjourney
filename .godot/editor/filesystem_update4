@@ -1,7 +1,3 @@
+res://scripts/TranslucentObstacle.cs
 res://scripts/Player.cs
 res://scripts/Movement.cs
-res://scenes/Basic.tscn
-res://scenes/Rock.tscn
-res://scenes/basic.tscn
-res://scripts/TranslucentObstacle.cs
-res://scenes/rock.tscn
