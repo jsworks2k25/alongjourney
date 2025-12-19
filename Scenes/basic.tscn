@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=4 uid="uid://du4uisvl0wd7j"]
 
-[ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://Sprites/spritesheet.png" id="1_ampw4"]
-[ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://Scenes/player.tscn" id="3_2tjqw"]
-[ext_resource type="Texture2D" uid="uid://dpxrbr5nc6c1b" path="res://Sprites/empty.png" id="3_dfl7p"]
-[ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://Scenes/rock.tscn" id="4_6xd2x"]
+[ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://sprites/spritesheet.png" id="1_ampw4"]
+[ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://scenes/player.tscn" id="3_2tjqw"]
+[ext_resource type="Texture2D" uid="uid://dpxrbr5nc6c1b" path="res://sprites/empty.png" id="3_dfl7p"]
+[ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://scenes/rock.tscn" id="4_dfl7p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dfl7p"]
 texture = ExtResource("1_ampw4")
@@ -282,13 +282,15 @@ tile_set = SubResource("TileSet_gp2vx")
 [node name="ObjectLayer" type="Node2D" parent="."]
 y_sort_enabled = true
 
-[node name="player" parent="ObjectLayer" instance=ExtResource("3_2tjqw")]
+[node name="Player" parent="ObjectLayer" instance=ExtResource("3_2tjqw")]
 y_sort_enabled = true
 position = Vector2(-4, 3)
 
-[node name="Camera2D" type="Camera2D" parent="ObjectLayer/player"]
+[node name="Camera2D" type="Camera2D" parent="ObjectLayer/Player"]
 offset = Vector2(0, -10)
 zoom = Vector2(3, 3)
 
-[node name="rock" parent="ObjectLayer" instance=ExtResource("4_6xd2x")]
+[node name="Rock" parent="ObjectLayer" instance=ExtResource("4_dfl7p")]
 position = Vector2(-95, 11)
+TransparencyAlpha = 0.6
+FadeDuration = 0.1

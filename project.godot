@@ -23,6 +23,11 @@ animation/layers/only_include_visible_layers_by_default=true
 
 aseprite_executable_path="C:/Program Files (x86)/Steam/steamapps/common/Aseprite/Aseprite.exe"
 
+[display]
+
+window/size/mode=3
+window/stretch/mode="viewport"
+
 [dotnet]
 
 project/assembly_name="js_game_project"
