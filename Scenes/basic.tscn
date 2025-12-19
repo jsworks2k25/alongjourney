@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=4 uid="uid://du4uisvl0wd7j"]
+[gd_scene load_steps=10 format=4 uid="uid://du4uisvl0wd7j"]
 
-[ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://sprites/spritesheet.png" id="1_ampw4"]
-[ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://scenes/player.tscn" id="3_2tjqw"]
-[ext_resource type="Texture2D" uid="uid://dpxrbr5nc6c1b" path="res://sprites/empty.png" id="3_dfl7p"]
+[ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://Sprites/spritesheet.png" id="1_ampw4"]
+[ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://Scenes/player.tscn" id="3_2tjqw"]
+[ext_resource type="Texture2D" uid="uid://dpxrbr5nc6c1b" path="res://Sprites/empty.png" id="3_dfl7p"]
+[ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://Scenes/rock.tscn" id="4_6xd2x"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dfl7p"]
 texture = ExtResource("1_ampw4")
@@ -243,7 +244,6 @@ texture_region_size = Vector2i(32, 32)
 10:21/0 = 0
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ampw4"]
-load_path = "res://.godot/imported/grass.png-1572a75374ab70eb30be63c3ab8a61c1.ctex"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6xd2x"]
 texture = SubResource("CompressedTexture2D_ampw4")
@@ -283,8 +283,12 @@ tile_set = SubResource("TileSet_gp2vx")
 y_sort_enabled = true
 
 [node name="player" parent="ObjectLayer" instance=ExtResource("3_2tjqw")]
+y_sort_enabled = true
 position = Vector2(-4, 3)
 
 [node name="Camera2D" type="Camera2D" parent="ObjectLayer/player"]
 offset = Vector2(0, -10)
 zoom = Vector2(3, 3)
+
+[node name="rock" parent="ObjectLayer" instance=ExtResource("4_6xd2x")]
+position = Vector2(-95, 11)

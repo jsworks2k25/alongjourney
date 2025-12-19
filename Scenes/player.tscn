@@ -1,13 +1,14 @@
 [gd_scene load_steps=16 format=3 uid="uid://bo677htw67u60"]
 
-[ext_resource type="Script" uid="uid://dam5a6y653ny4" path="res://scripts/Movement.cs" id="1_g2els"]
-[ext_resource type="Texture2D" uid="uid://2s787mdntunk" path="res://sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
-[ext_resource type="Texture2D" uid="uid://bry46a3e3vedy" path="res://sprites/template-rear-stand-Sheet.png" id="3_tuyoq"]
-[ext_resource type="Texture2D" uid="uid://cewv1oab2bwnp" path="res://sprites/template-front-run-Sheet.png" id="4_fjrip"]
-[ext_resource type="Texture2D" uid="uid://dykorehndu360" path="res://sprites/template-rear-run-Sheet.png" id="5_smehm"]
+[ext_resource type="Script" uid="uid://bc0wb17bvvbfa" path="res://scripts/Movement.cs" id="1_g2els"]
+[ext_resource type="Texture2D" uid="uid://2s787mdntunk" path="res://Sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://bry46a3e3vedy" path="res://Sprites/template-rear-stand-Sheet.png" id="3_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://cewv1oab2bwnp" path="res://Sprites/template-front-run-Sheet.png" id="4_fjrip"]
+[ext_resource type="Texture2D" uid="uid://dykorehndu360" path="res://Sprites/template-rear-run-Sheet.png" id="5_smehm"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yw30f"]
-size = Vector2(8, 2)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fkybt"]
+radius = 3.0
+height = 12.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ur7pv"]
 atlas = ExtResource("4_fjrip")
@@ -99,12 +100,12 @@ motion_mode = 1
 script = ExtResource("1_g2els")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_yw30f")
-disabled = true
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_fkybt")
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(0, -13)
+position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_qfm1y")
 animation = &"idle"
 frame_progress = 0.95557165

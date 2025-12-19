@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dykorehndu360"
-path="res://.godot/imported/template-rear-run-Sheet.png-2f91878e31ebb076d29ed5dc49920233.ctex"
+path="res://.godot/imported/template-rear-run-Sheet.png-2fe7b8579cae92512794d8fd5fc800bf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/template-rear-run-Sheet.png"
-dest_files=["res://.godot/imported/template-rear-run-Sheet.png-2f91878e31ebb076d29ed5dc49920233.ctex"]
+source_file="res://Sprites/template-rear-run-Sheet.png"
+dest_files=["res://.godot/imported/template-rear-run-Sheet.png-2fe7b8579cae92512794d8fd5fc800bf.ctex"]
 
 [params]
 

@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "QUxe8G4l5pk=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\jackw\\Documents\\GitHub\\alongjourney\\js_game_project.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jackw\\.nuget\\packages\\godot.sourcegenerators\\4.5.0\\godot.sourcegenerators.4.5.0.nupkg.sha512",
+    "C:\\Users\\jackw\\.nuget\\packages\\godotsharp\\4.5.0\\godotsharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\jackw\\.nuget\\packages\\godotsharpeditor\\4.5.0\\godotsharpeditor.4.5.0.nupkg.sha512",
+    "C:\\Users\\jackw\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.20\\microsoft.netcore.app.ref.8.0.20.nupkg.sha512",
+    "C:\\Users\\jackw\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.20\\microsoft.windowsdesktop.app.ref.8.0.20.nupkg.sha512",
+    "C:\\Users\\jackw\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.20\\microsoft.aspnetcore.app.ref.8.0.20.nupkg.sha512"
+  ],
+  "logs": []
+}
