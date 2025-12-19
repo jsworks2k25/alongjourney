@@ -104,9 +104,10 @@ disabled = true
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
+position = Vector2(0, -13)
 sprite_frames = SubResource("SpriteFrames_qfm1y")
-animation = &"idle_rear"
-offset = Vector2(0, -10)
+animation = &"idle"
+frame_progress = 0.95557165
 metadata/_aseprite_wizard_interface_config_ = {
 "pending_changes": {
 "embed_tex": true,

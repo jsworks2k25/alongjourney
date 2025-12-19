@@ -1,5 +1,5 @@
 bd8b7a4084b1d03d7506a69e643bafa0
-::res://::1765971396
+::res://::1766138708
 icon.svg::CompressedTexture2D::5706503639897135879::1759434042::1759434042::1::::<><><>0<>0<>a4c0581c1b95d785f9474a9b183c579a<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 README.md::TextFile::-1::1759435569::0::1::::<><><>0<>0<><>::
 ::res://addons/::1760985047
@@ -293,8 +293,8 @@ theme.tres::Theme::2909626652912860453::1760985049::0::1::::<><><>0<>0<><>::uid:
 Devlog.md::TextFile::-1::1759434042::0::1::::<><><>0<>0<><>::
 GDD.md::TextFile::-1::1764002422::0::1::::<><><>0<>0<><>::
 Reflection.md::TextFile::-1::1759434042::0::1::::<><><>0<>0<><>::
-::res://scenes/::1763332605
-basic.tscn::PackedScene::8624135483309515445::1763332605::0::1::::<><><>0<>0<><>::uid://cosktenf140vu::::res://sprites/spritesheet.png<>uid://sbgi8is1elfp::::res://sprites/grass.png<>uid://bo677htw67u60::::res://scenes/player.tscn<>uid://dpxrbr5nc6c1b::::res://sprites/empty.png
+::res://scenes/::1765971433
+basic.tscn::PackedScene::8624135483309515445::1765971433::0::1::::<><><>0<>0<><>::uid://cosktenf140vu::::res://sprites/spritesheet.png<>uid://sbgi8is1elfp::::res://sprites/grass.png<>uid://bo677htw67u60::::res://scenes/player.tscn<>uid://dpxrbr5nc6c1b::::res://sprites/empty.png
 player.tscn::PackedScene::3435060692231913591::1759851726::0::1::::<><><>0<>0<><>::uid://dam5a6y653ny4::::res://scripts/Movement.cs<>uid://2s787mdntunk::::res://sprites/template-front-stand-Sheet.png<>uid://bry46a3e3vedy::::res://sprites/template-rear-stand-Sheet.png<>uid://cewv1oab2bwnp::::res://sprites/template-front-run-Sheet.png<>uid://dykorehndu360::::res://sprites/template-rear-run-Sheet.png
 ::res://scripts/::1759434042
 Movement.cs::CSharpScript::7185857760659879457::1760986126::0::1::::<>CharacterBody2D<><>0<>0<><>::
