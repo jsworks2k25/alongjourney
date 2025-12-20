@@ -3,16 +3,25 @@ using System;
 
 public partial class Movement : CharacterBody2D
 {
-	[Export]
-	public int Speed { get; set; } = 100;
 
+	[Export] private AnimationPlayer _animPlayer;
+	[Export] private Marker2D _attackPivot;
+	[Export] private Area2D _weaponArea;
+	[Export] private Sprite2D _slashSprite;
+	private bool _isAttacking = false;
+	public int Speed { get; set; } = 150;
 	private AnimatedSprite2D body;
 	private Vector2 isoVec = new Vector2(1f, 0.5f);
 	private bool lastFacingUp = false; // 用于静止时判断上/下朝向
 
 	public override void _Ready()
 	{
+		_slashSprite.Visible = false;
 		body = GetNode<AnimatedSprite2D>("Body");
+		_weaponArea.Monitoring = false;
+		_animPlayer.AnimationFinished += (animName) => {
+			if (animName == "meleeAttack") _isAttacking = false;
+		};
 	}
 
 	public void GetInput()
@@ -52,5 +61,30 @@ public partial class Movement : CharacterBody2D
 	{
 		GetInput();
 		MoveAndSlide();
+	}
+	public override void _Input(InputEvent @event)
+	{
+		if (@event.IsActionPressed("attack") && !_isAttacking)
+		{
+			ExecuteAttack();
+		}
+	}
+	private void ExecuteAttack()
+	{
+		_isAttacking = true;
+
+		// 1. 计算鼠标方向
+		Vector2 mousePos = GetGlobalMousePosition();
+		Vector2 dir = (mousePos - GlobalPosition).Normalized();
+
+		// 2. 将角度锁定到 45 度的倍数 (PI / 4)
+		float angle = dir.Angle();
+		float snappedAngle = Mathf.Snapped(angle, Mathf.Pi / 4.0f);
+
+		// 3. 旋转 Pivot 节点
+		_weaponArea.Rotation = snappedAngle - (Mathf.Pi / 2.0f);
+
+		// 5. 播放动画
+		_animPlayer.Play("meleeAttack");
 	}
 }
