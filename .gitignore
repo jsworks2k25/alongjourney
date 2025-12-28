@@ -1,9 +1,9 @@
-# Godot-specific
-.import/                   # 导入的资源缓存
-.export/                   # 导出缓存 (Godot 4.3+)
-.godot/                    # 本地项目缓存
+# --- Godot 4.x 核心忽略项 ---
+.godot/
+.tmp/
 
-# Build outputs
+# --- 导出与构建 ---
+export_presets.cfg
 *.exe
 *.apk
 *.aab
@@ -11,13 +11,19 @@
 *.zip
 *.tar.gz
 
-# System/editor files
-*.tmp
-*.log
-*.swp
+# --- IDE 与 系统文件 ---
+.vs/
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
+*.log
 
-# User-specific Godot editor settings
-.editor_settings-3.tres
-.editor_settings-4.tres
+# --- C# / .NET (如果你使用 C#) ---
+.mono/
+bin/
+obj/
+*.sln
+*.csproj
+*.csproj.old
+*.cs.uid

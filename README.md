@@ -3,11 +3,18 @@
 > An 2D indie game under development, it would combine elements of RPG, Rogue-like and strategy. We hope the AI will be the highlight of our project 
 
 ---
+
+## 链接 / Links
+ - [`Assets`](https://drive.google.com/drive/folders/1W9W6cMNDFmN9C8jCZCxo74k9-5rACcPb) - 素材 / Assets  
+ - [`docs/GDD.md`](./docs/GDD.md) - 游戏设计文档 / Game Design Document  
+ - [`docs/Devlog.md`](./docs/Devlog.md) - 开发日志 / Development Log   
+
+---
 ## Git 使用指南 - tt可以看这（
 
 > 虽然大部分时候可以用GitHub Desktop，但是有时候还是指令更靠谱一点
 
-打开git bash（git的终端， 就是输指令的地方）
+打开git bash
 * 右键选中文件夹 - Git Bash Here
 * 或者在windows搜索Git Bash - 打开后输入
 ```bash
@@ -20,31 +27,38 @@ git checkout dev
 
 # 获取远程最新进度
 git pull origin dev
-
-# 获取到本地文件出了点问题，新建个文件夹到GitHub - Code - Copy URL
-git clone https://github.com/jsworks2k25/alongjourney.git
 ```
 
 ### 提交更改
 ```bash
 # 查看修改了哪些文件
 git status
-
 # 添加所有更改到暂存区
-git add -A
-
+git add .
+```
+**如果发现不想要的文件被add到了暂存区**
+```bash
+# 清除Git Index缓存
+git rm -r --cached .
+```
+确认没问题后提交文件更改
+```bash
 # 提交更改：-m 后面是commit message，记得一定加引号
 git commit -m "feat: 添加玩家移动场景"
 ```
-
 
 ### 推送到远程
 ```bash
 # 推送到 dev 分支
 git push origin dev
 ```
+**彻底覆盖远程分支（需小心！）**  
+  如果确认本地版本才是对的：  
+  ```bash
+  git push origin dev --force
+  ```
 
-### 创建功能分支（推荐做法）
+### 创建功能分支
 如果要做新功能或大修改：  
 ```bash
 # 从 dev 创建新分支
@@ -57,35 +71,6 @@ git push origin feature/jump-mechanic
 ```
 然后在 GitHub 上发起 Pull Request 合并回 `dev`。  
 
-### 常见问题
-**忘记切分支就在 main 上开发了**  
-  ```bash
-  git checkout -b hotfix/move-from-main
-  git push origin hotfix/move-from-main
-  ```
-  然后用 PR 合并。  
-
-**远程和本地冲突**  
-  ```bash
-  git pull origin dev
-  # 按提示解决冲突，然后：
-  git add -A
-  git commit
-  git push origin dev
-  ```
-
-**彻底覆盖远程分支（需小心！）**  
-  如果确认本地版本才是对的：  
-  ```bash
-  git push origin dev --force
-  ```
-
----
-
-## 链接 / Links
-* 云文档链接 [`GOOGLE DRIVE`](https://drive.google.com/drive/folders/1JxQtAn7uOHykelvt85-YNNnM-vz1oXzR)
-* 游戏设计文档 / Game Design Document [`docs/GDD.md`](./docs/GDD.md)
-* 开发日志 / Development Log [`docs/Devlog.md`](./docs/Devlog.md)
 
 ---
 
@@ -138,22 +123,13 @@ git push origin feature/jump-mechanic
 
 ---
 
-## 附加资源 / Additional Docs
-
-* [`docs/GDD.md`](./docs/GDD.md)：游戏设计文档 / Game Design Document
-* [`docs/Devlog.md`](./docs/Devlog.md)：开发日志 / Development Log
-* [`docs/Reflection.md`](./docs/Reflection.md)：项目反思 / Final Reflection
-
----
-
 ## 联系方式 / Contact
 
-### 开发者 / Developers：
-* Jack Wan: Script, AI design, musics & sound effects
-* Qijia Liu: Mechanics, Gameplay design
-* Stan Wan: Scripting assistance, Artworks, UI
-
 ### 邮箱 / Email：[stanwan375@gmail.com](mailto:stawnan375@gmail.com)
+
+### 开发者 / Developers：
+* Jack: Script, AI design, musics & sound effects
+* Stan: Scripting assistance, Artworks, UI
 
 ---
 

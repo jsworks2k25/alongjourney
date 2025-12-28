@@ -18,24 +18,19 @@
   Winning \- gain initial bonuses/build skill trees \- enhance in-game experience; Losing \- gain game experience/skills \- want to win more 
 
 - *Negative Feedback*: 
-
+  
   Reach goal \- create harder maps \- more challenging route design and combat 
 
   Intra-games: 
 
 - *Positive Feedback*: 
 
-  Design better routes \- routes easier to protect/better support for players to clear maps \- stabilized passage/capture whole map Experience; 
 
-  Better combat skills \- Defeat stronger enemies with less equipment and facilities \- Accelerated development 
 
 - *Negative feedback*: 
 
-  Poor route design \- Difficult to protect from enemies / Unable to utilize transported resources \- Waste of resources and time leading to failure / No further development;
 
-  Poor combat operations \- Unable to defeat the enemies \- Restricted space for development 
-
-- **Innovative mechanic**: Unlike traditional tower defense, enemies are targeted by routes, combining Rogue-like and battle elements.
+- **Innovative mechanic**: An exceptionally intelligent AI with logical reasoning capabilities based on DEL and other frameworks, enabling realistic simulated interactions.
 
 ## 3\. Story & World 
 
@@ -85,17 +80,15 @@
 ## 2\. 玩法机制 / Core Mechanics
 
 - 控制方式：方向键，点击  
-- 基本操作：控制角色移动，2.5D（大概率），点击/拖拽放置，控制防御设施进行战斗，点击射击。  
+- 基本操作：控制角色移动，2.5D（大概率），放置，建造，对话  
 - 游戏主循环：  
   局外：  
   正反馈：胜利-获得初始加成/建造技能树-增强局内体验；失败-获得游戏经验/技巧-更想赢  
   负反馈：达成目标-生成更难的地图-对路线设计及战斗产生更高挑战  
   局内：  
-  正反馈：设计更好的路线-路线更容易保护/可以更好支持玩家清理地图-稳定通关/占领全地图体验爽局  
-  更好的战斗技巧-以较差的装备和设施打败较强的敌人-加速发展  
-  负反馈：路线设计差-难以保护被敌人攻破/无法利用运输的资源-浪费资源和时间导致失败/后续无法发展  
-  战斗操作差-打不过敌人-限制发展空间  
-- 创新机制：与传统塔防不同，敌人以路线为攻击目标，结合肉鸽与战斗
+  正反馈： 
+  负反馈： 
+- 创新机制：极为聪明的AI，拥有基于DEL等逻辑逻辑推理能力，将真实模拟互动
 
 ## 3\. 故事与世界观 / Story & World
 
@@ -105,7 +98,7 @@
 
 ## 4\. 关卡设计 / Level Design
 
-- 主要关卡列表与描述：不同地图，特殊地形：资源贫瘠/敌人强度，可供选择  
+- 主要关卡列表与描述：不同地图，特殊地形：资源贫瘠/敌人强度，可供选择，融合类箱庭的开放世界地图或地牢类房间拼接式
 - 难度与节奏设计：  
 - 互动要素设计：
 
@@ -127,3 +120,11 @@
 - 模块与系统划分：  
 - 使用的插件 / 外部资源：
 
+
+
+#  新计划
+地图设计类似超级放大版泰拉瑞亚，各种区域分化明显，有足够资源需求，并且难以每次从初始据点过去，需要建立新据点（以及可能修路设防），据点可以作为重生点，也可以造传送装置
+不同区域大致按到出生点距离排难度，后期科技逐渐需要铁、石油之类的后期资源，从而产生探索需求
+做一些生产元素，种田炼铁之类的，可以让npc帮忙，实现一定的自动化，这样可以产生一些中心据点的需求
+npc可以是落单的或是其他阵营，落单的显然容易拉拢，其他阵营可以尝试合并、结盟、交易、或者屠了
+可以藏一点小小的主线，有点碎片剧情，让故事更有趣合理，以及稍微推动玩家发展（但是最好别过头，留些选择空间）
