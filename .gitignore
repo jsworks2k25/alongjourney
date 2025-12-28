@@ -35,6 +35,10 @@ bin/
 obj/
 .mono/
 
-# 如果你不需要上传解决方案文件 (通常保留 .sln 和 .csproj 是好的，但 *.user 必须忽略)
+# 如果不需要上传解决方案文件 
 *.sln.DotSettings.user
 *.csproj.user
+
+*.sln
+*.csproj
+*.csproj.old
