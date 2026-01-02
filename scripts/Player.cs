@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Movement : CharacterBody2D
+public partial class Player : CharacterBody2D
 {
 
 	[Export] private AnimationPlayer _animPlayer;
