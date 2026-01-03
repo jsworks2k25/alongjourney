@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=4 uid="uid://du4uisvl0wd7j"]
+[gd_scene load_steps=11 format=4 uid="uid://du4uisvl0wd7j"]
 
 [ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://sprites/spritesheet.png" id="1_ampw4"]
 [ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://scenes/player.tscn" id="3_2tjqw"]
 [ext_resource type="Texture2D" uid="uid://dpxrbr5nc6c1b" path="res://sprites/empty.png" id="3_dfl7p"]
 [ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://scenes/rock.tscn" id="4_dfl7p"]
+[ext_resource type="PackedScene" uid="uid://dsftw85vqphm" path="res://scenes/robot_0.tscn" id="5_w4mkn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dfl7p"]
 texture = ExtResource("1_ampw4")
@@ -294,3 +295,5 @@ zoom = Vector2(3, 3)
 position = Vector2(-95, 11)
 TransparencyAlpha = 0.6
 FadeDuration = 0.1
+
+[node name="Robot0" parent="ObjectLayer" instance=ExtResource("5_w4mkn")]

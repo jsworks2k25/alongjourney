@@ -7,9 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://dykorehndu360" path="res://sprites/template-rear-run-Sheet.png" id="5_smehm"]
 [ext_resource type="Texture2D" uid="uid://dh2wojpdv50eq" path="res://sprites/slash-sheet.png" id="6_tuyoq"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fkybt"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
 radius = 3.0
-height = 12.0
+height = 10.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ur7pv"]
 atlas = ExtResource("4_fjrip")
@@ -101,7 +101,7 @@ radius = 26.0
 height = 58.0
 
 [sub_resource type="Animation" id="Animation_ur7pv"]
-length = 0.001
+length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -121,10 +121,10 @@ tracks/1/path = NodePath("AttackPivot/MeleeArea/Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.0333, 0.06666667),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [1]
+"values": [0, 1, 2]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -133,10 +133,10 @@ tracks/2/path = NodePath("AttackPivot/MeleeArea:monitoring")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true]
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="Animation_smehm"]
@@ -186,7 +186,9 @@ _data = {
 }
 
 [node name="player" type="CharacterBody2D" node_paths=PackedStringArray("_animPlayer", "_attackPivot", "_weaponArea", "_slashSprite")]
+collision_mask = 6
 motion_mode = 1
+safe_margin = 0.2
 script = ExtResource("1_g2els")
 _animPlayer = NodePath("AnimationPlayer")
 _attackPivot = NodePath("AttackPivot")
@@ -195,7 +197,7 @@ _slashSprite = NodePath("AttackPivot/MeleeArea/Sprite2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = -1.5707964
-shape = SubResource("CapsuleShape2D_fkybt")
+shape = SubResource("CapsuleShape2D_tuyoq")
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
@@ -225,6 +227,8 @@ scale = Vector2(1, 0.5)
 
 [node name="MeleeArea" type="Area2D" parent="AttackPivot"]
 position = Vector2(0, -16)
+collision_layer = 0
+collision_mask = 4
 
 [node name="Sprite2D" type="Sprite2D" parent="AttackPivot/MeleeArea"]
 texture_filter = 1
@@ -232,7 +236,6 @@ position = Vector2(0, 6)
 scale = Vector2(3, 4)
 texture = ExtResource("6_tuyoq")
 hframes = 3
-frame = 1
 metadata/_aseprite_wizard_interface_config_ = {
 "animation_section": true,
 "output_section": false,

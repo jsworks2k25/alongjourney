@@ -59,6 +59,7 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		_weaponArea.AreaEntered += _on_weapon_area_area_entered;
 		GetInput();
 		MoveAndSlide();
 	}
@@ -86,5 +87,17 @@ public partial class Player : CharacterBody2D
 
 		// 5. 播放动画
 		_animPlayer.Play("meleeAttack");
+	}
+	
+	private void _on_weapon_area_area_entered(Area2D area)
+	{
+		// area 是进入的那个受击区 (Hurtbox)
+		// 我们要通过 Hurtbox 找到它的父节点，即 Enemy 脚本所在的地方
+		Node victim = area.Owner; // 获取场景的拥有者
+
+		if (victim is IDamageable enemy)
+		{
+			enemy.TakeDamage(10);
+		}
 	}
 }
