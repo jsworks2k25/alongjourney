@@ -3,7 +3,7 @@ using System;
 
 public partial class Robot0 : CharacterBody2D, IDamageable
 {
-	[Export] public float Speed = 100.0f;
+	[Export] public float Speed = 10.0f;
 	[Export] public int Health = 30;
 
 	private Vector2[] _directions = new Vector2[] {
@@ -20,7 +20,11 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 	[Export] private RayCast2D _rayCast;
 	[Export] private Timer _moveTimer;
 	[Export] private AnimationPlayer _animPlayer;
-
+	private bool isMoving = false;
+	private string state = "";
+	private string direction = "";
+	private bool flip = false;
+	
 	public override void _Ready()
 	{
 		PickRandomDirection();
@@ -33,15 +37,21 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 	{
 		bool collided = MoveAndSlide();
 		// 1. 避障检测：如果前方有墙
-		if (_rayCast.IsColliding())
+		if (_rayCast.IsColliding() && isMoving)
 		{
 			PickRandomDirection();
 		}
 
 		// 2. 移动
-		Velocity = _currentDir * Speed;
-		MoveAndSlide();
-
+		if(isMoving)
+		{
+			Velocity = _currentDir * Speed;
+			MoveAndSlide();
+		}
+		else
+		{
+			Velocity = new Vector2(0f, 0f);
+		}
 		// 3. 处理方向贴图和翻转
 		UpdateAnimation();
 		
@@ -59,26 +69,32 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 		int index = _random.Next(0, _directions.Length);
 		_currentDir = _directions[index];
 		
+		if(isMoving)
+		{
+			isMoving = _random.Next(0, 10) > 3;
+		}
+		else
+		{
+			isMoving = true;
+		}
+		_moveTimer.WaitTime = (float)_random.NextDouble() * 2.0f + 2.0f;
 		// 让探测器的方向指向移动方向
 		_rayCast.TargetPosition = _currentDir * 40; 
 	}
 
 	private void UpdateAnimation()
 	{
-		string state = Velocity.Length() > 0.1f ? "move" : "idle";
-		string direction = "";
-		bool flip = false;
-
+		state = Velocity.Length() > 0.1f ? "move" : "idle";
 		// 根据速度向量判断 4 个斜向0
 		// 等距视角 4 方向：(1, 0.5), (-1, 0.5), (1, -0.5), (-1, -0.5)
 		
-		if (Velocity.Y >= 0) // 向下系列 (右下、左下)
+		if (Velocity.Y > 0) // 向下系列 (右下、左下)
 		{
 			direction = "down";
 			// 如果 X < 0，说明是左下，我们需要翻转“右下”的贴图
 			flip = Velocity.X < 0;
 		}
-		else // 向上系列 (右上、左上)
+		else if (Velocity.Y < 0)// 向上系列 (右上、左上)
 		{
 			direction = "up";
 			// 如果 X > 0，说明是右上，我们需要翻转“左上”的贴图
@@ -87,18 +103,12 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 
 		// 拼接动画名字，例如 "idle_down" 或 "move_up"
 		string animName = $"{state}_{direction}";
-
 		// 执行播放和翻转
 		if (_animPlayer.CurrentAnimation != animName)
 		{
 			_animPlayer.Play(animName);
 		}
 		_sprite.FlipH = flip;
-		string dir = Velocity.Y >= 0 ? "down" : "up";
-	
-		_sprite.FlipH = (Velocity.Y >= 0 && Velocity.X < 0) || (Velocity.Y < 0 && Velocity.X > 0);
-	
-		_animPlayer.Play($"{state}_{dir}");
 	}
 
 	// 供玩家调用的受击函数
