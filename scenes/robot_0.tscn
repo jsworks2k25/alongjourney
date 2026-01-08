@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://dsftw85vqphm"]
 
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://sprites/robot.png" id="1_8kwrt"]
-[ext_resource type="Script" uid="uid://bhuxnkpoktfy6" path="res://scripts/Robot0.cs" id="1_w0dvl"]
+[ext_resource type="Script" uid="uid://eee2pnmbdd7w" path="res://scripts/Robot0.cs" id="1_w0dvl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0
@@ -118,10 +118,10 @@ _animPlayer = NodePath("AnimationPlayer")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("1_8kwrt")
+offset = Vector2(0, -8)
 hframes = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 7)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_w0dvl")
 
@@ -130,7 +130,7 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2(0, 3)
+position = Vector2(0, -3)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_osokj")
 

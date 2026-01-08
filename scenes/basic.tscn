@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://dpxrbr5nc6c1b" path="res://sprites/empty.png" id="3_dfl7p"]
 [ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://scenes/rock.tscn" id="4_dfl7p"]
 [ext_resource type="PackedScene" uid="uid://dsftw85vqphm" path="res://scenes/robot_0.tscn" id="5_w4mkn"]
+[ext_resource type="PackedScene" uid="uid://df01wn734v1rp" path="res://scenes/tree_0.tscn" id="6_7mps8"]
+[ext_resource type="PackedScene" uid="uid://b20ds5ke2655t" path="res://scenes/wood.tscn" id="7_j2j5c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dfl7p"]
 texture = ExtResource("1_ampw4")
@@ -243,17 +245,8 @@ texture_region_size = Vector2i(32, 32)
 8:21/0 = 0
 9:21/0 = 0
 10:21/0 = 0
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ampw4"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6xd2x"]
-texture = SubResource("CompressedTexture2D_ampw4")
-texture_region_size = Vector2i(32, 32)
-0:0/next_alternative_id = 2
-0:0/0 = 0
-0:0/0/texture_origin = Vector2i(0, -8)
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -8, -16, 0, 0, 8, 16, 0)
-0:1/0 = 0
+9:6/0 = 0
+3:8/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w4mkn"]
 texture = ExtResource("3_dfl7p")
@@ -266,7 +259,6 @@ texture_region_size = Vector2i(32, 32)
 tile_shape = 1
 tile_size = Vector2i(32, 16)
 physics_layer_0/collision_layer = 1
-sources/1 = SubResource("TileSetAtlasSource_6xd2x")
 sources/3 = SubResource("TileSetAtlasSource_w4mkn")
 sources/0 = SubResource("TileSetAtlasSource_dfl7p")
 
@@ -284,16 +276,22 @@ tile_set = SubResource("TileSet_gp2vx")
 y_sort_enabled = true
 
 [node name="Player" parent="ObjectLayer" instance=ExtResource("3_2tjqw")]
-y_sort_enabled = true
 position = Vector2(-4, 3)
 
 [node name="Camera2D" type="Camera2D" parent="ObjectLayer/Player"]
 offset = Vector2(0, -10)
 zoom = Vector2(3, 3)
 
+[node name="Robot0" parent="ObjectLayer" instance=ExtResource("5_w4mkn")]
+MaxHealth = 100
+
 [node name="Rock" parent="ObjectLayer" instance=ExtResource("4_dfl7p")]
 position = Vector2(-95, 11)
 TransparencyAlpha = 0.6
 FadeDuration = 0.1
 
-[node name="Robot0" parent="ObjectLayer" instance=ExtResource("5_w4mkn")]
+[node name="Tree0" parent="ObjectLayer" instance=ExtResource("6_7mps8")]
+texture_filter = 1
+position = Vector2(-48, -15)
+collision_priority = 3.0
+DropItemScene = ExtResource("7_j2j5c")

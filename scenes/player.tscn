@@ -186,6 +186,7 @@ _data = {
 }
 
 [node name="player" type="CharacterBody2D" node_paths=PackedStringArray("_animPlayer", "_attackPivot", "_weaponArea", "_slashSprite")]
+y_sort_enabled = true
 collision_mask = 6
 motion_mode = 1
 safe_margin = 0.2
@@ -201,10 +202,10 @@ shape = SubResource("CapsuleShape2D_tuyoq")
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_qfm1y")
 animation = &"idle"
 frame_progress = 0.95557165
+offset = Vector2(0, -12)
 metadata/_aseprite_wizard_interface_config_ = {
 "pending_changes": {
 "embed_tex": true,

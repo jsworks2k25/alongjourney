@@ -19,6 +19,9 @@ public partial class Player : CharacterBody2D
 		_slashSprite.Visible = false;
 		body = GetNode<AnimatedSprite2D>("Body");
 		_weaponArea.Monitoring = false;
+
+		_weaponArea.AreaEntered += _on_weapon_area_area_entered;
+		
 		_animPlayer.AnimationFinished += (animName) => {
 			if (animName == "meleeAttack") _isAttacking = false;
 		};
@@ -59,7 +62,7 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		_weaponArea.AreaEntered += _on_weapon_area_area_entered;
+		
 		GetInput();
 		MoveAndSlide();
 	}

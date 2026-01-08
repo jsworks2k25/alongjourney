@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bv4jtxoj3ql0f"]
+
+[ext_resource type="PackedScene" uid="uid://df01wn734v1rp" path="res://scenes/tree_0.tscn" id="1_xjnh2"]
+[ext_resource type="PackedScene" uid="uid://b20ds5ke2655t" path="res://scenes/wood.tscn" id="2_s42hq"]
+[ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://scenes/player.tscn" id="3_4brrt"]
+
+[node name="TestArena" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("3_4brrt")]
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+offset = Vector2(0, -10)
+zoom = Vector2(3, 3)
+
+[node name="Tree0" parent="." instance=ExtResource("1_xjnh2")]
+position = Vector2(49, 0)
+DropItemScene = ExtResource("2_s42hq")

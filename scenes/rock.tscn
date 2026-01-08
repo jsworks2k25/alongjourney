@@ -20,8 +20,8 @@ script = ExtResource("1_mek2u")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(1, -11)
 texture = ExtResource("1_lgx4v")
+offset = Vector2(0, -12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = -1.5707964

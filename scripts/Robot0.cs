@@ -4,7 +4,8 @@ using System;
 public partial class Robot0 : CharacterBody2D, IDamageable
 {
 	[Export] public float Speed = 10.0f;
-	[Export] public int Health = 30;
+	[Export] public int MaxHealth = 30;
+	[Export] private int _currentHealth;
 
 	private Vector2[] _directions = new Vector2[] {
 		new Vector2(1, 0.5f).Normalized(),   // 右下
@@ -31,6 +32,7 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 		
 		// 绑定计时器，每隔几秒换个方向
 		_moveTimer.Timeout += PickRandomDirection;
+		_currentHealth = MaxHealth;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -114,14 +116,14 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 	// 供玩家调用的受击函数
 	public void TakeDamage(int damage)
 	{
-		Health -= damage;
+		_currentHealth -= damage;
 
 		// 简单的受击反馈：闪红光
 		var tween = CreateTween();
 		tween.TweenProperty(_sprite, "modulate", Colors.Red, 0.1f);
 		tween.TweenProperty(_sprite, "modulate", Colors.White, 0.1f);
 
-		if (Health <= 0)
+		if (_currentHealth <= 0)
 		{
 			Die();
 		}
