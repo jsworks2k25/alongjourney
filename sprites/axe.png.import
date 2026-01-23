@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dioxj4dtvcfg5"
-path="res://.godot/imported/template-front-stand-Sheet.png-b08152d8ee431eef710043db685a7164.ctex"
+uid="uid://cc1t6u346icxv"
+path="res://.godot/imported/axe.png-7ad8fa60a528d53f2a9596e2cbdc2634.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/template-front-stand-Sheet.png"
-dest_files=["res://.godot/imported/template-front-stand-Sheet.png-b08152d8ee431eef710043db685a7164.ctex"]
+source_file="res://sprites/axe.png"
+dest_files=["res://.godot/imported/axe.png-7ad8fa60a528d53f2a9596e2cbdc2634.ctex"]
 
 [params]
 

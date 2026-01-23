@@ -23,7 +23,7 @@ public partial class Tree : TranslucentObstacle, IDamageable
     }
 
     // 接口方法的具体实现
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Vector2? sourcePosition = null)
     {
         _currentHealth -= damage;
         GD.Print($"当前血量: {_currentHealth}");

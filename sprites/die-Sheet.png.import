@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://lme3khcc71ax"
-path="res://.godot/imported/Small-8-Direction-Characters_by_AxulArt.png-086ee3260fd3a639150e1893dff18b55.ctex"
+uid="uid://d3oensniyq6dx"
+path="res://.godot/imported/die-Sheet.png-d3320bf5c41408cd55ed1ddfa1117b59.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/Small-8-Direction-Characters_by_AxulArt.png"
-dest_files=["res://.godot/imported/Small-8-Direction-Characters_by_AxulArt.png-086ee3260fd3a639150e1893dff18b55.ctex"]
+source_file="res://sprites/die-Sheet.png"
+dest_files=["res://.godot/imported/die-Sheet.png-d3320bf5c41408cd55ed1ddfa1117b59.ctex"]
 
 [params]
 

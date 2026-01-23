@@ -114,7 +114,7 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 	}
 
 	// 供玩家调用的受击函数
-	public void TakeDamage(int damage)
+	public void TakeDamage(int damage, Vector2? sourcePosition = null)
 	{
 		_currentHealth -= damage;
 
