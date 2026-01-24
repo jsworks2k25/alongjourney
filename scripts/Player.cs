@@ -33,12 +33,9 @@ public partial class Player : CharacterBody2D
             _healthComponent.HealthChanged += OnHurt;
         }
 
-        // 获取武器 (假设 WeaponHolder 下面已经挂了 ProceduralWeapon 场景)
-        // 你也可以在代码里动态 Instance 武器
         if (_weaponHolder != null && _weaponHolder.GetChildCount() > 0)
         {
             _currentWeapon = _weaponHolder.GetChild<Weapon>(0);
-            // 订阅武器的完成信号，防止卡死
             _currentWeapon.AttackFinished += OnWeaponAttackFinished;
         }
     }
@@ -68,23 +65,33 @@ public partial class Player : CharacterBody2D
         MoveAndSlide();
         UpdateBodyAnimation(); 
     }
-
+    private void EnterAttackState()
+    {
+        // 尝试让武器攻击
+        Vector2 mouseDir = (GetGlobalMousePosition() - GlobalPosition).Normalized();
+        
+        // 只有当武器不在冷却时才进入攻击状态
+        // 这里只是为了状态同步，Weapon 内部也会检查冷却
+        
+        if (_currentWeapon.Attack(mouseDir))
+        {
+            _currentState = PlayerState.Attack;
+        }
+    }
     private void HandleWeaponAiming()
     {
         if (_currentState == PlayerState.Dead) return;
-
         // 获取鼠标方向
         Vector2 mouseDir = (GetGlobalMousePosition() - GlobalPosition).Normalized();
         
-        // 这里不需要旋转 WeaponHolder，因为 Isometric 压缩会让旋转看起来变扁
-        // 我们把方向传给武器，让武器自己决定怎么旋转
-        // 但是为了简单，通常我们可以旋转 WeaponHolder，但要处理翻转
-        
-        // 简单的左右翻转处理 (让武器在左边或右边)
+        _weaponHolder.Rotation = mouseDir.Angle();
+
         if (mouseDir.X < 0)
-            _weaponHolder.Scale = new Vector2(-1, 1); // 镜像翻转
-        else
-            _weaponHolder.Scale = new Vector2(1, 1);
+        {
+            // 鼠标在左：翻转 Y 轴
+            _weaponHolder.Scale = new Vector2(1, -1); 
+        }
+
     }
 
     private void HandleMovementState()
@@ -101,28 +108,12 @@ public partial class Player : CharacterBody2D
         // 攻击输入
         if (Input.IsActionJustPressed("attack"))
         {
-            if (_currentWeapon == null)
-            {
-                GD.PrintErr("检测到按键，但是 _currentWeapon 是空的！请检查 WeaponHolder 下面有没有子节点，或者子节点有没有挂载 Weapon 脚本。");
-            }
-            else
+            if (_currentWeapon != null)
             {
                 GD.Print("检测到攻击按键，尝试进入攻击状态...");
                 EnterAttackState();
             }
         }
-    }
-
-    private void EnterAttackState()
-    {
-        // 尝试让武器攻击
-        Vector2 mouseDir = (GetGlobalMousePosition() - GlobalPosition).Normalized();
-        
-        // 只有当武器不在冷却时才进入攻击状态
-        // 这里只是为了状态同步，Weapon 内部也会检查冷却
-        _currentState = PlayerState.Attack;
-        GD.Print("调用武器攻击，方向: ", mouseDir);
-        _currentWeapon.Attack(mouseDir); 
     }
 
     // 收到武器信号，解除锁定

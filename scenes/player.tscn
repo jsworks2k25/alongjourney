@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bo677htw67u60"]
+[gd_scene load_steps=19 format=3 uid="uid://bo677htw67u60"]
 
 [ext_resource type="Script" uid="uid://cdf0ahb0s6jis" path="res://scripts/Player.cs" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://dioxj4dtvcfg5" path="res://sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bi46nx5h1fl8w" path="res://sprites/template-rear-run-Sheet.png" id="5_smehm"]
 [ext_resource type="Script" uid="uid://qmkxyr8rr1d2" path="res://scripts/HurtboxComponent.cs" id="6_ur7pv"]
 [ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="7_y4r1p"]
+[ext_resource type="PackedScene" uid="uid://dambflx8sgsb8" path="res://scenes/axe.tscn" id="9_ur7pv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
 radius = 3.0
@@ -340,7 +341,7 @@ height = 12.0
 
 [node name="player" type="CharacterBody2D" node_paths=PackedStringArray("_animPlayer", "_bodySprite", "_healthComponent", "_weaponHolder")]
 y_sort_enabled = true
-collision_mask = 30
+collision_mask = 26
 motion_mode = 1
 safe_margin = 0.2
 script = ExtResource("1_g2els")
@@ -378,5 +379,6 @@ shape = SubResource("CapsuleShape2D_3v2ag")
 script = ExtResource("7_y4r1p")
 
 [node name="WeaponPivot" type="Marker2D" parent="."]
-position = Vector2(0, -8)
-scale = Vector2(1, 0.5)
+y_sort_enabled = true
+
+[node name="Axe" parent="WeaponPivot" instance=ExtResource("9_ur7pv")]
