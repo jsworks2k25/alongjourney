@@ -70,7 +70,7 @@ public partial class WoodDrop : Area2D
     private void OnBodyEntered(Node2D body)
     {
         // 使用 Group 或接口查找玩家
-        string groupName = GameConfig.Instance != null ? GameConfig.Instance.PlayerGroupName : "Player";
+        string groupName = GameConfig.GetPlayerGroupName();
         if (body.IsInGroup(groupName) || body is ITargetable targetable)
         {
             _isMagnetized = true;

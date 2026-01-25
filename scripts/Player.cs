@@ -13,7 +13,7 @@ public partial class Player : Actor
         base._Ready();
 
         // 添加到 Player 组
-        AddToGroup(GetPlayerGroupName());
+        AddToGroup(GameConfig.GetPlayerGroupName());
 
         _weaponHolder = GetNodeOrNull<Marker2D>("WeaponPivot")
             ?? GetNodeOrNull<Marker2D>("WeaponHolder");
@@ -89,8 +89,4 @@ public partial class Player : Actor
         }
     }
 
-    private string GetPlayerGroupName()
-    {
-        return GameConfig.Instance != null ? GameConfig.Instance.PlayerGroupName : "Player";
-    }
 }

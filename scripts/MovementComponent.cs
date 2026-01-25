@@ -30,8 +30,8 @@ public partial class MovementComponent : BaseComponent
         }
 
         // 状态处理由 Actor 或状态机负责，这里只处理移动
-        // 如果处于 Stagger 状态，不更新速度（由 HitEffectComponent 控制）
-        if (Owner.CurrentState == Actor.ActorState.Stagger)
+        // 如果处于 Stagger 或 Attack 状态，不更新速度（由 HitEffectComponent 或 Actor 控制）
+        if (Owner.CurrentState == Actor.ActorState.Stagger || Owner.CurrentState == Actor.ActorState.Attack)
         {
             return;
         }

@@ -10,7 +10,7 @@ public partial class HurtboxComponent : Area2D, IDamageable
 
     public override void _Ready()
     {
-        _owner = FindActorOwner();
+        _owner = ActorHelper.FindActorOwner(this);
     }
 
     public void TakeDamage(int amount, Vector2? sourcePosition = null)
@@ -25,16 +25,5 @@ public partial class HurtboxComponent : Area2D, IDamageable
         {
             HealthComponent.TakeDamage(amount, sourcePosition);
         }
-    }
-
-    private Actor FindActorOwner()
-    {
-        Node current = GetParent();
-        while (current != null && !(current is Actor))
-        {
-            current = current.GetParent();
-        }
-
-        return current as Actor;
     }
 }

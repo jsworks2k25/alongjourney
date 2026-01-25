@@ -63,16 +63,19 @@ public partial class HitEffectComponent : BaseComponent
 
     public override void _PhysicsProcess(double delta)
     {
-        if (_isStaggered && _characterBody != null)
+        if (_isStaggered && Owner != null && Owner.CurrentState == Actor.ActorState.Stagger)
         {
             // 应用击退摩擦力
             _knockbackVelocity = _knockbackVelocity.MoveToward(Vector2.Zero, KnockbackFriction * (float)delta);
-            _characterBody.Velocity = _knockbackVelocity;
+            
+            // 通过黑板系统设置击退速度，由 Actor._PhysicsProcess 统一处理
+            Owner.SetBlackboardValue(Actor.KeyKnockbackVelocity, _knockbackVelocity);
 
             // 如果速度足够小，恢复正常
             if (_knockbackVelocity.Length() < StaggerThreshold)
             {
                 _isStaggered = false;
+                Owner.SetBlackboardValue(Actor.KeyKnockbackVelocity, Vector2.Zero);
                 OnStaggerEnded?.Invoke();
             }
         }
@@ -147,6 +150,11 @@ public partial class HitEffectComponent : BaseComponent
     {
         _isStaggered = false;
         _knockbackVelocity = Vector2.Zero;
+        
+        if (Owner != null)
+        {
+            Owner.SetBlackboardValue(Actor.KeyKnockbackVelocity, Vector2.Zero);
+        }
         
         if (_characterBody != null)
         {

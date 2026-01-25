@@ -10,7 +10,7 @@ public partial class BaseComponent : Node
 
     public override void _Ready()
     {
-        Owner = FindActorOwner();
+        Owner = ActorHelper.FindActorOwner(this);
         if (Owner == null)
         {
             GD.PushWarning($"{Name}: BaseComponent requires an Actor parent.");
@@ -32,16 +32,5 @@ public partial class BaseComponent : Node
 
     protected virtual void OnOwnerBlackboardChanged(string key, Variant value)
     {
-    }
-
-    private Actor FindActorOwner()
-    {
-        Node current = GetParent();
-        while (current != null && !(current is Actor))
-        {
-            current = current.GetParent();
-        }
-
-        return current as Actor;
     }
 }

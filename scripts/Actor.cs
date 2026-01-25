@@ -31,6 +31,7 @@ public partial class Actor : CharacterBody2D, ITargetable
     public const string KeyVelocity = "velocity";
     public const string KeyCurrentHealth = "current_health";
     public const string KeyMaxHealth = "max_health";
+    public const string KeyKnockbackVelocity = "knockback_velocity"; // 击退速度（由 HitEffectComponent 设置）
 
     public Godot.Collections.Dictionary<string, Variant> Blackboard { get; } = new();
 
@@ -82,12 +83,20 @@ public partial class Actor : CharacterBody2D, ITargetable
             return;
         }
 
+        // 优先级：Stagger > Attack > Normal
+        // Stagger 状态：由 HitEffectComponent 通过黑板控制击退速度
+        if (CurrentState == ActorState.Stagger)
+        {
+            Vector2 knockbackVel = GetBlackboardVector(KeyKnockbackVelocity, Vector2.Zero);
+            Velocity = knockbackVel;
+        }
         // Attack 状态时自动减速（由 Actor 统一处理，不依赖 MovementComponent）
-        if (CurrentState == ActorState.Attack)
+        else if (CurrentState == ActorState.Attack)
         {
             float friction = GameConfig.Instance != null ? GameConfig.Instance.KnockbackFriction : 600f;
             Velocity = Velocity.MoveToward(Vector2.Zero, friction * (float)delta);
         }
+        // Normal 状态由 MovementComponent 处理（在 MovementComponent._PhysicsProcess 中）
 
         MoveAndSlide();
         SetBlackboardValueIfChanged(KeyVelocity, Velocity);
@@ -107,6 +116,7 @@ public partial class Actor : CharacterBody2D, ITargetable
         Blackboard[KeyHitPending] = false;
         Blackboard[KeyHitSource] = HealthComponent.NoSourcePosition;
         Blackboard[KeyVelocity] = Vector2.Zero;
+        Blackboard[KeyKnockbackVelocity] = Vector2.Zero;
     }
 
     public void SetBlackboardValue(string key, Variant value)

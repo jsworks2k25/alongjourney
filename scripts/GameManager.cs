@@ -50,12 +50,7 @@ public partial class GameManager : Node
 
     private Player FindPlayer()
     {
-        return GetTree().GetFirstNodeInGroup(GetPlayerGroupName()) as Player;
-    }
-
-    private string GetPlayerGroupName()
-    {
-        return GameConfig.Instance != null ? GameConfig.Instance.PlayerGroupName : "Player";
+        return GetTree().GetFirstNodeInGroup(GameConfig.GetPlayerGroupName()) as Player;
     }
 
     private void SetupPlayer(Player player)

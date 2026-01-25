@@ -58,5 +58,13 @@ public partial class GameConfig : Node
         }
         Instance = this;
     }
+
+    /// <summary>
+    /// 获取玩家组名（空值安全）
+    /// </summary>
+    public static string GetPlayerGroupName()
+    {
+        return Instance?.PlayerGroupName ?? "Player";
+    }
 }
 
