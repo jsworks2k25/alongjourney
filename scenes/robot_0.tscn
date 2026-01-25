@@ -1,9 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://dsftw85vqphm"]
+[gd_scene load_steps=15 format=3 uid="uid://dsftw85vqphm"]
 
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://sprites/robot.png" id="1_8kwrt"]
 [ext_resource type="Script" uid="uid://eee2pnmbdd7w" path="res://scripts/Robot0.cs" id="1_w0dvl"]
 [ext_resource type="Script" uid="uid://c6ydw0bq7qkyd" path="res://scripts/AnimationController.cs" id="2_edo0t"]
-[ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="3_osokj"]
+[ext_resource type="Script" uid="uid://u1ykjx61t81p" path="res://scripts/MovementSmoothingComponent.cs" id="5_2gpyy"]
+[ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="5_wxql2"]
+[ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="6_utrwa"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0
@@ -28,23 +30,6 @@ tracks/0/keys = {
 "values": [0]
 }
 
-[sub_resource type="Animation" id="Animation_edo0t"]
-resource_name = "idle_down"
-length = 0.4
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [0, 2]
-}
-
 [sub_resource type="Animation" id="Animation_2gpyy"]
 resource_name = "idle_up"
 length = 0.4
@@ -62,8 +47,8 @@ tracks/0/keys = {
 "values": [4, 6]
 }
 
-[sub_resource type="Animation" id="Animation_w0dvl"]
-resource_name = "move_down"
+[sub_resource type="Animation" id="Animation_edo0t"]
+resource_name = "idle_down"
 length = 0.4
 loop_mode = 1
 tracks/0/type = "value"
@@ -73,10 +58,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [0, 1, 2, 3]
+"values": [0, 2]
 }
 
 [sub_resource type="Animation" id="Animation_osokj"]
@@ -94,6 +79,23 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_w0dvl"]
+resource_name = "move_down"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_utrwa"]
@@ -141,16 +143,27 @@ collision_mask = 3
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
-[node name="AnimationController" type="Node2D" parent="." node_paths=PackedStringArray("_animPlayer", "_sprite")]
+[node name="CoreComponents" type="Node" parent="."]
+
+[node name="AnimationController" type="Node" parent="CoreComponents" node_paths=PackedStringArray("_animPlayer", "_sprite")]
 script = ExtResource("2_edo0t")
 _animPlayer = NodePath("AnimationPlayer")
-_sprite = NodePath("../Sprite2D")
+_sprite = NodePath("../../Sprite2D")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimationController"]
-root_node = NodePath("../..")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CoreComponents/AnimationController"]
+root_node = NodePath("../../..")
 libraries = {
 &"": SubResource("AnimationLibrary_utrwa")
 }
 
-[node name="HealthComponent" type="Node2D" parent="."]
-script = ExtResource("3_osokj")
+[node name="MovementSmoothingComponent" type="Node" parent="CoreComponents"]
+script = ExtResource("5_2gpyy")
+Acceleration = 100.0
+Friction = 50.0
+
+[node name="MovementComponent2" type="Node" parent="CoreComponents"]
+script = ExtResource("5_wxql2")
+
+[node name="HealthComponent" type="Node" parent="CoreComponents"]
+script = ExtResource("6_utrwa")
+MaxHealth = 50

@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 动画控制器组件，统一管理动画播放逻辑
 /// </summary>
-public partial class AnimationController : Node
+public partial class AnimationController : BaseComponent
 {
     [Export] private AnimationPlayer _animPlayer;
     [Export] private Sprite2D _sprite;
@@ -23,13 +23,13 @@ public partial class AnimationController : Node
     private bool _isDead = false;
     private Vector2 _lastMoveDir = Vector2.Down;
 
-    public override void _Ready()
+    public override void Initialize()
     {
-        if (_animPlayer == null)
-            _animPlayer = GetParent().GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+        if (_animPlayer == null && Owner != null)
+            _animPlayer = Owner.GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
 
-        if (_sprite == null)
-            _sprite = GetParent().GetNodeOrNull<Sprite2D>("Sprite2D");
+        if (_sprite == null && Owner != null)
+            _sprite = Owner.GetNodeOrNull<Sprite2D>("Sprite2D");
 
         // 从 GameConfig 加载默认值
         if (GameConfig.Instance != null)
@@ -40,6 +40,28 @@ public partial class AnimationController : Node
             AnimMoveBack = GameConfig.Instance.AnimMoveBack;
             AnimDie = GameConfig.Instance.AnimDie;
             VelocityDeadZone = GameConfig.Instance.VelocityDeadZone;
+        }
+
+        if (Owner != null)
+        {
+            _isDead = Owner.GetBlackboardBool(Actor.KeyIsDead, false);
+            UpdateAnimation(Owner.GetBlackboardVector(Actor.KeyVelocity, Vector2.Zero));
+        }
+    }
+
+    protected override void OnOwnerStateChanged(Actor.ActorState newState)
+    {
+        if (newState == Actor.ActorState.Dead)
+        {
+            PlayDeathAnimation();
+        }
+    }
+
+    protected override void OnOwnerBlackboardChanged(string key, Variant value)
+    {
+        if (key == Actor.KeyVelocity)
+        {
+            UpdateAnimation(value.AsVector2());
         }
     }
 

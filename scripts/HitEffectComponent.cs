@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// 受击反馈组件，统一处理闪烁、击退、抖动等效果
 /// </summary>
-public partial class HitEffectComponent : Node
+public partial class HitEffectComponent : BaseComponent
 {
     [Export] public bool EnableFlash = true;
     [Export] public bool EnableKnockback = false;
@@ -28,17 +28,37 @@ public partial class HitEffectComponent : Node
     private Vector2 _knockbackVelocity = Vector2.Zero;
     private bool _isStaggered = false;
 
-    public override void _Ready()
+    public override void Initialize()
     {
-        _targetNode = GetParent<Node2D>();
-        _sprite = _targetNode.GetNodeOrNull<Sprite2D>("Sprite2D");
-        _characterBody = _targetNode as CharacterBody2D;
+        _targetNode = Owner;
+        _sprite = Owner?.GetNodeOrNull<Sprite2D>("Sprite2D");
+        _characterBody = Owner;
 
         // 如果父节点是 CharacterBody2D，启用击退功能
         if (_characterBody != null)
         {
             EnableKnockback = true;
         }
+    }
+
+    protected override void OnOwnerBlackboardChanged(string key, Variant value)
+    {
+        if (Owner == null)
+        {
+            return;
+        }
+
+        if (key != Actor.KeyHitPending || !value.AsBool())
+        {
+            return;
+        }
+
+        Vector2 source = Owner.GetBlackboardVector(Actor.KeyHitSource, HealthComponent.NoSourcePosition);
+        bool hasSource = !float.IsNaN(source.X) && !float.IsNaN(source.Y);
+        PlayHitEffect(hasSource ? source : (Vector2?)null);
+
+        Owner.SetBlackboardValue(Actor.KeyHitPending, false);
+        Owner.SetBlackboardValue(Actor.KeyHitSource, HealthComponent.NoSourcePosition);
     }
 
     public override void _PhysicsProcess(double delta)

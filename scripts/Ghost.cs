@@ -8,7 +8,6 @@ public partial class Ghost : Enemy
     [Export] public float DamageInterval = 1.0f;
 
     // --- 组件引用 ---
-    [Export] private MovementSmoothingComponent _movementSmoothing;
     [Export] private Area2D _detectionArea;
     [Export] private HitboxComponent _hitbox;
 
@@ -29,8 +28,6 @@ public partial class Ghost : Enemy
         }
 
         // 自动查找组件
-        if (_movementSmoothing == null)
-            _movementSmoothing = GetNodeOrNull<MovementSmoothingComponent>("MovementSmoothing");
         if (_detectionArea == null)
             _detectionArea = GetNodeOrNull<Area2D>("DetectionArea");
         if (_hitbox == null)
@@ -44,8 +41,8 @@ public partial class Ghost : Enemy
         switch (_currentState)
         {
             case GhostState.Idle:
-                // [新增] 惯性刹车：如果没有目标，就慢慢停下来，而不是瞬间静止
-                Velocity = ApplyBrake(Velocity, (float)delta);
+                // 空闲时停止移动（MovementComponent 会自动处理刹车）
+                SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
                 break;
 
             case GhostState.Chase:
@@ -53,11 +50,11 @@ public partial class Ghost : Enemy
                     _target = null;
                 if (_target != null && _target.IsAlive)
                 {
-                    ChaseTarget(delta);
+                    ChaseTarget();
                 }
                 else
                 {
-                    Velocity = ApplyBrake(Velocity, (float)delta);
+                    SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
                 }
                 break;
         }
@@ -68,19 +65,18 @@ public partial class Ghost : Enemy
 
     // --- 核心移动逻辑改动 ---
 
-    private void ChaseTarget(double delta)
+    private void ChaseTarget()
     {
         var targetPos = GetTargetPosition();
-        if (!targetPos.HasValue) return;
+        if (!targetPos.HasValue)
+        {
+            SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
+            return;
+        }
 
         Vector2 direction = (targetPos.Value - GlobalPosition).Normalized();
-        
-        // [修改] 不再直接赋值 Velocity = direction * Speed
-        // 而是使用 MoveToward 平滑地从"当前速度"过渡到"目标速度"
-        
-        Velocity = ApplyAcceleration(Velocity, direction * Speed * _isoVec, (float)delta);
-        
-
+        // 写入移动意图到黑板，由 MovementComponent 处理
+        SetBlackboardValue(Actor.KeyMoveDirection, direction);
     }
 
     // --- 动画优化 ---
@@ -94,19 +90,6 @@ public partial class Ghost : Enemy
 		}
     }
 
-    private Vector2 ApplyAcceleration(Vector2 currentVelocity, Vector2 targetVelocity, float delta)
-    {
-        return _movementSmoothing != null
-            ? _movementSmoothing.Accelerate(currentVelocity, targetVelocity, delta)
-            : targetVelocity;
-    }
-
-    private Vector2 ApplyBrake(Vector2 currentVelocity, float delta)
-    {
-        return _movementSmoothing != null
-            ? _movementSmoothing.Brake(currentVelocity, delta)
-            : Vector2.Zero;
-    }
 
     // --- 其他逻辑保持不变 ---
     private void ProcessContactDamage(double delta)

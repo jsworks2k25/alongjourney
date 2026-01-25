@@ -12,6 +12,9 @@
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="11_isf7u"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="12_0cc3o"]
 
+[sub_resource type="Resource" id="Resource_tglyx"]
+script = ExtResource("12_0cc3o")
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dfl7p"]
 texture = ExtResource("1_ampw4")
 texture_region_size = Vector2i(32, 32)
@@ -266,14 +269,14 @@ physics_layer_0/collision_layer = 1
 sources/3 = SubResource("TileSetAtlasSource_w4mkn")
 sources/0 = SubResource("TileSetAtlasSource_dfl7p")
 
-[sub_resource type="Resource" id="Resource_tglyx"]
-script = ExtResource("12_0cc3o")
-
 [node name="World" type="Node2D"]
+
+[node name="GameConfig" type="Node" parent="."]
+script = ExtResource("8_dq03a")
 
 [node name="MainCamera" type="Camera2D" parent="."]
 physics_interpolation_mode = 1
-position = Vector2(80, 9)
+position = Vector2(0, 9)
 zoom = Vector2(3, 3)
 process_callback = 0
 
@@ -282,6 +285,20 @@ process_priority = 300
 process_physics_priority = 300
 script = ExtResource("2_mwhox")
 metadata/_custom_type_script = "uid://bd046eokvcnu2"
+
+[node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
+top_level = true
+position = Vector2(0, 9)
+script = ExtResource("11_isf7u")
+priority = 10
+follow_mode = 2
+follow_target = NodePath("../ObjectLayer/Player")
+zoom = Vector2(3, 3)
+tween_resource = SubResource("Resource_tglyx")
+follow_damping = true
+dead_zone_width = 0.02
+dead_zone_height = 0.01
+metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="GoundLayer" type="TileMapLayer" parent="."]
 z_index = -1
@@ -316,21 +333,3 @@ collision_priority = 3.0
 [node name="ghost" parent="ObjectLayer" instance=ExtResource("8_txgak")]
 position = Vector2(81, -74)
 collision_mask = 1
-
-[node name="GameConfig" type="Node2D" parent="."]
-script = ExtResource("8_dq03a")
-
-[node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
-top_level = true
-position = Vector2(80, 9)
-script = ExtResource("11_isf7u")
-priority = 10
-follow_mode = 2
-follow_target = NodePath("../ObjectLayer/Player")
-zoom = Vector2(3, 3)
-tween_resource = SubResource("Resource_tglyx")
-follow_offset = Vector2(80, 0)
-follow_damping = true
-dead_zone_width = 0.02
-dead_zone_height = 0.01
-metadata/_custom_type_script = "uid://bhexx6mj1xv3q"

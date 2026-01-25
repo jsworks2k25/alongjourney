@@ -52,26 +52,31 @@ public partial class Robot0 : Enemy
 			PickRandomDirection();
 		}
 
-		// 2. 移动
+		// 2. 写入移动意图到黑板，由 MovementComponent 处理
 		if(isMoving)
 		{
-			Velocity = _currentDir * Speed;
+			SetBlackboardValue(Actor.KeyMoveDirection, _currentDir);
 		}
 		else
 		{
-			Velocity = Vector2.Zero;
+			SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
 		}
 		
 		// 3. 处理方向贴图和翻转
 		UpdateAnimation();
 		
-		// 碰撞滑动处理
+		// 碰撞滑动处理：更新方向以便下次移动时使用
 		if (GetSlideCollisionCount() > 0)
 		{
 			var collision = GetSlideCollision(0);
 			// collision.GetNormal() 会给你一个垂直于碰撞表面的向量（指向外面）
 			// 我们让方向沿着墙面（或玩家表面）滑动
 			_currentDir = _currentDir.Slide(collision.GetNormal()).Normalized();
+			// 立即更新黑板中的移动方向
+			if (isMoving)
+			{
+				SetBlackboardValue(Actor.KeyMoveDirection, _currentDir);
+			}
 		}
 	}
 

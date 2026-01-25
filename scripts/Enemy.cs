@@ -1,12 +1,7 @@
 using Godot;
 
-public partial class Enemy : CharacterBody2D
+public partial class Enemy : Actor
 {
-    // 获取子节点的引用
-    protected HealthComponent _healthComponent;
-    protected AnimationController _animationController;
-    protected HitEffectComponent _hitEffectComponent;
-    
     // 简单的状态机枚举
     protected enum EnemyState { Idle, Chase, Attack }
     protected EnemyState CurrentState = EnemyState.Idle;
@@ -18,19 +13,13 @@ public partial class Enemy : CharacterBody2D
 
     public override void _Ready()
     {
+        base._Ready();
+
         // 从 GameConfig 获取等距向量
         _isoVec = GameConfig.Instance != null ? GameConfig.Instance.IsometricVector : new Vector2(1f, 0.5f);
 
-        // 自动寻找组件
-        _healthComponent = GetNodeOrNull<HealthComponent>("HealthComponent");
-        _animationController = GetNodeOrNull<AnimationController>("AnimationController");
-        _hitEffectComponent = GetNodeOrNull<HitEffectComponent>("HitEffectComponent");
-        
-        // 订阅死亡信号：死了就播放动画并消失
-        if (_healthComponent != null)
-        {
-            _healthComponent.Died += OnDied;
-        }
+        // 将 Speed 写入黑板，供 MovementComponent 使用
+        SetBlackboardValue(Actor.KeyMoveSpeed, Speed);
 
         // 查找目标（玩家）
         FindTarget();
@@ -86,13 +75,7 @@ public partial class Enemy : CharacterBody2D
                 HandleChaseState(delta);
                 break;
         }
-
-        MoveAndSlide();
-    }
-
-    protected virtual void HandleIdleState(double delta)
-    {
-        // 子类可以重写
+        base._PhysicsProcess(delta);
     }
 
     protected virtual void HandleChaseState(double delta)
@@ -101,18 +84,25 @@ public partial class Enemy : CharacterBody2D
         if (targetPos.HasValue)
         {
             Vector2 direction = (targetPos.Value - GlobalPosition).Normalized();
-            Velocity = direction * Speed * _isoVec;
+            // 写入移动意图到黑板，由 MovementComponent 处理
+            SetBlackboardValue(Actor.KeyMoveDirection, direction);
+        }
+        else
+        {
+            SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
         }
     }
 
-    protected virtual void OnDied()
+    protected virtual void HandleIdleState(double delta)
     {
-        // 播放死亡动画
-        if (_animationController != null)
-        {
-            _animationController.PlayDeathAnimation();
-        }
-        
+        // 空闲时停止移动
+        SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
+    }
+
+    protected override void HandleDied()
+    {
+        base.HandleDied();
+
         // 延迟销毁，让动画播放完
         GetTree().CreateTimer(0.5f).Timeout += QueueFree;
     }
