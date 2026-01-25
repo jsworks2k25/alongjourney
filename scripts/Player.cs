@@ -19,6 +19,7 @@ public partial class Player : CharacterBody2D, ITargetable
 
     // --- 2. 基础属性 ---
     [Export] public float Speed = 100.0f;
+    [Export] private MovementSmoothingComponent _movementSmoothing;
     
     // --- 3. 状态机 ---
     private enum PlayerState { Normal, Attack, Stagger, Dead }
@@ -64,6 +65,9 @@ public partial class Player : CharacterBody2D, ITargetable
             _hitEffectComponent.OnStaggerEnded += OnStaggerEnded;
         }
 
+        if (_movementSmoothing == null)
+            _movementSmoothing = GetNodeOrNull<MovementSmoothingComponent>("MovementSmoothing");
+
         if (_weaponHolder != null && _weaponHolder.GetChildCount() > 0)
         {
             _currentWeapon = _weaponHolder.GetChild<Weapon>(0);
@@ -91,7 +95,7 @@ public partial class Player : CharacterBody2D, ITargetable
         switch (_currentState)
         {
             case PlayerState.Normal:
-                HandleMovementState();
+                HandleMovementState(delta);
                 break;
             
             case PlayerState.Attack:
@@ -141,10 +145,22 @@ public partial class Player : CharacterBody2D, ITargetable
         _weaponHolder.Scale = new Vector2(1, mouseDir.X < 0 ? -1 : 1);
     }
 
-    private void HandleMovementState()
+    private void HandleMovementState(double delta)
     {
         Vector2 input = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-        Velocity = input * Speed * _isoVec;
+        Vector2 targetVelocity = input * Speed * _isoVec;
+        float deltaSeconds = (float)delta;
+
+        if (_movementSmoothing != null)
+        {
+            Velocity = input.Length() > 0
+                ? _movementSmoothing.Accelerate(Velocity, targetVelocity, deltaSeconds)
+                : _movementSmoothing.Brake(Velocity, deltaSeconds);
+        }
+        else
+        {
+            Velocity = targetVelocity;
+        }
 
         if (input.Length() > 0)
         {

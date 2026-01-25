@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bo677htw67u60"]
+[gd_scene load_steps=22 format=3 uid="uid://bo677htw67u60"]
 
 [ext_resource type="Script" uid="uid://cdf0ahb0s6jis" path="res://scripts/Player.cs" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://dioxj4dtvcfg5" path="res://sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="7_y4r1p"]
 [ext_resource type="PackedScene" uid="uid://dambflx8sgsb8" path="res://scenes/axe.tscn" id="9_ur7pv"]
 [ext_resource type="Script" uid="uid://db1cxs1ex0f7h" path="res://scripts/HitEffectComponent.cs" id="10_y4r1p"]
+[ext_resource type="Script" uid="uid://u1ykjx61t81p" path="res://scripts/MovementSmoothingComponent.cs" id="11_smooth"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
 radius = 3.0
@@ -341,7 +342,7 @@ _data = {
 &"move_front": SubResource("Animation_d2wvv")
 }
 
-[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("_bodySprite", "_healthComponent", "_hurtboxComponent", "_animationController", "_hitEffectComponent", "_weaponHolder")]
+[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("_bodySprite", "_healthComponent", "_hurtboxComponent", "_animationController", "_hitEffectComponent", "_weaponHolder", "_movementSmoothing")]
 y_sort_enabled = true
 collision_layer = 2
 collision_mask = 28
@@ -354,6 +355,7 @@ _hurtboxComponent = NodePath("Hurtbox")
 _animationController = NodePath("AnimationController")
 _hitEffectComponent = NodePath("HitEffectComponent")
 _weaponHolder = NodePath("WeaponPivot")
+_movementSmoothing = NodePath("MovementSmoothingComponent")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = -1.5707964
@@ -398,3 +400,8 @@ offset = Vector2(0, -12)
 script = ExtResource("10_y4r1p")
 EnableKnockback = true
 FlashDuration = 0.2
+
+[node name="MovementSmoothingComponent" type="Node" parent="."]
+script = ExtResource("11_smooth")
+Acceleration = 500.0
+Friction = 300.0

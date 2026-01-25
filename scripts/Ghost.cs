@@ -4,13 +4,11 @@ using System;
 public partial class Ghost : Enemy
 {
     // --- 配置 ---
-    [Export] public float Acceleration = 200f; // [新增] 加速度：数值越小，启动越慢（漂移感越强）
-    [Export] public float Friction = 150f;     // [新增] 摩擦力：数值越小，刹车越慢
-    
     [Export] public int DamagePerTick = 10;
     [Export] public float DamageInterval = 1.0f;
 
     // --- 组件引用 ---
+    [Export] private MovementSmoothingComponent _movementSmoothing;
     [Export] private Area2D _detectionArea;
     [Export] private HitboxComponent _hitbox;
 
@@ -31,6 +29,8 @@ public partial class Ghost : Enemy
         }
 
         // 自动查找组件
+        if (_movementSmoothing == null)
+            _movementSmoothing = GetNodeOrNull<MovementSmoothingComponent>("MovementSmoothing");
         if (_detectionArea == null)
             _detectionArea = GetNodeOrNull<Area2D>("DetectionArea");
         if (_hitbox == null)
@@ -45,7 +45,7 @@ public partial class Ghost : Enemy
         {
             case GhostState.Idle:
                 // [新增] 惯性刹车：如果没有目标，就慢慢停下来，而不是瞬间静止
-                ApplyFriction(delta);
+                Velocity = ApplyBrake(Velocity, (float)delta);
                 break;
 
             case GhostState.Chase:
@@ -57,7 +57,7 @@ public partial class Ghost : Enemy
                 }
                 else
                 {
-                    ApplyFriction(delta);
+                    Velocity = ApplyBrake(Velocity, (float)delta);
                 }
                 break;
         }
@@ -78,15 +78,9 @@ public partial class Ghost : Enemy
         // [修改] 不再直接赋值 Velocity = direction * Speed
         // 而是使用 MoveToward 平滑地从"当前速度"过渡到"目标速度"
         
-        Velocity = Velocity.MoveToward(direction * Speed * _isoVec, Acceleration * (float)delta);
+        Velocity = ApplyAcceleration(Velocity, direction * Speed * _isoVec, (float)delta);
         
 
-    }
-
-    private void ApplyFriction(double delta)
-    {
-        // [新增] 逐渐将速度降为 0
-        Velocity = Velocity.MoveToward(Vector2.Zero, Friction * (float)delta);
     }
 
     // --- 动画优化 ---
@@ -98,6 +92,20 @@ public partial class Ghost : Enemy
 			// 使用统一方法，根据 velocity.Y 自动判断方向，自动翻转
 			_animationController.UpdateAnimation(Velocity);
 		}
+    }
+
+    private Vector2 ApplyAcceleration(Vector2 currentVelocity, Vector2 targetVelocity, float delta)
+    {
+        return _movementSmoothing != null
+            ? _movementSmoothing.Accelerate(currentVelocity, targetVelocity, delta)
+            : targetVelocity;
+    }
+
+    private Vector2 ApplyBrake(Vector2 currentVelocity, float delta)
+    {
+        return _movementSmoothing != null
+            ? _movementSmoothing.Brake(currentVelocity, delta)
+            : Vector2.Zero;
     }
 
     // --- 其他逻辑保持不变 ---

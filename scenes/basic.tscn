@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://du4uisvl0wd7j"]
+[gd_scene load_steps=16 format=4 uid="uid://du4uisvl0wd7j"]
 
 [ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://sprites/spritesheet.png" id="1_ampw4"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="2_mwhox"]
@@ -272,8 +272,10 @@ script = ExtResource("12_0cc3o")
 [node name="World" type="Node2D"]
 
 [node name="MainCamera" type="Camera2D" parent="."]
-position = Vector2(0, 9)
+physics_interpolation_mode = 1
+position = Vector2(80, 9)
 zoom = Vector2(3, 3)
+process_callback = 0
 
 [node name="PhantomCameraHost" type="Node" parent="MainCamera"]
 process_priority = 300
@@ -320,12 +322,15 @@ script = ExtResource("8_dq03a")
 
 [node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
 top_level = true
-position = Vector2(0, 9)
+position = Vector2(80, 9)
 script = ExtResource("11_isf7u")
 priority = 10
 follow_mode = 2
 follow_target = NodePath("../ObjectLayer/Player")
 zoom = Vector2(3, 3)
 tween_resource = SubResource("Resource_tglyx")
+follow_offset = Vector2(80, 0)
 follow_damping = true
+dead_zone_width = 0.02
+dead_zone_height = 0.01
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"

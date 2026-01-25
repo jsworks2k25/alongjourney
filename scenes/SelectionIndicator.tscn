@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnagg5faysv6i"]
+
+[ext_resource type="Script" path="res://scripts/SelectionIndicator.cs" id="1_selind"]
+
+[node name="SelectionIndicator" type="Node2D"]
+script = ExtResource("1_selind")
+TileColor = null
+TargetColor = null
+TileHalfSize = null
+TargetRadius = null
