@@ -13,9 +13,10 @@ public partial class Axe : Weapon
             _animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
         // 动画结束时，告诉玩家解锁 Attack 状态
+        string swingAnim = GameConfig.Instance != null ? GameConfig.Instance.AnimSwing : "swing";
         _animPlayer.AnimationFinished += (animName) => {
             GD.Print("动画结束: " + animName);
-            if (animName == "swing")
+            if (animName == swingAnim)
             {
                 _isAttacking = false;
                 StartCooldown(); // 开启冷却计时
@@ -41,7 +42,8 @@ public partial class Axe : Weapon
 
         // 4. 播放动画
         // 既然动画是统一朝右画的，Player 已经旋转了父节点，这里直接播即可
-        _animPlayer.Play("swing");
+        string swingAnim = GameConfig.Instance != null ? GameConfig.Instance.AnimSwing : "swing";
+        _animPlayer.Play(swingAnim);
         return true;
     }
 }

@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://dsftw85vqphm"]
+[gd_scene load_steps=13 format=3 uid="uid://dsftw85vqphm"]
 
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://sprites/robot.png" id="1_8kwrt"]
 [ext_resource type="Script" uid="uid://eee2pnmbdd7w" path="res://scripts/Robot0.cs" id="1_w0dvl"]
+[ext_resource type="Script" uid="uid://c6ydw0bq7qkyd" path="res://scripts/AnimationController.cs" id="2_edo0t"]
+[ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="3_osokj"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0
@@ -97,23 +99,21 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_utrwa"]
 _data = {
 &"RESET": SubResource("Animation_wxql2"),
-&"idle_down": SubResource("Animation_edo0t"),
-&"idle_up": SubResource("Animation_2gpyy"),
-&"move_down": SubResource("Animation_w0dvl"),
-&"move_up": SubResource("Animation_osokj")
+&"idle_back": SubResource("Animation_2gpyy"),
+&"idle_front": SubResource("Animation_edo0t"),
+&"move_back": SubResource("Animation_osokj"),
+&"move_front": SubResource("Animation_w0dvl")
 }
 
-[node name="Robot0" type="CharacterBody2D" node_paths=PackedStringArray("_sprite", "_rayCast", "_moveTimer", "_animPlayer")]
+[node name="Robot0" type="CharacterBody2D" node_paths=PackedStringArray("_rayCast", "_moveTimer")]
 y_sort_enabled = true
 collision_layer = 4
 collision_mask = 2
 safe_margin = 0.2
 script = ExtResource("1_w0dvl")
-Health = 100
-_sprite = NodePath("Sprite2D")
 _rayCast = NodePath("RayCast2D")
 _moveTimer = NodePath("Timer")
-_animPlayer = NodePath("AnimationPlayer")
+Speed = 20.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -141,7 +141,16 @@ collision_mask = 3
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationController" type="Node2D" parent="." node_paths=PackedStringArray("_animPlayer", "_sprite")]
+script = ExtResource("2_edo0t")
+_animPlayer = NodePath("AnimationPlayer")
+_sprite = NodePath("../Sprite2D")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimationController"]
+root_node = NodePath("../..")
 libraries = {
 &"": SubResource("AnimationLibrary_utrwa")
 }
+
+[node name="HealthComponent" type="Node2D" parent="."]
+script = ExtResource("3_osokj")

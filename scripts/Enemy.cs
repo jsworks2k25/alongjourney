@@ -4,45 +4,116 @@ public partial class Enemy : CharacterBody2D
 {
     // 获取子节点的引用
     protected HealthComponent _healthComponent;
+    protected AnimationController _animationController;
+    protected HitEffectComponent _hitEffectComponent;
     
     // 简单的状态机枚举
     protected enum EnemyState { Idle, Chase, Attack }
     protected EnemyState CurrentState = EnemyState.Idle;
     
     [Export] public float Speed = 50f;
-    public Player TargetPlayer; // 目标引用
+    protected ITargetable _target; // 使用接口而不是直接引用 Player
+
+    protected Vector2 _isoVec;
 
     public override void _Ready()
     {
+        // 从 GameConfig 获取等距向量
+        _isoVec = GameConfig.Instance != null ? GameConfig.Instance.IsometricVector : new Vector2(1f, 0.5f);
+
         // 自动寻找组件
-        _healthComponent = GetNode<HealthComponent>("HealthComponent");
+        _healthComponent = GetNodeOrNull<HealthComponent>("HealthComponent");
+        _animationController = GetNodeOrNull<AnimationController>("AnimationController");
+        _hitEffectComponent = GetNodeOrNull<HitEffectComponent>("HitEffectComponent");
         
         // 订阅死亡信号：死了就播放动画并消失
-        _healthComponent.Died += OnDied;
+        if (_healthComponent != null)
+        {
+            _healthComponent.Died += OnDied;
+        }
+
+        // 查找目标（玩家）
+        FindTarget();
+    }
+
+    /// <summary>
+    /// 查找目标（使用 Group 或接口）
+    /// </summary>
+    protected virtual void FindTarget()
+    {
+        if (_target != null && GodotObject.IsInstanceValid(_target as GodotObject) && _target.IsAlive)
+            return;
+        _target = null;
+
+        string groupName = GameConfig.Instance != null ? GameConfig.Instance.PlayerGroupName : "Player";
+        var players = GetTree().GetNodesInGroup(groupName);
+
+        foreach (var player in players)
+        {
+            if (player is ITargetable targetable && targetable.IsAlive)
+            {
+                _target = targetable;
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 获取目标位置，子类可以重写
+    /// </summary>
+    protected virtual Vector2? GetTargetPosition()
+    {
+        if (_target == null || !GodotObject.IsInstanceValid(_target as GodotObject)) return null;
+        if (!_target.IsAlive) return null;
+        return _target.GlobalPosition;
     }
 
     // 子类可以重写这个方法来实现不同的 AI
     public override void _PhysicsProcess(double delta)
     {
+        if (_target != null && !GodotObject.IsInstanceValid(_target as GodotObject))
+            _target = null;
+        if (_target == null || !_target.IsAlive)
+            FindTarget();
+
         switch (CurrentState)
         {
             case EnemyState.Idle:
                 // 简单的巡逻逻辑或发呆
+                HandleIdleState(delta);
                 break;
             case EnemyState.Chase:
-                if (TargetPlayer != null)
-                {
-                    Vector2 direction = (TargetPlayer.GlobalPosition - GlobalPosition).Normalized();
-                    Velocity = direction * Speed;
-                    MoveAndSlide();
-                }
+                HandleChaseState(delta);
                 break;
+        }
+
+        MoveAndSlide();
+    }
+
+    protected virtual void HandleIdleState(double delta)
+    {
+        // 子类可以重写
+    }
+
+    protected virtual void HandleChaseState(double delta)
+    {
+        var targetPos = GetTargetPosition();
+        if (targetPos.HasValue)
+        {
+            Vector2 direction = (targetPos.Value - GlobalPosition).Normalized();
+            Velocity = direction * Speed * _isoVec;
         }
     }
 
-    private void OnDied()
+    protected virtual void OnDied()
     {
-        // 播放死亡动画，掉落物品等
-        QueueFree(); // 简单销毁
+        // 播放死亡动画
+        if (_animationController != null)
+        {
+            _animationController.PlayDeathAnimation();
+        }
+        
+        // 延迟销毁，让动画播放完
+        GetTree().CreateTimer(0.5f).Timeout += QueueFree;
     }
 }

@@ -1,20 +1,16 @@
 using Godot;
 using System;
 
-public partial class Ghost : CharacterBody2D
+public partial class Ghost : Enemy
 {
     // --- 配置 ---
-    [Export] public float Speed = 40f;
     [Export] public float Acceleration = 200f; // [新增] 加速度：数值越小，启动越慢（漂移感越强）
     [Export] public float Friction = 150f;     // [新增] 摩擦力：数值越小，刹车越慢
     
     [Export] public int DamagePerTick = 10;
     [Export] public float DamageInterval = 1.0f;
 
-    private Vector2 _isoVec = new Vector2(1f, 0.5f);
-
     // --- 组件引用 ---
-    [Export] private AnimationPlayer _animPlayer;
     [Export] private Area2D _detectionArea;
     [Export] private HitboxComponent _hitbox;
 
@@ -22,18 +18,29 @@ public partial class Ghost : CharacterBody2D
     private enum GhostState { Idle, Chase }
     private GhostState _currentState = GhostState.Idle;
 
-    private Node2D _target = null;
     private float _damageTimer = 0f;
 
     public override void _Ready()
     {
-        _detectionArea.BodyEntered += OnBodyEnteredDetection;
-        _detectionArea.BodyExited += OnBodyExitedDetection;
-        _animPlayer.Play("move_front");
+        base._Ready(); // 调用基类初始化
+        
+        if (_detectionArea != null)
+        {
+            _detectionArea.BodyEntered += OnBodyEnteredDetection;
+            _detectionArea.BodyExited += OnBodyExitedDetection;
+        }
+
+        // 自动查找组件
+        if (_detectionArea == null)
+            _detectionArea = GetNodeOrNull<Area2D>("DetectionArea");
+        if (_hitbox == null)
+            _hitbox = GetNodeOrNull<HitboxComponent>("Hitbox");
     }
 
     public override void _PhysicsProcess(double delta)
     {
+        base._PhysicsProcess(delta); // 调用基类的移动逻辑
+        
         switch (_currentState)
         {
             case GhostState.Idle:
@@ -42,19 +49,19 @@ public partial class Ghost : CharacterBody2D
                 break;
 
             case GhostState.Chase:
-                if (_target != null)
+                if (_target != null && !GodotObject.IsInstanceValid(_target as GodotObject))
+                    _target = null;
+                if (_target != null && _target.IsAlive)
                 {
                     ChaseTarget(delta);
                 }
-                else 
+                else
                 {
-                    // 目标丢失（比如玩家死了），转为刹车
                     ApplyFriction(delta);
                 }
                 break;
         }
 
-        MoveAndSlide();
         UpdateAnimation();
         ProcessContactDamage(delta);
     }
@@ -63,15 +70,17 @@ public partial class Ghost : CharacterBody2D
 
     private void ChaseTarget(double delta)
     {
-        Vector2 direction = (_target.GlobalPosition - GlobalPosition).Normalized();
+        var targetPos = GetTargetPosition();
+        if (!targetPos.HasValue) return;
+
+        Vector2 direction = (targetPos.Value - GlobalPosition).Normalized();
         
         // [修改] 不再直接赋值 Velocity = direction * Speed
-        // 而是使用 MoveToward 平滑地从“当前速度”过渡到“目标速度”
+        // 而是使用 MoveToward 平滑地从"当前速度"过渡到"目标速度"
         
         Velocity = Velocity.MoveToward(direction * Speed * _isoVec, Acceleration * (float)delta);
-        // 简单的朝向翻转
-        var sprite = GetNode<Sprite2D>("Sprite2D");
-        sprite.FlipH = Velocity.X > 0;
+        
+
     }
 
     private void ApplyFriction(double delta)
@@ -84,64 +93,55 @@ public partial class Ghost : CharacterBody2D
 
     private void UpdateAnimation()
     {
-        // 只有当速度超过一定程度才切换动画，防止原地轻微漂移时动画鬼畜
-        if (Velocity.Length() > 5f) 
-        {
-            // 给 Y 轴加一点“死区”，防止在水平移动时因为微小的 Y 轴波动而切换前后动画
-            if (Velocity.Y > 5f)
-                _animPlayer.Play("move_front");
-            else if (Velocity.Y < -5f)
-                _animPlayer.Play("move_back");
-        }
-        else
-        {
-            // 如果速度很慢，可以选择暂停动画或者播放 Idle
-            // _animPlayer.Pause(); 
-        }
+		if (_animationController != null)
+		{
+			// 使用统一方法，根据 velocity.Y 自动判断方向，自动翻转
+			_animationController.UpdateAnimation(Velocity);
+		}
     }
 
     // --- 其他逻辑保持不变 ---
     private void ProcessContactDamage(double delta)
     {
-        if (_hitbox.HasOverlappingAreas()) 
+        if (_hitbox == null || !_hitbox.HasOverlappingAreas()) 
         {
-            _damageTimer -= (float)delta;
-            if (_damageTimer <= 0)
+            _damageTimer = 0;
+            return;
+        }
+
+        _damageTimer -= (float)delta;
+        if (_damageTimer <= 0)
+        {
+            foreach (var area in _hitbox.GetOverlappingAreas())
             {
-                foreach (var area in _hitbox.GetOverlappingAreas())
+                if (area is IDamageable damageable)
                 {
-                    var victim = area.Owner as Node; 
-                    if (area is IDamageable damageable)
-                    {
-                        // 传递攻击者的位置（Ghost的全局位置）
-                        damageable.TakeDamage(DamagePerTick, GlobalPosition);
-                        _damageTimer = DamageInterval; 
-                    }
+                    // 传递攻击者的位置（Ghost的全局位置）
+                    damageable.TakeDamage(DamagePerTick, GlobalPosition);
+                    _damageTimer = DamageInterval; 
+                    break; // 一次只伤害一个目标
                 }
             }
-        }
-        else
-        {
-            _damageTimer = 0; 
         }
     }
 
     private void OnBodyEnteredDetection(Node2D body)
     {
-        if (body.Name == "Player") 
+        if (body is ITargetable targetable && targetable.IsAlive)
         {
-            _target = body;
+            _target = targetable;
             _currentState = GhostState.Chase;
         }
     }
 
     private void OnBodyExitedDetection(Node2D body)
     {
-        if (body == _target)
+        if (_target != null && !GodotObject.IsInstanceValid(_target as GodotObject))
+            _target = null;
+        if (body is ITargetable targetable && targetable == _target)
         {
             _target = null;
             _currentState = GhostState.Idle;
-            // 注意：这里删除了 Velocity = Vector2.Zero，交给 ApplyFriction 处理
         }
     }
 }

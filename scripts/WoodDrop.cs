@@ -45,12 +45,17 @@ public partial class WoodDrop : Area2D
             // 计算方向
             Vector2 direction = (_playerTarget.GlobalPosition - GlobalPosition).Normalized();
             
+            // 从 GameConfig 获取配置
+            float magnetSpeed = GameConfig.Instance != null ? GameConfig.Instance.ItemMagnetSpeed : MagnetSpeed;
+            float acceleration = GameConfig.Instance != null ? GameConfig.Instance.ItemAcceleration : Acceleration;
+            float collectDistance = GameConfig.Instance != null ? GameConfig.Instance.ItemCollectionDistance : 10.0f;
+            
             // 简单的加速逻辑 (越飞越快)
-            _velocity = _velocity.Lerp(direction * MagnetSpeed, (float)delta * Acceleration);
+            _velocity = _velocity.Lerp(direction * magnetSpeed, (float)delta * acceleration);
             GlobalPosition += _velocity * (float)delta;
 
             // 3. 收集判定 (距离足够近就吃掉)
-            if (GlobalPosition.DistanceTo(_playerTarget.GlobalPosition) < 10.0f)
+            if (GlobalPosition.DistanceTo(_playerTarget.GlobalPosition) < collectDistance)
             {
                 CollectItem();
             }
@@ -64,13 +69,14 @@ public partial class WoodDrop : Area2D
 
     private void OnBodyEntered(Node2D body)
     {
-        // 假设你的玩家节点叫 "Player" 或者在特定组里
-        if (body.Name == "Player" || body.IsInGroup("Player")) 
+        // 使用 Group 或接口查找玩家
+        string groupName = GameConfig.Instance != null ? GameConfig.Instance.PlayerGroupName : "Player";
+        if (body.IsInGroup(groupName) || body is ITargetable targetable)
         {
             _isMagnetized = true;
             _playerTarget = body;
             
-            // 可选：在这里播放一个“发现目标”的小音效
+            // 可选：在这里播放一个"发现目标"的小音效
         }
     }
 

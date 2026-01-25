@@ -1,13 +1,9 @@
 using Godot;
 using System;
 
-public partial class Robot0 : CharacterBody2D, IDamageable
+public partial class Robot0 : Enemy
 {
-	[Export] public float Speed = 10.0f;
-	[Export] public int MaxHealth = 30;
-	[Export] private int _currentHealth;
-
-	private Vector2[] _directions = new Vector2[] {
+	[Export] private Vector2[] _directions = new Vector2[] {
 		new Vector2(1, 0.5f).Normalized(),   // 右下
 		new Vector2(-1, 0.5f).Normalized(),  // 左下
 		new Vector2(1, -0.5f).Normalized(),  // 右上
@@ -17,29 +13,41 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 	private Vector2 _currentDir;
 	private Random _random = new Random();
 
-	[Export] private Sprite2D _sprite;
 	[Export] private RayCast2D _rayCast;
 	[Export] private Timer _moveTimer;
-	[Export] private AnimationPlayer _animPlayer;
 	private bool isMoving = false;
-	private string state = "";
-	private string direction = "";
-	private bool flip = false;
 	
 	public override void _Ready()
 	{
+		base._Ready(); // 调用基类初始化
+		
 		PickRandomDirection();
 		
 		// 绑定计时器，每隔几秒换个方向
-		_moveTimer.Timeout += PickRandomDirection;
-		_currentHealth = MaxHealth;
+		if (_moveTimer != null)
+		{
+			_moveTimer.Timeout += PickRandomDirection;
+		}
+		else
+		{
+			_moveTimer = GetNodeOrNull<Timer>("MoveTimer");
+			if (_moveTimer != null)
+			{
+				_moveTimer.Timeout += PickRandomDirection;
+			}
+		}
+
+		// 自动查找组件
+		if (_rayCast == null)
+			_rayCast = GetNodeOrNull<RayCast2D>("RayCast2D");
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		bool collided = MoveAndSlide();
+		base._PhysicsProcess(delta); // 调用基类逻辑
+		
 		// 1. 避障检测：如果前方有墙
-		if (_rayCast.IsColliding() && isMoving)
+		if (_rayCast != null && _rayCast.IsColliding() && isMoving)
 		{
 			PickRandomDirection();
 		}
@@ -48,16 +56,17 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 		if(isMoving)
 		{
 			Velocity = _currentDir * Speed;
-			MoveAndSlide();
 		}
 		else
 		{
-			Velocity = new Vector2(0f, 0f);
+			Velocity = Vector2.Zero;
 		}
+		
 		// 3. 处理方向贴图和翻转
 		UpdateAnimation();
 		
-		if (collided)
+		// 碰撞滑动处理
+		if (GetSlideCollisionCount() > 0)
 		{
 			var collision = GetSlideCollision(0);
 			// collision.GetNormal() 会给你一个垂直于碰撞表面的向量（指向外面）
@@ -79,59 +88,25 @@ public partial class Robot0 : CharacterBody2D, IDamageable
 		{
 			isMoving = true;
 		}
-		_moveTimer.WaitTime = (float)_random.NextDouble() * 2.0f + 2.0f;
+		
+		if (_moveTimer != null)
+		{
+			_moveTimer.WaitTime = (float)_random.NextDouble() * 2.0f + 2.0f;
+		}
+		
 		// 让探测器的方向指向移动方向
-		_rayCast.TargetPosition = _currentDir * 40; 
+		if (_rayCast != null)
+		{
+			_rayCast.TargetPosition = _currentDir * 40; 
+		}
 	}
 
 	private void UpdateAnimation()
 	{
-		state = Velocity.Length() > 0.1f ? "move" : "idle";
-		// 根据速度向量判断 4 个斜向0
-		// 等距视角 4 方向：(1, 0.5), (-1, 0.5), (1, -0.5), (-1, -0.5)
-		
-		if (Velocity.Y > 0) // 向下系列 (右下、左下)
+		if (_animationController != null)
 		{
-			direction = "down";
-			// 如果 X < 0，说明是左下，我们需要翻转“右下”的贴图
-			flip = Velocity.X < 0;
-		}
-		else if (Velocity.Y < 0)// 向上系列 (右上、左上)
-		{
-			direction = "up";
-			// 如果 X > 0，说明是右上，我们需要翻转“左上”的贴图
-			flip = Velocity.X > 0;
-		}
-
-		// 拼接动画名字，例如 "idle_down" 或 "move_up"
-		string animName = $"{state}_{direction}";
-		// 执行播放和翻转
-		if (_animPlayer.CurrentAnimation != animName)
-		{
-			_animPlayer.Play(animName);
-		}
-		_sprite.FlipH = flip;
-	}
-
-	// 供玩家调用的受击函数
-	public void TakeDamage(int damage, Vector2? sourcePosition = null)
-	{
-		_currentHealth -= damage;
-
-		// 简单的受击反馈：闪红光
-		var tween = CreateTween();
-		tween.TweenProperty(_sprite, "modulate", Colors.Red, 0.1f);
-		tween.TweenProperty(_sprite, "modulate", Colors.White, 0.1f);
-
-		if (_currentHealth <= 0)
-		{
-			Die();
+			// 使用统一方法，根据 velocity.Y 自动判断方向，自动翻转
+			_animationController.UpdateAnimation(Velocity);
 		}
 	}
-
-	private void Die()
-	{
-		QueueFree();
-	}
-
 }

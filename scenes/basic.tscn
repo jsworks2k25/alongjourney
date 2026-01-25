@@ -1,13 +1,16 @@
-[gd_scene load_steps=12 format=4 uid="uid://du4uisvl0wd7j"]
+[gd_scene load_steps=17 format=4 uid="uid://du4uisvl0wd7j"]
 
 [ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://sprites/spritesheet.png" id="1_ampw4"]
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="2_mwhox"]
 [ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://scenes/player.tscn" id="3_2tjqw"]
 [ext_resource type="Texture2D" uid="uid://dpxrbr5nc6c1b" path="res://sprites/empty.png" id="3_dfl7p"]
 [ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://scenes/rock.tscn" id="4_dfl7p"]
 [ext_resource type="PackedScene" uid="uid://dsftw85vqphm" path="res://scenes/robot_0.tscn" id="5_w4mkn"]
 [ext_resource type="PackedScene" uid="uid://df01wn734v1rp" path="res://scenes/tree_0.tscn" id="6_7mps8"]
-[ext_resource type="PackedScene" uid="uid://b20ds5ke2655t" path="res://scenes/wood.tscn" id="7_j2j5c"]
+[ext_resource type="Script" uid="uid://dfvyk3sglg1gu" path="res://scripts/GameConfig.cs" id="8_dq03a"]
 [ext_resource type="PackedScene" uid="uid://bjmid78a1unwj" path="res://scenes/ghost.tscn" id="8_txgak"]
+[ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="11_isf7u"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="12_0cc3o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dfl7p"]
 texture = ExtResource("1_ampw4")
@@ -263,7 +266,20 @@ physics_layer_0/collision_layer = 1
 sources/3 = SubResource("TileSetAtlasSource_w4mkn")
 sources/0 = SubResource("TileSetAtlasSource_dfl7p")
 
+[sub_resource type="Resource" id="Resource_tglyx"]
+script = ExtResource("12_0cc3o")
+
 [node name="World" type="Node2D"]
+
+[node name="MainCamera" type="Camera2D" parent="."]
+position = Vector2(0, 9)
+zoom = Vector2(3, 3)
+
+[node name="PhantomCameraHost" type="Node" parent="MainCamera"]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("2_mwhox")
+metadata/_custom_type_script = "uid://bd046eokvcnu2"
 
 [node name="GoundLayer" type="TileMapLayer" parent="."]
 z_index = -1
@@ -278,17 +294,10 @@ y_sort_enabled = true
 
 [node name="Player" parent="ObjectLayer" instance=ExtResource("3_2tjqw")]
 position = Vector2(0, 9)
-collision_layer = 2
-collision_mask = 61
-Speed = 100.0
-
-[node name="Camera2D" type="Camera2D" parent="ObjectLayer/Player"]
-offset = Vector2(0, -10)
-zoom = Vector2(3, 3)
+collision_mask = 57
 
 [node name="Robot0" parent="ObjectLayer" instance=ExtResource("5_w4mkn")]
 position = Vector2(0, -22)
-MaxHealth = 100
 
 [node name="Rock" parent="ObjectLayer" instance=ExtResource("4_dfl7p")]
 position = Vector2(-95, 11)
@@ -301,8 +310,22 @@ texture_filter = 1
 position = Vector2(-48, -15)
 collision_layer = 8
 collision_priority = 3.0
-DropItemScene = ExtResource("7_j2j5c")
 
 [node name="ghost" parent="ObjectLayer" instance=ExtResource("8_txgak")]
 position = Vector2(81, -74)
 collision_mask = 1
+
+[node name="GameConfig" type="Node2D" parent="."]
+script = ExtResource("8_dq03a")
+
+[node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
+top_level = true
+position = Vector2(0, 9)
+script = ExtResource("11_isf7u")
+priority = 10
+follow_mode = 2
+follow_target = NodePath("../ObjectLayer/Player")
+zoom = Vector2(3, 3)
+tween_resource = SubResource("Resource_tglyx")
+follow_damping = true
+metadata/_custom_type_script = "uid://bhexx6mj1xv3q"

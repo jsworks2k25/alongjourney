@@ -23,6 +23,12 @@ animation/layers/only_include_visible_layers_by_default=true
 
 aseprite_executable_path="C:/Program Files (x86)/Steam/steamapps/common/Aseprite/Aseprite.exe"
 
+[autoload]
+
+GameConfig="*res://scripts/GameConfig.cs"
+GameManager="*res://scripts/GameManager.cs"
+PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
+
 [display]
 
 window/size/viewport_width=1920
@@ -36,7 +42,7 @@ project/assembly_name="js_game_project"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
+enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/phantom_camera/plugin.cfg")
 
 [importer_defaults]
 
@@ -115,3 +121,7 @@ attack={
 2d_physics/layer_6="EnemyHurtbox"
 2d_physics/layer_7="EnvironmentHurtbox"
 2d_physics/layer_8="Item掉落物"
+
+[physics]
+
+common/physics_interpolation=true

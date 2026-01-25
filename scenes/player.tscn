@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bo677htw67u60"]
+[gd_scene load_steps=21 format=3 uid="uid://bo677htw67u60"]
 
 [ext_resource type="Script" uid="uid://cdf0ahb0s6jis" path="res://scripts/Player.cs" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://dioxj4dtvcfg5" path="res://sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
@@ -6,13 +6,19 @@
 [ext_resource type="Texture2D" uid="uid://dumpbq5yp6boy" path="res://sprites/template-rear-stand-Sheet.png" id="3_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://b32v34imykgxo" path="res://sprites/template-front-run-Sheet.png" id="4_fjrip"]
 [ext_resource type="Texture2D" uid="uid://bi46nx5h1fl8w" path="res://sprites/template-rear-run-Sheet.png" id="5_smehm"]
+[ext_resource type="Script" uid="uid://c6ydw0bq7qkyd" path="res://scripts/AnimationController.cs" id="6_d2wvv"]
 [ext_resource type="Script" uid="uid://qmkxyr8rr1d2" path="res://scripts/HurtboxComponent.cs" id="6_ur7pv"]
 [ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="7_y4r1p"]
 [ext_resource type="PackedScene" uid="uid://dambflx8sgsb8" path="res://scenes/axe.tscn" id="9_ur7pv"]
+[ext_resource type="Script" uid="uid://db1cxs1ex0f7h" path="res://scripts/HitEffectComponent.cs" id="10_y4r1p"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
 radius = 3.0
 height = 10.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3v2ag"]
+radius = 4.0
+height = 12.0
 
 [sub_resource type="Animation" id="Animation_ur7pv"]
 length = 0.1
@@ -335,34 +341,23 @@ _data = {
 &"move_front": SubResource("Animation_d2wvv")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3v2ag"]
-radius = 4.0
-height = 12.0
-
-[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("_animPlayer", "_bodySprite", "_healthComponent", "_weaponHolder")]
+[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("_bodySprite", "_healthComponent", "_hurtboxComponent", "_animationController", "_hitEffectComponent", "_weaponHolder")]
 y_sort_enabled = true
-collision_mask = 26
+collision_layer = 2
+collision_mask = 28
 motion_mode = 1
 safe_margin = 0.2
 script = ExtResource("1_g2els")
-_animPlayer = NodePath("AnimationPlayer")
 _bodySprite = NodePath("Sprite2D")
 _healthComponent = NodePath("HealthComponent")
+_hurtboxComponent = NodePath("Hurtbox")
+_animationController = NodePath("AnimationController")
+_hitEffectComponent = NodePath("HitEffectComponent")
 _weaponHolder = NodePath("WeaponPivot")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture_filter = 1
-texture = ExtResource("2_qlg0r")
-offset = Vector2(0, -12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_tuyoq")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_y4r1p")
-}
 
 [node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("HealthComponent")]
 collision_layer = 16
@@ -382,3 +377,24 @@ script = ExtResource("7_y4r1p")
 y_sort_enabled = true
 
 [node name="Axe" parent="WeaponPivot" instance=ExtResource("9_ur7pv")]
+
+[node name="AnimationController" type="Node2D" parent="." node_paths=PackedStringArray("_animPlayer", "_sprite")]
+script = ExtResource("6_d2wvv")
+_animPlayer = NodePath("AnimationPlayer")
+_sprite = NodePath("../Sprite2D")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimationController"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_y4r1p")
+}
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_qlg0r")
+offset = Vector2(0, -12)
+
+[node name="HitEffectComponent" type="Node2D" parent="."]
+script = ExtResource("10_y4r1p")
+EnableKnockback = true
+FlashDuration = 0.2

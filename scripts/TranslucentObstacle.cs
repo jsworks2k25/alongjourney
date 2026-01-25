@@ -28,9 +28,9 @@ public partial class TranslucentObstacle : StaticBody2D
 
     private void OnBodyEntered(Node2D body)
     {
-        // 检查进入的是不是玩家
-        // 建议给 Player 节点添加一个 Group 叫 "Player"，或者检查名字
-        if (body.Name == "Player" || body.IsInGroup("Player"))
+        // 检查进入的是不是玩家（使用 Group 或接口）
+        string groupName = GameConfig.Instance != null ? GameConfig.Instance.PlayerGroupName : "Player";
+        if (body.IsInGroup(groupName) || body is ITargetable)
         {
             FadeTo(TransparencyAlpha);
         }
@@ -38,7 +38,8 @@ public partial class TranslucentObstacle : StaticBody2D
 
     private void OnBodyExited(Node2D body)
     {
-        if (body.Name == "Player" || body.IsInGroup("Player"))
+        string groupName = GameConfig.Instance != null ? GameConfig.Instance.PlayerGroupName : "Player";
+        if (body.IsInGroup(groupName) || body is ITargetable)
         {
             FadeTo(1.0f); // 恢复完全不透明
         }
