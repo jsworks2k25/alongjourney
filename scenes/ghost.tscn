@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bjmid78a1unwj"]
+[gd_scene load_steps=20 format=3 uid="uid://bjmid78a1unwj"]
 
 [ext_resource type="Script" uid="uid://dhxb3m8w1eqyx" path="res://scripts/Ghost.cs" id="1_5mfnq"]
 [ext_resource type="Texture2D" uid="uid://dpd4reoax0hn8" path="res://sprites/ghost_move-Sheet.png" id="2_lv6vd"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://blklhk28e5kbv" path="res://scripts/HitboxComponent.cs" id="5_seks5"]
 [ext_resource type="Script" uid="uid://u1ykjx61t81p" path="res://scripts/MovementSmoothingComponent.cs" id="6_smooth"]
 [ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="8_wj1r3"]
+[ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://scenes/shadow.tscn" id="9_seks5"]
 
 [sub_resource type="Animation" id="Animation_4pqta"]
 length = 0.001
@@ -134,8 +135,8 @@ radius = 9.0
 height = 24.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8ky03"]
-radius = 6.0
-height = 12.0
+radius = 8.0
+height = 16.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lv6vd"]
 radius = 150.0
@@ -159,7 +160,7 @@ libraries = {
 modulate = Color(1, 1, 1, 0.78431374)
 texture_filter = 1
 texture = ExtResource("2_lv6vd")
-offset = Vector2(0, -12)
+offset = Vector2(0, -16)
 hframes = 12
 metadata/_aseprite_wizard_interface_config_ = {
 "layer_section": false,
@@ -208,7 +209,6 @@ collision_mask = 16
 script = ExtResource("5_seks5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(0, 16)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_8ky03")
 
@@ -238,3 +238,6 @@ script = ExtResource("8_wj1r3")
 script = ExtResource("5_lv6vd")
 _animPlayer = NodePath("../../AnimationPlayer")
 _sprite = NodePath("../../Sprite2D")
+
+[node name="Shadow" parent="." instance=ExtResource("9_seks5")]
+scale = Vector2(1, 0.5)

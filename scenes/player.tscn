@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bo677htw67u60"]
+[gd_scene load_steps=26 format=3 uid="uid://bo677htw67u60"]
 
 [ext_resource type="Script" uid="uid://cdf0ahb0s6jis" path="res://scripts/Player.cs" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://dioxj4dtvcfg5" path="res://sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
@@ -14,14 +14,16 @@
 [ext_resource type="Script" uid="uid://u1ykjx61t81p" path="res://scripts/MovementSmoothingComponent.cs" id="11_smooth"]
 [ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="13_jej6c"]
 [ext_resource type="Script" uid="uid://b05i7vfhhemfo" path="res://scripts/PlayerInputComponent.cs" id="14_f1ej7"]
+[ext_resource type="Script" uid="uid://bm55nqkckkc3h" path="res://scripts/InventoryComponent.cs" id="15_a8ls1"]
+[ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://scenes/shadow.tscn" id="15_oprun"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
 radius = 3.0
 height = 10.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3v2ag"]
-radius = 4.0
-height = 12.0
+radius = 3.0
+height = 10.0
 
 [sub_resource type="Animation" id="Animation_ur7pv"]
 length = 0.1
@@ -367,7 +369,7 @@ collision_mask = 0
 script = ExtResource("6_ur7pv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2(0, -1)
+position = Vector2(0, -8)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_3v2ag")
 
@@ -407,3 +409,9 @@ libraries = {
 
 [node name="PlayerInputComponent" type="Node" parent="CoreComponents"]
 script = ExtResource("14_f1ej7")
+
+[node name="InventoryComponent" type="Node" parent="CoreComponents"]
+script = ExtResource("15_a8ls1")
+
+[node name="Shadow" parent="." instance=ExtResource("15_oprun")]
+scale = Vector2(1, 0.5)

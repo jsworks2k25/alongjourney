@@ -1,11 +1,10 @@
 using Godot;
 
-// 这是一个专门用来"挨打"的区域
+/// <summary>
+/// 受击区域组件：实现 IDamageable 接口，通过 Actor 黑板系统处理伤害
+/// </summary>
 public partial class HurtboxComponent : Area2D, IDamageable
 {
-    [Export]
-    public HealthComponent HealthComponent; // 依赖注入：把第一步的血条组件拖进来
-
     private Actor _owner;
 
     public override void _Ready()
@@ -14,16 +13,7 @@ public partial class HurtboxComponent : Area2D, IDamageable
     }
 
     public void TakeDamage(int amount, Vector2? sourcePosition = null)
-    {
-        if (_owner != null)
-        {
-            _owner.RequestDamage(amount, sourcePosition);
-            return;
-        }
-
-        if (HealthComponent != null)
-        {
-            HealthComponent.TakeDamage(amount, sourcePosition);
-        }
+    {      
+        _owner.RequestDamage(amount, sourcePosition);
     }
 }

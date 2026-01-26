@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dsftw85vqphm"]
+[gd_scene load_steps=16 format=3 uid="uid://dsftw85vqphm"]
 
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://sprites/robot.png" id="1_8kwrt"]
 [ext_resource type="Script" uid="uid://eee2pnmbdd7w" path="res://scripts/Robot0.cs" id="1_w0dvl"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://u1ykjx61t81p" path="res://scripts/MovementSmoothingComponent.cs" id="5_2gpyy"]
 [ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="5_wxql2"]
 [ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="6_utrwa"]
+[ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://scenes/shadow.tscn" id="7_utrwa"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0
@@ -167,3 +168,6 @@ script = ExtResource("5_wxql2")
 [node name="HealthComponent" type="Node" parent="CoreComponents"]
 script = ExtResource("6_utrwa")
 MaxHealth = 50
+
+[node name="Shadow" parent="." instance=ExtResource("7_utrwa")]
+scale = Vector2(1, 0.5)
