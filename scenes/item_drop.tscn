@@ -1,20 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://b20ds5ke2655t"]
+[gd_scene load_steps=3 format=3 uid="uid://b20ds5ke2655t"]
 
-[ext_resource type="Script" uid="uid://cwe23nhp060ti" path="res://scripts/WoodDrop.cs" id="1_d45ue"]
-[ext_resource type="Texture2D" uid="uid://6nfhpfopxptq" path="res://sprites/wood.png" id="1_y25wi"]
+[ext_resource type="Texture2D" uid="uid://6nfhpfopxptq" path="res://sprites/wood.png" id="1_e8wxw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d45ue"]
 radius = 22.0
 
-[node name="WoodDrop" type="Area2D"]
+[node name="ItemDrop" type="Area2D"]
 y_sort_enabled = true
 collision_layer = 128
 collision_mask = 2
-script = ExtResource("1_d45ue")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-texture = ExtResource("1_y25wi")
+texture = ExtResource("1_e8wxw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_d45ue")

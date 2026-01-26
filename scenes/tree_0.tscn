@@ -1,8 +1,33 @@
-[gd_scene load_steps=7 format=3 uid="uid://df01wn734v1rp"]
+[gd_scene load_steps=12 format=3 uid="uid://df01wn734v1rp"]
 
 [ext_resource type="Texture2D" uid="uid://bb6lpbfqlleb1" path="res://sprites/tree0.png" id="1_0vwl2"]
 [ext_resource type="Script" uid="uid://boarcagsurb63" path="res://scripts/Tree.cs" id="1_n3261"]
-[ext_resource type="PackedScene" uid="uid://b20ds5ke2655t" path="res://scenes/wood.tscn" id="2_hkdf7"]
+[ext_resource type="Script" uid="uid://creubjckrpor5" path="res://scripts/ItemData.cs" id="2_3exby"]
+[ext_resource type="Script" uid="uid://c4obbuoq3k52u" path="res://scripts/ItemDrop.cs" id="3_3exby"]
+
+[sub_resource type="Resource" id="Resource_03sex"]
+script = ExtResource("2_3exby")
+metadata/_custom_type_script = "uid://creubjckrpor5"
+
+[sub_resource type="Resource" id="Resource_n3wld"]
+script = ExtResource("2_3exby")
+metadata/_custom_type_script = "uid://creubjckrpor5"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d45ue"]
+radius = 22.0
+
+[sub_resource type="PackedScene" id="PackedScene_03sex"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("ItemDrop", "Area2D", "y_sort_enabled", "collision_layer", "collision_mask", "script", "ItemData", "CollisionShape2D", "CollisionShape2D", "shape"),
+"node_count": 2,
+"node_paths": [NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 5, 2, 0, 3, 1, 4, 2, 5, 3, 6, 4, 0, 1073741824, 0, 8, 7, -1, 1, 9, 5, 0),
+"variants": [true, 128, 2, ExtResource("3_3exby"), SubResource("Resource_n3wld"), SubResource("CircleShape2D_d45ue")],
+"version": 3
+}
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n3261"]
 radius = 3.6363635
@@ -21,7 +46,8 @@ y_sort_enabled = true
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_n3261")
-DropItemScene = ExtResource("2_hkdf7")
+DropItemData = SubResource("Resource_03sex")
+DropItemScene = SubResource("PackedScene_03sex")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 y_sort_enabled = true

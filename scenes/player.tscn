@@ -354,6 +354,9 @@ motion_mode = 1
 safe_margin = 0.2
 script = ExtResource("1_g2els")
 
+[node name="InventoryComponent" type="Node" parent="."]
+script = ExtResource("15_a8ls1")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("2_qlg0r")
@@ -409,9 +412,6 @@ libraries = {
 
 [node name="PlayerInputComponent" type="Node" parent="CoreComponents"]
 script = ExtResource("14_f1ej7")
-
-[node name="InventoryComponent" type="Node" parent="CoreComponents"]
-script = ExtResource("15_a8ls1")
 
 [node name="Shadow" parent="." instance=ExtResource("15_oprun")]
 scale = Vector2(1, 0.5)

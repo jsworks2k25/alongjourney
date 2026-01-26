@@ -1,15 +1,25 @@
 using Godot;
 
-[GlobalClass] // 让你能在编辑器里新建这个资源
+/// <summary>
+/// 物品数据资源，使用 Godot Resource 系统
+/// 在编辑器中创建 .tres 文件来定义物品属性
+/// </summary>
+[GlobalClass]
 public partial class ItemData : Resource
 {
-    [Export] public string Id;
-    [Export] public string Name;
+    [ExportGroup("Basic Info")]
+    [Export] public string Id = "";
+    [Export] public string Name = "";
+    [Export] public string Description = "";
     [Export] public Texture2D Icon;
+    
+    [ExportGroup("Stack Settings")]
     [Export] public int MaxStack = 99;
+    
+    [ExportGroup("Item Type")]
     [Export] public bool IsConsumable = false;
     
-    // 你可以在这里加更复杂的逻辑，比如
+    // 可以扩展更多属性
     // [Export] public int DamageBonus;
-    // [Export] public PackedScene BuildingPrefab; // 如果是造塔的物品
+    // [Export] public PackedScene BuildingPrefab;
 }

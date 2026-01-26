@@ -1,34 +1,32 @@
 using Godot;
-using System;
 
-// 关键点 1: 继承 TranslucentObstacle 而不是 Node2D/Area2D
-// 关键点 2: 实现 IDamageable 接口
+/// <summary>
+/// 树：可被砍伐的障碍物，使用 ItemData Resource 系统配置掉落物
+/// </summary>
 public partial class Tree : TranslucentObstacle, IDamageable
 {
     [ExportGroup("Tree Properties")]
-    [Export] public int MaxHealth = 30;             // 树的血量（比如砍3下倒）
-    
+    [Export] public int MaxHealth = 30;
+
     [ExportGroup("Drops")]
-    [Export] public PackedScene DropItemScene;     // 拖入你之前做的 WoodDrop.tscn
-    [Export] public int DropCount = 3;             // 掉落数量
+    [Export] public ItemData DropItemData;          // 使用 ItemData Resource
+    [Export] public PackedScene DropItemScene;      // 通用的掉落物场景模板
+    [Export] public int DropCount = 3;
+    [Export] public int DropAmountPerItem = 1;      // 每个掉落物的数量
 
     private int _currentHealth;
 
     public override void _Ready()
     {
-        // 关键点 3: 必须调用基类的 _Ready，否则半透明逻辑可能会失效！
         base._Ready();
-        
         _currentHealth = MaxHealth;
     }
 
-    // 接口方法的具体实现
     public void TakeDamage(int damage, Vector2? sourcePosition = null)
     {
         _currentHealth -= damage;
-        GD.Print($"当前血量: {_currentHealth}");
-        
-        // 视觉反馈：简单的受击闪白或抖动 (Juice!)
+        GD.Print($"树当前血量: {_currentHealth}");
+
         PlayHitEffect();
 
         if (_currentHealth <= 0)
@@ -39,42 +37,48 @@ public partial class Tree : TranslucentObstacle, IDamageable
 
     private void PlayHitEffect()
     {
-        // 创建一个简单的抖动动画
         Tween tween = CreateTween();
-        // 向右歪一点 -> 向左歪一点 -> 回正
         tween.TweenProperty(this, "rotation_degrees", 5.0f, 0.05f);
         tween.TweenProperty(this, "rotation_degrees", -5.0f, 0.05f);
         tween.TweenProperty(this, "rotation_degrees", 0.0f, 0.05f);
-        
-        // 如果想变色提示受击，也可以加 Modulate 闪烁
-        // tween.TweenProperty(this, "modulate", Colors.Red, 0.1f);
-        // tween.TweenProperty(this, "modulate", Colors.White, 0.1f);
     }
 
-    private void Die(){
-        if (DropItemScene != null)
+    private void Die()
+    {
+        if (DropItemData == null || DropItemScene == null)
         {
-            // 获取当前场景根节点
-            var rootNode = GetTree().CurrentScene;
-
-            for (int i = 0; i < DropCount; i++)
-            {
-                // 1. 实例化
-                Node2D drop = DropItemScene.Instantiate<Node2D>();
-                
-                // 2. 设置位置
-                Vector2 randomOffset = new Vector2(GD.Randf() * 10 - 5, GD.Randf() * 10 - 5);
-                drop.GlobalPosition = this.GlobalPosition + randomOffset;
-                
-                // 3. 添加到场景 (Godot 4 C# 标准写法)
-                rootNode.CallDeferred(Node.MethodName.AddChild, drop);
-            }
+            GD.PrintErr("错误：DropItemData 或 DropItemScene 未配置！");
+            QueueFree();
+            return;
         }
-        else
+
+        var rootNode = GetTree().CurrentScene;
+
+        for (int i = 0; i < DropCount; i++)
         {
-            GD.PrintErr("错误：DropItemScene 没拖进去！树虽然死了但没掉东西。");
+            // 实例化掉落物场景（使用通用的 ItemDrop 基类）
+            var drop = DropItemScene.Instantiate<ItemDrop>();
+            if (drop == null)
+            {
+                GD.PrintErr("错误：DropItemScene 必须是 ItemDrop 类型！");
+                continue;
+            }
+
+            // 设置掉落物数据（使用 Resource 系统）
+            drop.ItemData = DropItemData;
+            drop.Amount = DropAmountPerItem;
+
+            // 随机位置偏移
+            Vector2 randomOffset = new Vector2(
+                GD.Randf() * 20f - 10f,
+                GD.Randf() * 20f - 10f
+            );
+            drop.GlobalPosition = GlobalPosition + randomOffset;
+
+            // 添加到场景
+            rootNode.CallDeferred(Node.MethodName.AddChild, drop);
         }
 
         QueueFree();
-}
+    }
 }
