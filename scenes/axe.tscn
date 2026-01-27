@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dambflx8sgsb8"]
+[gd_scene format=3 uid="uid://dambflx8sgsb8"]
 
 [ext_resource type="Texture2D" uid="uid://cc1t6u346icxv" path="res://sprites/axe.png" id="1_8s0ly"]
 [ext_resource type="Script" uid="uid://csfi6r5uadylo" path="res://scripts/Axe.cs" id="1_q6140"]
@@ -202,13 +202,13 @@ _data = {
 &"swing": SubResource("Animation_8lyos")
 }
 
-[node name="Axe" type="Node2D" node_paths=PackedStringArray("_animPlayer", "_hitbox")]
+[node name="Axe" type="Node2D" unique_id=255401608 node_paths=PackedStringArray("_animPlayer", "_hitbox")]
 script = ExtResource("1_q6140")
 _animPlayer = NodePath("AnimationPlayer")
 Cooldown = 0.1
 _hitbox = NodePath("Hitbox")
 
-[node name="SlashSprite" type="Sprite2D" parent="."]
+[node name="SlashSprite" type="Sprite2D" parent="." unique_id=513079808]
 visible = false
 texture_filter = 1
 rotation = -1.5707964
@@ -217,7 +217,7 @@ texture = ExtResource("2_uel4w")
 offset = Vector2(0, 8)
 hframes = 3
 
-[node name="WeaponSprite" type="Sprite2D" parent="."]
+[node name="WeaponSprite" type="Sprite2D" parent="." unique_id=2053074861]
 visible = false
 texture_filter = 1
 texture = ExtResource("1_8s0ly")
@@ -244,17 +244,15 @@ metadata/_aseprite_wizard_interface_config_ = {
 }
 }
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=215992227]
 collision_layer = 0
 collision_mask = 96
 monitoring = false
 script = ExtResource("2_q6140")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=32509784]
 position = Vector2(21, 0)
 shape = SubResource("CapsuleShape2D_3pksi")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_xd2ot")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=997264439]
+libraries/ = SubResource("AnimationLibrary_xd2ot")
