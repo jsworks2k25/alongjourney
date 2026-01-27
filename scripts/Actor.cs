@@ -4,18 +4,10 @@ using System;
 public partial class Actor : CharacterBody2D, ITargetable
 {
     [Signal]
-    public delegate void StateChangedEventHandler(int newState);
+    public delegate void StateChangedEventHandler(string newStateName);
 
     [Signal]
     public delegate void BlackboardChangedEventHandler(string key, Variant value);
-
-    public enum ActorState
-    {
-        Normal,
-        Attack,
-        Stagger,
-        Dead
-    }
 
     public const string KeyInputVector = "input_vector"; // 保留兼容性
     public const string KeyMoveDirection = "move_direction"; // 通用移动方向（归一化向量）
@@ -31,18 +23,32 @@ public partial class Actor : CharacterBody2D, ITargetable
     public const string KeyVelocity = "velocity";
     public const string KeyCurrentHealth = "current_health";
     public const string KeyMaxHealth = "max_health";
-    public const string KeyKnockbackVelocity = "knockback_velocity"; // 击退速度（由 HitEffectComponent 设置）
-
     public Godot.Collections.Dictionary<string, Variant> Blackboard { get; } = new();
 
-    public ActorState CurrentState { get; private set; } = ActorState.Normal;
-    public bool IsAlive => CurrentState != ActorState.Dead;
+    private StateMachine _stateMachine;
 
-    public event Action<ActorState> StateChangedTyped;
+    /// <summary>
+    /// 获取当前状态名称（用于兼容性检查）
+    /// </summary>
+    public string CurrentStateName => _stateMachine?.CurrentState?.Name ?? "None";
+    
+    /// <summary>
+    /// 检查是否处于指定状态
+    /// </summary>
+    public bool IsInState<T>() where T : State
+    {
+        return _stateMachine?.CurrentState is T;
+    }
+
+    /// <summary>
+    /// 检查是否存活
+    /// </summary>
+    public bool IsAlive => !GetBlackboardBool(KeyIsDead, false);
 
     protected HealthComponent _healthComponent;
     protected AnimationController _animationController;
     protected HitEffectComponent _hitEffectComponent;
+    protected KnockbackComponent _knockbackComponent;
     protected HurtboxComponent _hurtboxComponent;
     protected CollisionShape2D _collisionShape;
 
@@ -53,12 +59,25 @@ public partial class Actor : CharacterBody2D, ITargetable
 
     public override void _Ready()
     {
+        // 查找状态机
+        _stateMachine = GetNodeOrNull<StateMachine>("StateMachine");
+        if (_stateMachine != null)
+        {
+            _stateMachine.StateChanged += OnStateMachineStateChanged;
+        }
+        else
+        {
+            GD.PushWarning($"{Name}: Actor should have a StateMachine child node.");
+        }
+
         _healthComponent = GetNodeOrNull<HealthComponent>("CoreComponents/HealthComponent")
             ?? GetNodeOrNull<HealthComponent>("HealthComponent");
         _animationController = GetNodeOrNull<AnimationController>("CoreComponents/AnimationController")
             ?? GetNodeOrNull<AnimationController>("AnimationController");
         _hitEffectComponent = GetNodeOrNull<HitEffectComponent>("CoreComponents/HitEffectComponent")
             ?? GetNodeOrNull<HitEffectComponent>("HitEffectComponent");
+        _knockbackComponent = GetNodeOrNull<KnockbackComponent>("CoreComponents/KnockbackComponent")
+            ?? GetNodeOrNull<KnockbackComponent>("KnockbackComponent");
         _hurtboxComponent = GetNodeOrNull<HurtboxComponent>("CoreComponents/HurtboxComponent")
             ?? GetNodeOrNull<HurtboxComponent>("HurtboxComponent")
             ?? GetNodeOrNull<HurtboxComponent>("Hurtbox");
@@ -69,11 +88,11 @@ public partial class Actor : CharacterBody2D, ITargetable
             _healthComponent.Died += HandleDied;
             _healthComponent.HealthChanged += HandleHealthChanged;
         }
+    }
 
-        if (_hitEffectComponent != null)
-        {
-            _hitEffectComponent.OnStaggerEnded += OnStaggerEnded;
-        }
+    private void OnStateMachineStateChanged(string newStateName)
+    {
+        EmitSignal(SignalName.StateChanged, newStateName);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -83,20 +102,10 @@ public partial class Actor : CharacterBody2D, ITargetable
             return;
         }
 
-        // 优先级：Stagger > Attack > Normal
-        // Stagger 状态：由 HitEffectComponent 通过黑板控制击退速度
-        if (CurrentState == ActorState.Stagger)
-        {
-            Vector2 knockbackVel = GetBlackboardVector(KeyKnockbackVelocity, Vector2.Zero);
-            Velocity = knockbackVel;
-        }
-        // Attack 状态时自动减速（由 Actor 统一处理，不依赖 MovementComponent）
-        else if (CurrentState == ActorState.Attack)
-        {
-            float friction = GameConfig.Instance != null ? GameConfig.Instance.KnockbackFriction : 600f;
-            Velocity = Velocity.MoveToward(Vector2.Zero, friction * (float)delta);
-        }
-        // Normal 状态由 MovementComponent 处理（在 MovementComponent._PhysicsProcess 中）
+        // Actor 只负责调用 MoveAndSlide，所有速度计算由组件负责：
+        // - Normal 状态：MovementComponent 计算速度
+        // - Stagger 状态：KnockbackComponent 计算速度
+        // - Attack 状态：MovementComponent 不更新速度，保持当前速度（或由其他组件处理）
 
         MoveAndSlide();
         SetBlackboardValueIfChanged(KeyVelocity, Velocity);
@@ -109,14 +118,13 @@ public partial class Actor : CharacterBody2D, ITargetable
         Blackboard[KeyMoveSpeed] = 0f; // 0 表示使用 MovementComponent 的默认值
         Blackboard[KeyIsDead] = false;
         Blackboard[KeyIsAttacking] = false;
-        Blackboard[KeyState] = (int)CurrentState;
+        Blackboard[KeyState] = "None";
         Blackboard[KeyDamagePending] = false;
         Blackboard[KeyDamageAmount] = 0;
         Blackboard[KeyDamageSource] = HealthComponent.NoSourcePosition;
         Blackboard[KeyHitPending] = false;
         Blackboard[KeyHitSource] = HealthComponent.NoSourcePosition;
         Blackboard[KeyVelocity] = Vector2.Zero;
-        Blackboard[KeyKnockbackVelocity] = Vector2.Zero;
     }
 
     public void SetBlackboardValue(string key, Variant value)
@@ -160,23 +168,20 @@ public partial class Actor : CharacterBody2D, ITargetable
         return Blackboard.TryGetValue(key, out var value) ? value.AsSingle() : defaultValue;
     }
 
-    public void SetState(ActorState newState)
+    /// <summary>
+    /// 请求切换到指定状态（通过状态机）
+    /// </summary>
+    public void RequestStateChange<T>() where T : State
     {
-        if (CurrentState == newState)
-        {
-            return;
-        }
+        _stateMachine?.ChangeStateByType<T>();
+    }
 
-        var oldState = CurrentState;
-        CurrentState = newState;
-
-        SetBlackboardValue(KeyState, (int)newState);
-        SetBlackboardValue(KeyIsDead, newState == ActorState.Dead);
-        SetBlackboardValue(KeyIsAttacking, newState == ActorState.Attack);
-
-        EmitSignal(SignalName.StateChanged, (int)newState);
-        StateChangedTyped?.Invoke(newState);
-        OnStateChanged(oldState, newState);
+    /// <summary>
+    /// 请求切换到指定状态（通过名称）
+    /// </summary>
+    public void RequestStateChangeByName(string stateName)
+    {
+        _stateMachine?.ChangeStateByName(stateName);
     }
 
     public void RequestDamage(int amount, Vector2? sourcePosition = null)
@@ -197,13 +202,9 @@ public partial class Actor : CharacterBody2D, ITargetable
         SetBlackboardValue(KeyDamagePending, true);
     }
 
-    protected virtual void OnStateChanged(ActorState oldState, ActorState newState)
-    {
-    }
-
     protected virtual void HandleHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition)
     {
-        if (CurrentState == ActorState.Dead)
+        if (GetBlackboardBool(KeyIsDead, false))
         {
             return;
         }
@@ -211,31 +212,33 @@ public partial class Actor : CharacterBody2D, ITargetable
         bool hasSource = !float.IsNaN(sourcePosition.X) && !float.IsNaN(sourcePosition.Y);
         if (hasSource)
         {
-            SetState(ActorState.Stagger);
             SetBlackboardValue(KeyHitSource, sourcePosition);
+            SetBlackboardValue(KeyHitPending, true);
+            
+            // 状态机会在状态更新时检查 KeyHitPending 并转换到 StaggerState
+            // StaggerState 会处理击退逻辑
         }
         else
         {
             SetBlackboardValue(KeyHitSource, HealthComponent.NoSourcePosition);
         }
-
-        SetBlackboardValue(KeyHitPending, true);
     }
 
     protected virtual void HandleDied()
     {
-        if (CurrentState == ActorState.Dead)
+        if (GetBlackboardBool(KeyIsDead, false))
         {
             return;
         }
 
         Velocity = Vector2.Zero;
-        SetState(ActorState.Dead);
-        SetCollisionEnabled(false);
-        SetHurtboxEnabled(false);
+        SetBlackboardValue(KeyIsDead, true);
+        
+        // 直接请求转换到死亡状态
+        RequestStateChange<DeadState>();
     }
 
-    protected void SetCollisionEnabled(bool enabled)
+    public void SetCollisionEnabled(bool enabled)
     {
         if (_collisionShape != null)
         {
@@ -243,7 +246,7 @@ public partial class Actor : CharacterBody2D, ITargetable
         }
     }
 
-    protected void SetHurtboxEnabled(bool enabled)
+    public void SetHurtboxEnabled(bool enabled)
     {
         if (_hurtboxComponent != null)
         {
@@ -252,11 +255,4 @@ public partial class Actor : CharacterBody2D, ITargetable
         }
     }
 
-    private void OnStaggerEnded()
-    {
-        if (CurrentState == ActorState.Stagger)
-        {
-            SetState(ActorState.Normal);
-        }
-    }
 }
