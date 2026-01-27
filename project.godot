@@ -14,7 +14,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="js_game_project (4.5)"
+config/name="js_game_project"
 run/main_scene="uid://du4uisvl0wd7j"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"

@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=3 uid="uid://b20ds5ke2655t"]
 
-[ext_resource type="Script" uid="uid://c4obbuoq3k52u" path="res://scripts/ItemDrop.cs" id="1_gvv6n"]
-[ext_resource type="Script" uid="uid://creubjckrpor5" path="res://scripts/ItemData.cs" id="2_xsgl2"]
+[ext_resource type="Script" uid="uid://d2dolri1qr8wp" path="res://scripts/ItemDrop.cs" id="1_gvv6n"]
+[ext_resource type="Script" uid="uid://c2y0mlq1xb0ms" path="res://scripts/ItemData.cs" id="2_xsgl2"]
 
 [sub_resource type="Resource" id="Resource_n3wld"]
 script = ExtResource("2_xsgl2")
-metadata/_custom_type_script = "uid://creubjckrpor5"
+metadata/_custom_type_script = "uid://c2y0mlq1xb0ms"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d45ue"]
 radius = 22.0

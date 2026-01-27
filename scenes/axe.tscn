@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://dambflx8sgsb8"]
 
 [ext_resource type="Texture2D" uid="uid://cc1t6u346icxv" path="res://sprites/axe.png" id="1_8s0ly"]
-[ext_resource type="Script" uid="uid://bh0ppnn7g8tpf" path="res://scripts/Axe.cs" id="1_q6140"]
-[ext_resource type="Script" uid="uid://blklhk28e5kbv" path="res://scripts/HitboxComponent.cs" id="2_q6140"]
+[ext_resource type="Script" uid="uid://csfi6r5uadylo" path="res://scripts/Axe.cs" id="1_q6140"]
+[ext_resource type="Script" uid="uid://bkv0sen3b5cr" path="res://scripts/HitboxComponent.cs" id="2_q6140"]
 [ext_resource type="Texture2D" uid="uid://dh2wojpdv50eq" path="res://sprites/slash-sheet.png" id="2_uel4w"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3pksi"]

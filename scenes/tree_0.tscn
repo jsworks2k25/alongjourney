@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://df01wn734v1rp"]
 
 [ext_resource type="Texture2D" uid="uid://bb6lpbfqlleb1" path="res://sprites/tree0.png" id="1_0vwl2"]
-[ext_resource type="Script" uid="uid://boarcagsurb63" path="res://scripts/Tree.cs" id="1_n3261"]
+[ext_resource type="Script" uid="uid://cqcy824yihurn" path="res://scripts/Tree.cs" id="1_n3261"]
 [ext_resource type="Resource" uid="uid://cwfbp3tajp8o1" path="res://resources/items/wood.tres" id="2_3exby"]
 [ext_resource type="PackedScene" uid="uid://b20ds5ke2655t" path="res://scenes/item_drop.tscn" id="3_03sex"]
 

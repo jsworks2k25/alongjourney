@@ -43,7 +43,22 @@ public partial class Actor : CharacterBody2D, ITargetable
     [Export] public AnimationController AnimationController { get; private set; }
     [Export] public HitEffectComponent HitEffectComponent { get; private set; }
     [Export] public KnockbackComponent KnockbackComponent { get; private set; }
-    [Export] public HurtboxComponent HurtboxComponent { get; private set; }
+    
+    // HurtboxComponent 使用 NodePath 来避免类型转换问题
+    [Export] public NodePath HurtboxComponentPath { get; private set; }
+    private HurtboxComponent _hurtboxComponent;
+    public HurtboxComponent HurtboxComponent 
+    { 
+        get 
+        { 
+            if (_hurtboxComponent == null && HurtboxComponentPath != null && !HurtboxComponentPath.IsEmpty)
+            {
+                _hurtboxComponent = GetNodeOrNull<HurtboxComponent>(HurtboxComponentPath);
+            }
+            return _hurtboxComponent;
+        }
+        private set { _hurtboxComponent = value; }
+    }
     
     // 碰撞体通常是固定的，可以用 GetNode，或者也 Export
     [Export] public CollisionShape2D CollisionShape { get; private set; }
@@ -82,6 +97,21 @@ public partial class Actor : CharacterBody2D, ITargetable
         // 🛡️ 架构检查：确保必要的组件已连接
         if (StateMachine == null) GD.PushError($"{Name}: StateMachine is not assigned in Inspector!");
         if (HealthComponent == null) GD.PushWarning($"{Name}: HealthComponent is missing!");
+        
+        // 初始化 HurtboxComponent（通过 NodePath 获取，避免类型转换问题）
+        if (HurtboxComponentPath != null && !HurtboxComponentPath.IsEmpty)
+        {
+            _hurtboxComponent = GetNodeOrNull<HurtboxComponent>(HurtboxComponentPath);
+            if (_hurtboxComponent == null)
+            {
+                GD.PushWarning($"{Name}: Failed to find HurtboxComponent at path: {HurtboxComponentPath}");
+            }
+        }
+        else
+        {
+            // 兜底策略：尝试通过常见的路径名称查找
+            _hurtboxComponent = GetNodeOrNull<HurtboxComponent>("Hurtbox");
+        }
         
         // 绑定事件
         if (StateMachine != null)

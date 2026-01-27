@@ -1,19 +1,19 @@
 [gd_scene load_steps=25 format=3 uid="uid://bjmid78a1unwj"]
 
-[ext_resource type="Script" uid="uid://dhxb3m8w1eqyx" path="res://scripts/Ghost.cs" id="1_5mfnq"]
+[ext_resource type="Script" uid="uid://dphbgrg3ophjy" path="res://scripts/Ghost.cs" id="1_5mfnq"]
 [ext_resource type="Texture2D" uid="uid://dpd4reoax0hn8" path="res://sprites/ghost_move-Sheet.png" id="2_lv6vd"]
-[ext_resource type="Script" uid="uid://qmkxyr8rr1d2" path="res://scripts/HurtboxComponent.cs" id="3_sv5gc"]
-[ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="4_wj1r3"]
-[ext_resource type="Script" uid="uid://c6ydw0bq7qkyd" path="res://scripts/AnimationController.cs" id="5_lv6vd"]
-[ext_resource type="Script" uid="uid://blklhk28e5kbv" path="res://scripts/HitboxComponent.cs" id="5_seks5"]
-[ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="8_wj1r3"]
-[ext_resource type="Script" uid="uid://db1cxs1ex0f7h" path="res://scripts/HitEffectComponent.cs" id="9_4pqta"]
+[ext_resource type="Script" uid="uid://cdpj2qq7mig3y" path="res://scripts/HurtboxComponent.cs" id="3_sv5gc"]
+[ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://scripts/HealthComponent.cs" id="4_wj1r3"]
+[ext_resource type="Script" uid="uid://bq7kokxio5iif" path="res://scripts/AnimationController.cs" id="5_lv6vd"]
+[ext_resource type="Script" uid="uid://bkv0sen3b5cr" path="res://scripts/HitboxComponent.cs" id="5_seks5"]
+[ext_resource type="Script" uid="uid://bmgna558so5yc" path="res://scripts/MovementComponent.cs" id="8_wj1r3"]
+[ext_resource type="Script" uid="uid://bwlybm005er1a" path="res://scripts/HitEffectComponent.cs" id="9_4pqta"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://scenes/shadow.tscn" id="9_seks5"]
-[ext_resource type="Script" uid="uid://bybftr6oa7248" path="res://scripts/StateMachine.cs" id="11_c10vd"]
-[ext_resource type="Script" uid="uid://lawgawt1uw1l" path="res://scripts/RunState.cs" id="12_uehw0"]
-[ext_resource type="Script" uid="uid://p7mcjjldalxq" path="res://scripts/IdleState.cs" id="13_pe3fk"]
-[ext_resource type="Script" uid="uid://ck4i11l8letwo" path="res://scripts/DeadState.cs" id="14_p0uf5"]
-[ext_resource type="Script" uid="uid://d3y5luc10ht7d" path="res://scripts/AttackState.cs" id="15_uehw0"]
+[ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://scripts/StateMachine.cs" id="11_c10vd"]
+[ext_resource type="Script" uid="uid://d1h1usnwy8f5q" path="res://scripts/RunState.cs" id="12_uehw0"]
+[ext_resource type="Script" uid="uid://bviqnfqsuhf8o" path="res://scripts/IdleState.cs" id="13_pe3fk"]
+[ext_resource type="Script" uid="uid://dj8mj2ea8x5u4" path="res://scripts/DeadState.cs" id="14_p0uf5"]
+[ext_resource type="Script" uid="uid://cux04vlwjftrw" path="res://scripts/AttackState.cs" id="15_uehw0"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
 radius = 4.0
@@ -146,7 +146,7 @@ _data = {
 &"move_front": SubResource("Animation_t76o2")
 }
 
-[node name="ghost" type="CharacterBody2D" node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "HurtboxComponent", "CollisionShape")]
+[node name="ghost" type="CharacterBody2D" node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "HurtboxComponentPath", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 0
 collision_mask = 0
@@ -159,7 +159,7 @@ StateMachine = NodePath("StateMachine")
 HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
 HitEffectComponent = NodePath("CoreComponents/HitEffect")
-HurtboxComponent = NodePath("Hurtbox")
+HurtboxComponentPath = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

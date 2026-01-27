@@ -1,16 +1,16 @@
 [gd_scene load_steps=20 format=3 uid="uid://dsftw85vqphm"]
 
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://sprites/robot.png" id="1_8kwrt"]
-[ext_resource type="Script" uid="uid://eee2pnmbdd7w" path="res://scripts/Robot0.cs" id="1_w0dvl"]
-[ext_resource type="Script" uid="uid://c6ydw0bq7qkyd" path="res://scripts/AnimationController.cs" id="2_edo0t"]
-[ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="5_wxql2"]
-[ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="6_utrwa"]
+[ext_resource type="Script" uid="uid://dbuahw42jt40u" path="res://scripts/Robot0.cs" id="1_w0dvl"]
+[ext_resource type="Script" uid="uid://bq7kokxio5iif" path="res://scripts/AnimationController.cs" id="2_edo0t"]
+[ext_resource type="Script" uid="uid://bmgna558so5yc" path="res://scripts/MovementComponent.cs" id="5_wxql2"]
+[ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://scripts/HealthComponent.cs" id="6_utrwa"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://scenes/shadow.tscn" id="7_utrwa"]
-[ext_resource type="Script" uid="uid://bybftr6oa7248" path="res://scripts/StateMachine.cs" id="8_hiucr"]
-[ext_resource type="Script" uid="uid://lawgawt1uw1l" path="res://scripts/RunState.cs" id="9_28whl"]
-[ext_resource type="Script" uid="uid://p7mcjjldalxq" path="res://scripts/IdleState.cs" id="10_mv5oq"]
-[ext_resource type="Script" uid="uid://ck4i11l8letwo" path="res://scripts/DeadState.cs" id="11_f2n1b"]
-[ext_resource type="Script" uid="uid://d3y5luc10ht7d" path="res://scripts/AttackState.cs" id="12_28whl"]
+[ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://scripts/StateMachine.cs" id="8_hiucr"]
+[ext_resource type="Script" uid="uid://d1h1usnwy8f5q" path="res://scripts/RunState.cs" id="9_28whl"]
+[ext_resource type="Script" uid="uid://bviqnfqsuhf8o" path="res://scripts/IdleState.cs" id="10_mv5oq"]
+[ext_resource type="Script" uid="uid://dj8mj2ea8x5u4" path="res://scripts/DeadState.cs" id="11_f2n1b"]
+[ext_resource type="Script" uid="uid://cux04vlwjftrw" path="res://scripts/AttackState.cs" id="12_28whl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0
@@ -112,7 +112,7 @@ _data = {
 &"move_front": SubResource("Animation_w0dvl")
 }
 
-[node name="Robot0" type="CharacterBody2D" node_paths=PackedStringArray("_rayCast", "_moveTimer", "StateMachine", "HealthComponent", "AnimationController", "HurtboxComponent", "CollisionShape")]
+[node name="Robot0" type="CharacterBody2D" node_paths=PackedStringArray("_rayCast", "_moveTimer", "StateMachine", "HealthComponent", "AnimationController", "HurtboxComponentPath", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 4
 collision_mask = 2
@@ -124,7 +124,7 @@ Speed = 20.0
 StateMachine = NodePath("StateMachine")
 HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
-HurtboxComponent = NodePath("Hurtbox")
+HurtboxComponentPath = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

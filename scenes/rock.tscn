@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dgl0m2dggs3ef"]
 
 [ext_resource type="Texture2D" uid="uid://bfjnx5ftj1jel" path="res://sprites/rock.png" id="1_lgx4v"]
-[ext_resource type="Script" uid="uid://c5h7yg2pwmvyh" path="res://scripts/TranslucentObstacle.cs" id="1_mek2u"]
+[ext_resource type="Script" uid="uid://c4gctuni5l2fo" path="res://scripts/TranslucentObstacle.cs" id="1_mek2u"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lgx4v"]
 radius = 4.0
