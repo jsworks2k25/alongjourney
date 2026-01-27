@@ -2,24 +2,24 @@ using Godot;
 
 public partial class Enemy : Actor
 {
-    // 简单的状态机枚举
-    protected enum EnemyState { Idle, Chase, Attack }
-    protected EnemyState CurrentState = EnemyState.Idle;
-    
     [Export] public float Speed = 50f;
-    protected ITargetable _target; // 使用接口而不是直接引用 Player
-
-    protected Vector2 _isoVec;
+    protected ITargetable _target;
 
     public override void _Ready()
     {
         base._Ready();
 
-        // 从 GameConfig 获取等距向量
-        _isoVec = GameConfig.Instance != null ? GameConfig.Instance.IsometricVector : new Vector2(1f, 0.5f);
+        // 订阅 HealthComponent 信号
+        if (HealthComponent != null)
+        {
+            HealthComponent.Died += HandleDied;
+            HealthComponent.HealthChanged += HandleHealthChanged;
+        }
+
+        // 等距向量现在由 MovementComponent 的 Export 属性管理
 
         // 将 Speed 写入黑板，供 MovementComponent 使用
-        SetBlackboardValue(Actor.KeyMoveSpeed, Speed);
+        SetBlackboardValue(Actor.BlackboardKeys.MoveSpeed, Speed);
 
         // 查找目标（玩家）
         FindTarget();
@@ -65,45 +65,65 @@ public partial class Enemy : Actor
         if (_target == null || !_target.IsAlive)
             FindTarget();
 
-        switch (CurrentState)
-        {
-            case EnemyState.Idle:
-                // 简单的巡逻逻辑或发呆
-                HandleIdleState(delta);
-                break;
-            case EnemyState.Chase:
-                HandleChaseState(delta);
-                break;
-        }
+        // AI 逻辑：根据目标位置决定移动方向
+        // 状态机会根据移动方向自动在 Idle 和 Run 之间切换
+        UpdateAIMovement(delta);
+        
         base._PhysicsProcess(delta);
     }
 
-    protected virtual void HandleChaseState(double delta)
+    /// <summary>
+    /// 更新 AI 移动逻辑：根据目标位置设置移动方向
+    /// </summary>
+    protected virtual void UpdateAIMovement(double delta)
     {
         var targetPos = GetTargetPosition();
         if (targetPos.HasValue)
         {
             Vector2 direction = (targetPos.Value - GlobalPosition).Normalized();
             // 写入移动意图到黑板，由 MovementComponent 处理
-            SetBlackboardValue(Actor.KeyMoveDirection, direction);
+            // 状态机会根据移动方向自动在 Idle 和 Run 之间切换
+            SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, direction);
         }
         else
         {
-            SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
+            // 没有目标时停止移动
+            SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, Vector2.Zero);
         }
     }
 
-    protected virtual void HandleIdleState(double delta)
+    private void HandleDied()
     {
-        // 空闲时停止移动
-        SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
-    }
+        if (GetBlackboardBool(Actor.BlackboardKeys.IsDead, false))
+        {
+            return;
+        }
 
-    protected override void HandleDied()
-    {
-        base.HandleDied();
+        Velocity = Vector2.Zero;
+        SetBlackboardValue(Actor.BlackboardKeys.IsDead, true);
+        RequestStateChange<DeadState>();
 
         // 延迟销毁，让动画播放完
         GetTree().CreateTimer(0.5f).Timeout += QueueFree;
+    }
+
+    private void HandleHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition)
+    {
+        if (GetBlackboardBool(Actor.BlackboardKeys.IsDead, false))
+        {
+            return;
+        }
+
+        bool hasSource = !float.IsNaN(sourcePosition.X) && !float.IsNaN(sourcePosition.Y);
+        if (hasSource)
+        {
+            SetBlackboardValue(Actor.BlackboardKeys.HitSource, sourcePosition);
+            RequestStateChange<StaggerState>();
+            SetBlackboardValue(Actor.BlackboardKeys.HitPending, true);
+        }
+        else
+        {
+            SetBlackboardValue(Actor.BlackboardKeys.HitSource, HealthComponent.NoSourcePosition);
+        }
     }
 }

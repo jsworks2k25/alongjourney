@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bo677htw67u60"]
+[gd_scene load_steps=32 format=3 uid="uid://bo677htw67u60"]
 
 [ext_resource type="Script" uid="uid://cdf0ahb0s6jis" path="res://scripts/Player.cs" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://dioxj4dtvcfg5" path="res://sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
@@ -11,11 +11,17 @@
 [ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="7_y4r1p"]
 [ext_resource type="PackedScene" uid="uid://dambflx8sgsb8" path="res://scenes/axe.tscn" id="9_ur7pv"]
 [ext_resource type="Script" uid="uid://db1cxs1ex0f7h" path="res://scripts/HitEffectComponent.cs" id="10_y4r1p"]
-[ext_resource type="Script" uid="uid://u1ykjx61t81p" path="res://scripts/MovementSmoothingComponent.cs" id="11_smooth"]
 [ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="13_jej6c"]
 [ext_resource type="Script" uid="uid://b05i7vfhhemfo" path="res://scripts/PlayerInputComponent.cs" id="14_f1ej7"]
 [ext_resource type="Script" uid="uid://bm55nqkckkc3h" path="res://scripts/InventoryComponent.cs" id="15_a8ls1"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://scenes/shadow.tscn" id="15_oprun"]
+[ext_resource type="Script" uid="uid://b7tcv8tgkb72" path="res://scripts/KnockbackComponent.cs" id="16_qfm1y"]
+[ext_resource type="Script" uid="uid://bybftr6oa7248" path="res://scripts/StateMachine.cs" id="18_a38lo"]
+[ext_resource type="Script" uid="uid://lawgawt1uw1l" path="res://scripts/RunState.cs" id="19_4ni07"]
+[ext_resource type="Script" uid="uid://p7mcjjldalxq" path="res://scripts/IdleState.cs" id="20_l71n6"]
+[ext_resource type="Script" uid="uid://ck4i11l8letwo" path="res://scripts/DeadState.cs" id="21_ke2ow"]
+[ext_resource type="Script" uid="uid://44vpkwixgvrw" path="res://scripts/StaggerState.cs" id="22_ujl30"]
+[ext_resource type="Script" uid="uid://d3y5luc10ht7d" path="res://scripts/AttackState.cs" id="23_4ni07"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
 radius = 3.0
@@ -346,16 +352,20 @@ _data = {
 &"move_front": SubResource("Animation_d2wvv")
 }
 
-[node name="player" type="CharacterBody2D"]
+[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 2
 collision_mask = 28
 motion_mode = 1
 safe_margin = 0.2
 script = ExtResource("1_g2els")
-
-[node name="InventoryComponent" type="Node" parent="."]
-script = ExtResource("15_a8ls1")
+StateMachine = NodePath("StateMachine")
+HealthComponent = NodePath("CoreComponents/Health")
+AnimationController = NodePath("CoreComponents/AnimationController")
+HitEffectComponent = NodePath("CoreComponents/HitEffect")
+KnockbackComponent = NodePath("CoreComponents/Knockback")
+HurtboxComponent = NodePath("Hurtbox")
+CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -383,20 +393,15 @@ y_sort_enabled = true
 
 [node name="CoreComponents" type="Node" parent="."]
 
-[node name="HealthComponent" type="Node" parent="CoreComponents"]
+[node name="Health" type="Node" parent="CoreComponents"]
 script = ExtResource("7_y4r1p")
 
-[node name="MovementSmoothingComponent" type="Node" parent="CoreComponents"]
-script = ExtResource("11_smooth")
-Acceleration = 500.0
-Friction = 300.0
-
-[node name="MovementComponent" type="Node" parent="CoreComponents"]
+[node name="Movement" type="Node" parent="CoreComponents"]
 script = ExtResource("13_jej6c")
+DebugMovement = true
 
-[node name="HitEffectComponent" type="Node" parent="CoreComponents"]
+[node name="HitEffect" type="Node" parent="CoreComponents"]
 script = ExtResource("10_y4r1p")
-EnableKnockback = true
 FlashDuration = 0.2
 
 [node name="AnimationController" type="Node" parent="CoreComponents" node_paths=PackedStringArray("_animPlayer", "_sprite")]
@@ -410,8 +415,33 @@ libraries = {
 &"": SubResource("AnimationLibrary_y4r1p")
 }
 
-[node name="PlayerInputComponent" type="Node" parent="CoreComponents"]
+[node name="PlayerInput" type="Node" parent="CoreComponents"]
 script = ExtResource("14_f1ej7")
+DebugInput = true
+
+[node name="Knockback" type="Node" parent="CoreComponents"]
+script = ExtResource("16_qfm1y")
 
 [node name="Shadow" parent="." instance=ExtResource("15_oprun")]
 scale = Vector2(1, 0.5)
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("18_a38lo")
+
+[node name="Run" type="Node" parent="StateMachine"]
+script = ExtResource("19_4ni07")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("20_l71n6")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("21_ke2ow")
+
+[node name="Stagger" type="Node" parent="StateMachine"]
+script = ExtResource("22_ujl30")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("23_4ni07")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("15_a8ls1")

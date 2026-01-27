@@ -4,10 +4,11 @@ using System;
 public partial class Robot0 : Enemy
 {
 	[Export] private Vector2[] _directions = new Vector2[] {
-		new Vector2(1, 0.5f).Normalized(),   // 右下
-		new Vector2(-1, 0.5f).Normalized(),  // 左下
-		new Vector2(1, -0.5f).Normalized(),  // 右上
-		new Vector2(-1, -0.5f).Normalized()  // 左上
+		// 斜向移动，等距斜率已经被MovementComponent处理
+		new Vector2(1, 1).Normalized(),   // 右下
+		new Vector2(-1, 1).Normalized(),  // 左下
+		new Vector2(1, -1).Normalized(),  // 右上
+		new Vector2(-1, -1).Normalized()  // 左上
 	};
 
 	private Vector2 _currentDir;
@@ -55,11 +56,11 @@ public partial class Robot0 : Enemy
 		// 2. 写入移动意图到黑板，由 MovementComponent 处理
 		if(isMoving)
 		{
-			SetBlackboardValue(Actor.KeyMoveDirection, _currentDir);
+			SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, _currentDir);
 		}
 		else
 		{
-			SetBlackboardValue(Actor.KeyMoveDirection, Vector2.Zero);
+			SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, Vector2.Zero);
 		}
 		
 		// 3. 处理方向贴图和翻转
@@ -75,7 +76,7 @@ public partial class Robot0 : Enemy
 			// 立即更新黑板中的移动方向
 			if (isMoving)
 			{
-				SetBlackboardValue(Actor.KeyMoveDirection, _currentDir);
+				SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, _currentDir);
 			}
 		}
 	}
@@ -108,10 +109,10 @@ public partial class Robot0 : Enemy
 
 	private void UpdateAnimation()
 	{
-		if (_animationController != null)
+		if (AnimationController != null)
 		{
 			// 使用统一方法，根据 velocity.Y 自动判断方向，自动翻转
-			_animationController.UpdateAnimation(Velocity);
+			AnimationController.UpdateAnimation(Velocity);
 		}
 	}
 }

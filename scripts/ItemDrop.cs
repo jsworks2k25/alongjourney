@@ -14,6 +14,7 @@ public partial class ItemDrop : Area2D
     [ExportGroup("Movement")]
     [Export] public float MagnetSpeed = 300.0f;
     [Export] public float Acceleration = 10.0f;
+    [Export] public float CollectionDistance = 10.0f;
 
     [ExportGroup("Spawn Animation")]
     [Export] public bool EnableSpawnAnimation = true;
@@ -97,8 +98,8 @@ public partial class ItemDrop : Area2D
     {
         Vector2 direction = (_playerTarget.GlobalPosition - GlobalPosition).Normalized();
         
-        float magnetSpeed = GameConfig.Instance?.ItemMagnetSpeed ?? MagnetSpeed;
-        float acceleration = GameConfig.Instance?.ItemAcceleration ?? Acceleration;
+        float magnetSpeed = MagnetSpeed;
+        float acceleration = Acceleration;
 
         _velocity = _velocity.Lerp(direction * magnetSpeed, (float)delta * acceleration);
         GlobalPosition += _velocity * (float)delta;
@@ -109,7 +110,7 @@ public partial class ItemDrop : Area2D
     /// </summary>
     private void CheckCollection()
     {
-        float collectDistance = GameConfig.Instance?.ItemCollectionDistance ?? 10.0f;
+        float collectDistance = CollectionDistance;
         
         if (GlobalPosition.DistanceTo(_playerTarget.GlobalPosition) < collectDistance)
         {
@@ -185,7 +186,7 @@ public partial class ItemDrop : Area2D
     private InventoryComponent FindInventoryComponent(Node2D target)
     {
         // 方式1：直接路径查找
-        var inventory = target.GetNodeOrNull<InventoryComponent>("InventoryComponent");
+        var inventory = target.GetNodeOrNull<InventoryComponent>("Inventory");
         if (inventory != null)
         {
             return inventory;
@@ -204,7 +205,7 @@ public partial class ItemDrop : Area2D
         var parent = target.GetParent();
         if (parent != null)
         {
-            return parent.GetNodeOrNull<InventoryComponent>("InventoryComponent");
+            return parent.GetNodeOrNull<InventoryComponent>("Inventory");
         }
 
         return null;

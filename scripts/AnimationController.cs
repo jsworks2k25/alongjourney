@@ -31,27 +31,18 @@ public partial class AnimationController : BaseComponent
         if (_sprite == null && Owner != null)
             _sprite = Owner.GetNodeOrNull<Sprite2D>("Sprite2D");
 
-        // 从 GameConfig 加载默认值
-        if (GameConfig.Instance != null)
-        {
-            AnimIdleFront = GameConfig.Instance.AnimIdleFront;
-            AnimIdleBack = GameConfig.Instance.AnimIdleBack;
-            AnimMoveFront = GameConfig.Instance.AnimMoveFront;
-            AnimMoveBack = GameConfig.Instance.AnimMoveBack;
-            AnimDie = GameConfig.Instance.AnimDie;
-            VelocityDeadZone = GameConfig.Instance.VelocityDeadZone;
-        }
+        // 动画名称和阈值现在通过 Export 属性在 Inspector 中配置
 
         if (Owner != null)
         {
-            _isDead = Owner.GetBlackboardBool(Actor.KeyIsDead, false);
-            UpdateAnimation(Owner.GetBlackboardVector(Actor.KeyVelocity, Vector2.Zero));
+            _isDead = Owner.GetBlackboardBool(Actor.BlackboardKeys.IsDead, false);
+            UpdateAnimation(Owner.GetBlackboardVector(Actor.BlackboardKeys.Velocity, Vector2.Zero));
         }
     }
 
-    protected override void OnOwnerStateChanged(Actor.ActorState newState)
+    protected override void OnOwnerStateChanged(string newStateName)
     {
-        if (newState == Actor.ActorState.Dead)
+        if (newStateName == "DeadState" || Owner.GetBlackboardBool(Actor.BlackboardKeys.IsDead, false))
         {
             PlayDeathAnimation();
         }
@@ -59,7 +50,7 @@ public partial class AnimationController : BaseComponent
 
     protected override void OnOwnerBlackboardChanged(string key, Variant value)
     {
-        if (key == Actor.KeyVelocity)
+        if (key == Actor.BlackboardKeys.Velocity.ToString())
         {
             UpdateAnimation(value.AsVector2());
         }

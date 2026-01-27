@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bjmid78a1unwj"]
+[gd_scene load_steps=25 format=3 uid="uid://bjmid78a1unwj"]
 
 [ext_resource type="Script" uid="uid://dhxb3m8w1eqyx" path="res://scripts/Ghost.cs" id="1_5mfnq"]
 [ext_resource type="Texture2D" uid="uid://dpd4reoax0hn8" path="res://sprites/ghost_move-Sheet.png" id="2_lv6vd"]
@@ -6,9 +6,29 @@
 [ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="4_wj1r3"]
 [ext_resource type="Script" uid="uid://c6ydw0bq7qkyd" path="res://scripts/AnimationController.cs" id="5_lv6vd"]
 [ext_resource type="Script" uid="uid://blklhk28e5kbv" path="res://scripts/HitboxComponent.cs" id="5_seks5"]
-[ext_resource type="Script" uid="uid://u1ykjx61t81p" path="res://scripts/MovementSmoothingComponent.cs" id="6_smooth"]
 [ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="8_wj1r3"]
+[ext_resource type="Script" uid="uid://db1cxs1ex0f7h" path="res://scripts/HitEffectComponent.cs" id="9_4pqta"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://scenes/shadow.tscn" id="9_seks5"]
+[ext_resource type="Script" uid="uid://bybftr6oa7248" path="res://scripts/StateMachine.cs" id="11_c10vd"]
+[ext_resource type="Script" uid="uid://lawgawt1uw1l" path="res://scripts/RunState.cs" id="12_uehw0"]
+[ext_resource type="Script" uid="uid://p7mcjjldalxq" path="res://scripts/IdleState.cs" id="13_pe3fk"]
+[ext_resource type="Script" uid="uid://ck4i11l8letwo" path="res://scripts/DeadState.cs" id="14_p0uf5"]
+[ext_resource type="Script" uid="uid://d3y5luc10ht7d" path="res://scripts/AttackState.cs" id="15_uehw0"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
+radius = 4.0
+height = 18.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o57ao"]
+radius = 9.0
+height = 24.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8ky03"]
+radius = 8.0
+height = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lv6vd"]
+radius = 150.0
 
 [sub_resource type="Animation" id="Animation_4pqta"]
 length = 0.001
@@ -126,22 +146,7 @@ _data = {
 &"move_front": SubResource("Animation_t76o2")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
-radius = 4.0
-height = 18.0
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o57ao"]
-radius = 9.0
-height = 24.0
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8ky03"]
-radius = 8.0
-height = 16.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_lv6vd"]
-radius = 150.0
-
-[node name="ghost" type="CharacterBody2D" node_paths=PackedStringArray("_detectionArea", "_hitbox")]
+[node name="ghost" type="CharacterBody2D" node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 0
 collision_mask = 0
@@ -150,11 +155,12 @@ script = ExtResource("1_5mfnq")
 _detectionArea = NodePath("Area2D")
 _hitbox = NodePath("Hitbox")
 Speed = 80.0
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_l5lq6")
-}
+StateMachine = NodePath("StateMachine")
+HealthComponent = NodePath("CoreComponents/Health")
+AnimationController = NodePath("CoreComponents/AnimationController")
+HitEffectComponent = NodePath("CoreComponents/HitEffect")
+HurtboxComponent = NodePath("Hurtbox")
+CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.78431374)
@@ -222,22 +228,44 @@ shape = SubResource("CircleShape2D_lv6vd")
 
 [node name="CoreComponents" type="Node" parent="."]
 
-[node name="MovementSmoothingComponent" type="Node" parent="CoreComponents"]
-script = ExtResource("6_smooth")
-Acceleration = 100.0
-Friction = 50.0
-
-[node name="HealthComponent" type="Node" parent="CoreComponents"]
+[node name="Health" type="Node" parent="CoreComponents"]
 script = ExtResource("4_wj1r3")
 MaxHealth = 50
 
-[node name="MovementComponent" type="Node" parent="CoreComponents"]
+[node name="Movement" type="Node" parent="CoreComponents"]
 script = ExtResource("8_wj1r3")
+Acceleration = 100.0
+Friction = 50.0
 
 [node name="AnimationController" type="Node" parent="CoreComponents" node_paths=PackedStringArray("_animPlayer", "_sprite")]
 script = ExtResource("5_lv6vd")
-_animPlayer = NodePath("../../AnimationPlayer")
+_animPlayer = NodePath("AnimationPlayer")
 _sprite = NodePath("../../Sprite2D")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CoreComponents/AnimationController"]
+root_node = NodePath("../../..")
+libraries = {
+&"": SubResource("AnimationLibrary_l5lq6")
+}
+
+[node name="HitEffect" type="Node" parent="CoreComponents"]
+script = ExtResource("9_4pqta")
+FlashDuration = 0.2
 
 [node name="Shadow" parent="." instance=ExtResource("9_seks5")]
 scale = Vector2(1, 0.5)
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("11_c10vd")
+
+[node name="Run" type="Node" parent="StateMachine"]
+script = ExtResource("12_uehw0")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("13_pe3fk")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("14_p0uf5")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("15_uehw0")

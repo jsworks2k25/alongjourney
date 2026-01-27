@@ -1,22 +1,16 @@
 using Godot;
 
 /// <summary>
-/// 受击反馈组件，统一处理闪烁、击退、抖动等效果
+/// 受击反馈组件，统一处理闪烁、抖动等视觉效果
 /// </summary>
 public partial class HitEffectComponent : BaseComponent
 {
     [Export] public bool EnableFlash = true;
-    [Export] public bool EnableKnockback = false;
     [Export] public bool EnableShake = false;
 
     [ExportGroup("Flash Settings")]
     [Export] public Color FlashColor = Colors.Red;
     [Export] public float FlashDuration = 0.1f;
-
-    [ExportGroup("Knockback Settings")]
-    [Export] public float KnockbackForce = 50f;
-    [Export] public float KnockbackFriction = 600f;
-    [Export] public float StaggerThreshold = 10f;
 
     [ExportGroup("Shake Settings")]
     [Export] public float ShakeAngle = 5.0f;
@@ -24,21 +18,11 @@ public partial class HitEffectComponent : BaseComponent
 
     private Node2D _targetNode;
     private Sprite2D _sprite;
-    private CharacterBody2D _characterBody;
-    private Vector2 _knockbackVelocity = Vector2.Zero;
-    private bool _isStaggered = false;
 
     public override void Initialize()
     {
         _targetNode = Owner;
         _sprite = Owner?.GetNodeOrNull<Sprite2D>("Sprite2D");
-        _characterBody = Owner;
-
-        // 如果父节点是 CharacterBody2D，启用击退功能
-        if (_characterBody != null)
-        {
-            EnableKnockback = true;
-        }
     }
 
     protected override void OnOwnerBlackboardChanged(string key, Variant value)
@@ -48,43 +32,19 @@ public partial class HitEffectComponent : BaseComponent
             return;
         }
 
-        if (key != Actor.KeyHitPending || !value.AsBool())
+        if (key != Actor.BlackboardKeys.HitPending.ToString() || !value.AsBool())
         {
             return;
         }
 
-        Vector2 source = Owner.GetBlackboardVector(Actor.KeyHitSource, HealthComponent.NoSourcePosition);
+        Vector2 source = Owner.GetBlackboardVector(Actor.BlackboardKeys.HitSource, HealthComponent.NoSourcePosition);
         bool hasSource = !float.IsNaN(source.X) && !float.IsNaN(source.Y);
         PlayHitEffect(hasSource ? source : (Vector2?)null);
 
-        Owner.SetBlackboardValue(Actor.KeyHitPending, false);
-        Owner.SetBlackboardValue(Actor.KeyHitSource, HealthComponent.NoSourcePosition);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.HitPending, false);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.HitSource, HealthComponent.NoSourcePosition);
     }
 
-    public override void _PhysicsProcess(double delta)
-    {
-        if (_isStaggered && Owner != null && Owner.CurrentState == Actor.ActorState.Stagger)
-        {
-            // 应用击退摩擦力
-            _knockbackVelocity = _knockbackVelocity.MoveToward(Vector2.Zero, KnockbackFriction * (float)delta);
-            
-            // 通过黑板系统设置击退速度，由 Actor._PhysicsProcess 统一处理
-            Owner.SetBlackboardValue(Actor.KeyKnockbackVelocity, _knockbackVelocity);
-
-            // 如果速度足够小，恢复正常
-            if (_knockbackVelocity.Length() < StaggerThreshold)
-            {
-                _isStaggered = false;
-                Owner.SetBlackboardValue(Actor.KeyKnockbackVelocity, Vector2.Zero);
-                OnStaggerEnded?.Invoke();
-            }
-        }
-    }
-
-    [Signal]
-    public delegate void StaggerEndedEventHandler();
-
-    public event StaggerEndedEventHandler OnStaggerEnded;
 
     /// <summary>
     /// 播放受击效果
@@ -99,11 +59,6 @@ public partial class HitEffectComponent : BaseComponent
         if (EnableShake)
         {
             PlayShake();
-        }
-
-        if (EnableKnockback && _characterBody != null && sourcePosition.HasValue)
-        {
-            ApplyKnockback(sourcePosition.Value);
         }
     }
 
@@ -122,45 +77,11 @@ public partial class HitEffectComponent : BaseComponent
         tween.TweenProperty(_targetNode, "rotation_degrees", 0.0f, ShakeDuration / 3);
     }
 
-    private void ApplyKnockback(Vector2 sourcePosition)
-    {
-        Vector2 knockbackDir = (_targetNode.GlobalPosition - sourcePosition).Normalized();
-        _knockbackVelocity = knockbackDir * KnockbackForce;
-        _isStaggered = true;
-    }
-
-    /// <summary>
-    /// 手动设置击退速度（用于外部控制）
-    /// </summary>
-    public void SetKnockbackVelocity(Vector2 velocity)
-    {
-        _knockbackVelocity = velocity;
-        _isStaggered = true;
-    }
-
-    /// <summary>
-    /// 检查是否处于击退状态
-    /// </summary>
-    public bool IsStaggered => _isStaggered;
-
     /// <summary>
     /// 重置所有效果状态（用于重生等场景）
     /// </summary>
     public void Reset()
     {
-        _isStaggered = false;
-        _knockbackVelocity = Vector2.Zero;
-        
-        if (Owner != null)
-        {
-            Owner.SetBlackboardValue(Actor.KeyKnockbackVelocity, Vector2.Zero);
-        }
-        
-        if (_characterBody != null)
-        {
-            _characterBody.Velocity = Vector2.Zero;
-        }
-        
         if (_sprite != null)
         {
             _sprite.Modulate = Colors.White;

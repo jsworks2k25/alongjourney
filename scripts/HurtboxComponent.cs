@@ -9,7 +9,7 @@ public partial class HurtboxComponent : Area2D, IDamageable
 
     public override void _Ready()
     {
-        _owner = ActorHelper.FindActorOwner(this);
+        _owner = GetParent<Actor>();
     }
 
     public void TakeDamage(int amount, Vector2? sourcePosition = null)

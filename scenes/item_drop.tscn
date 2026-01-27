@@ -1,6 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://b20ds5ke2655t"]
+[gd_scene load_steps=5 format=3 uid="uid://b20ds5ke2655t"]
 
-[ext_resource type="Texture2D" uid="uid://6nfhpfopxptq" path="res://sprites/wood.png" id="1_e8wxw"]
+[ext_resource type="Script" uid="uid://c4obbuoq3k52u" path="res://scripts/ItemDrop.cs" id="1_gvv6n"]
+[ext_resource type="Script" uid="uid://creubjckrpor5" path="res://scripts/ItemData.cs" id="2_xsgl2"]
+
+[sub_resource type="Resource" id="Resource_n3wld"]
+script = ExtResource("2_xsgl2")
+metadata/_custom_type_script = "uid://creubjckrpor5"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d45ue"]
 radius = 22.0
@@ -9,12 +14,11 @@ radius = 22.0
 y_sort_enabled = true
 collision_layer = 128
 collision_mask = 2
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture_filter = 1
-texture = ExtResource("1_e8wxw")
+script = ExtResource("1_gvv6n")
+ItemData = SubResource("Resource_n3wld")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_d45ue")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1

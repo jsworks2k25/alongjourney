@@ -1,56 +1,76 @@
 using Godot;
-using System;
+using Godot.Collections;
 
 public partial class Actor : CharacterBody2D, ITargetable
 {
+    // ==========================================
+    // 1. 信号定义
+    // ==========================================
     [Signal]
     public delegate void StateChangedEventHandler(string newStateName);
 
     [Signal]
     public delegate void BlackboardChangedEventHandler(string key, Variant value);
 
-    public const string KeyInputVector = "input_vector"; // 保留兼容性
-    public const string KeyMoveDirection = "move_direction"; // 通用移动方向（归一化向量）
-    public const string KeyMoveSpeed = "move_speed"; // 移动速度（由 MovementComponent 读取）
-    public const string KeyIsDead = "is_dead";
-    public const string KeyIsAttacking = "is_attacking";
-    public const string KeyState = "state";
-    public const string KeyDamagePending = "damage_pending";
-    public const string KeyDamageAmount = "damage_amount";
-    public const string KeyDamageSource = "damage_source";
-    public const string KeyHitPending = "hit_pending";
-    public const string KeyHitSource = "hit_source";
-    public const string KeyVelocity = "velocity";
-    public const string KeyCurrentHealth = "current_health";
-    public const string KeyMaxHealth = "max_health";
-    public Godot.Collections.Dictionary<string, Variant> Blackboard { get; } = new();
+    // ==========================================
+    // 2. Blackboard 键定义 (优化为 StringName)
+    // ==========================================
+    // 使用 StringName 在 Godot 中进行字典查找性能更佳
+    public static class BlackboardKeys
+    {
+        public static readonly StringName InputVector = "input_vector";
+        public static readonly StringName MoveDirection = "move_direction";
+        public static readonly StringName MoveSpeed = "move_speed";
+        public static readonly StringName IsDead = "is_dead";
+        public static readonly StringName IsAttacking = "is_attacking";
+        public static readonly StringName State = "state";
+        public static readonly StringName DamagePending = "damage_pending";
+        public static readonly StringName DamageAmount = "damage_amount";
+        public static readonly StringName DamageSource = "damage_source";
+        public static readonly StringName HitPending = "hit_pending";
+        public static readonly StringName HitSource = "hit_source";
+        public static readonly StringName Velocity = "velocity";
+        public static readonly StringName CurrentHealth = "current_health";
+        public static readonly StringName MaxHealth = "max_health";
+    }
 
-    private StateMachine _stateMachine;
+    // ==========================================
+    // 3. 组件引用 (使用 Export 替代 GetNode)
+    // ==========================================
+    [ExportGroup("Core Components")]
+    [Export] public StateMachine StateMachine { get; private set; }
+    [Export] public HealthComponent HealthComponent { get; private set; }
+    [Export] public AnimationController AnimationController { get; private set; }
+    [Export] public HitEffectComponent HitEffectComponent { get; private set; }
+    [Export] public KnockbackComponent KnockbackComponent { get; private set; }
+    [Export] public HurtboxComponent HurtboxComponent { get; private set; }
+    
+    // 碰撞体通常是固定的，可以用 GetNode，或者也 Export
+    [Export] public CollisionShape2D CollisionShape { get; private set; }
+
+    // ==========================================
+    // 4. 数据存储
+    // ==========================================
+    // 使用 StringName 作为 Key
+    public Dictionary<StringName, Variant> Blackboard { get; } = new();
 
     /// <summary>
     /// 获取当前状态名称（用于兼容性检查）
     /// </summary>
-    public string CurrentStateName => _stateMachine?.CurrentState?.Name ?? "None";
+    public string CurrentStateName => StateMachine?.CurrentState?.Name ?? "None";
     
     /// <summary>
     /// 检查是否处于指定状态
     /// </summary>
     public bool IsInState<T>() where T : State
     {
-        return _stateMachine?.CurrentState is T;
+        return StateMachine?.CurrentState is T;
     }
 
     /// <summary>
     /// 检查是否存活
     /// </summary>
-    public bool IsAlive => !GetBlackboardBool(KeyIsDead, false);
-
-    protected HealthComponent _healthComponent;
-    protected AnimationController _animationController;
-    protected HitEffectComponent _hitEffectComponent;
-    protected KnockbackComponent _knockbackComponent;
-    protected HurtboxComponent _hurtboxComponent;
-    protected CollisionShape2D _collisionShape;
+    public bool IsAlive => !GetBlackboardBool(BlackboardKeys.IsDead, false);
 
     public override void _EnterTree()
     {
@@ -59,200 +79,153 @@ public partial class Actor : CharacterBody2D, ITargetable
 
     public override void _Ready()
     {
-        // 查找状态机
-        _stateMachine = GetNodeOrNull<StateMachine>("StateMachine");
-        if (_stateMachine != null)
+        // 🛡️ 架构检查：确保必要的组件已连接
+        if (StateMachine == null) GD.PushError($"{Name}: StateMachine is not assigned in Inspector!");
+        if (HealthComponent == null) GD.PushWarning($"{Name}: HealthComponent is missing!");
+        
+        // 绑定事件
+        if (StateMachine != null)
         {
-            _stateMachine.StateChanged += OnStateMachineStateChanged;
-        }
-        else
-        {
-            GD.PushWarning($"{Name}: Actor should have a StateMachine child node.");
+            StateMachine.StateChanged += OnStateMachineStateChanged;
         }
 
-        _healthComponent = GetNodeOrNull<HealthComponent>("CoreComponents/HealthComponent")
-            ?? GetNodeOrNull<HealthComponent>("HealthComponent");
-        _animationController = GetNodeOrNull<AnimationController>("CoreComponents/AnimationController")
-            ?? GetNodeOrNull<AnimationController>("AnimationController");
-        _hitEffectComponent = GetNodeOrNull<HitEffectComponent>("CoreComponents/HitEffectComponent")
-            ?? GetNodeOrNull<HitEffectComponent>("HitEffectComponent");
-        _knockbackComponent = GetNodeOrNull<KnockbackComponent>("CoreComponents/KnockbackComponent")
-            ?? GetNodeOrNull<KnockbackComponent>("KnockbackComponent");
-        _hurtboxComponent = GetNodeOrNull<HurtboxComponent>("CoreComponents/HurtboxComponent")
-            ?? GetNodeOrNull<HurtboxComponent>("HurtboxComponent")
-            ?? GetNodeOrNull<HurtboxComponent>("Hurtbox");
-        _collisionShape = GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
-
-        if (_healthComponent != null)
-        {
-            _healthComponent.Died += HandleDied;
-            _healthComponent.HealthChanged += HandleHealthChanged;
-        }
-    }
-
-    private void OnStateMachineStateChanged(string newStateName)
-    {
-        EmitSignal(SignalName.StateChanged, newStateName);
+        // 自动查找兜底策略 (可选，为了向后兼容旧场景)
+        // 如果 Inspector 没赋值，尝试自动查找，但这不推荐作为主要方式
+        if (CollisionShape == null) CollisionShape = GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (!IsAlive)
-        {
-            return;
-        }
-
-        // Actor 只负责调用 MoveAndSlide，所有速度计算由组件负责：
-        // - Normal 状态：MovementComponent 计算速度
-        // - Stagger 状态：KnockbackComponent 计算速度
-        // - Attack 状态：MovementComponent 不更新速度，保持当前速度（或由其他组件处理）
-
-        MoveAndSlide();
-        SetBlackboardValueIfChanged(KeyVelocity, Velocity);
+        if (!IsAlive) return;
+        // 移动由 Movement/Knockback 组件驱动，避免依赖 Actor 本体处理顺序
     }
 
+    // ==========================================
+    // 5. Blackboard 操作封装
+    // ==========================================
     private void InitializeBlackboardDefaults()
     {
-        Blackboard[KeyInputVector] = Vector2.Zero;
-        Blackboard[KeyMoveDirection] = Vector2.Zero;
-        Blackboard[KeyMoveSpeed] = 0f; // 0 表示使用 MovementComponent 的默认值
-        Blackboard[KeyIsDead] = false;
-        Blackboard[KeyIsAttacking] = false;
-        Blackboard[KeyState] = "None";
-        Blackboard[KeyDamagePending] = false;
-        Blackboard[KeyDamageAmount] = 0;
-        Blackboard[KeyDamageSource] = HealthComponent.NoSourcePosition;
-        Blackboard[KeyHitPending] = false;
-        Blackboard[KeyHitSource] = HealthComponent.NoSourcePosition;
-        Blackboard[KeyVelocity] = Vector2.Zero;
+        Blackboard[BlackboardKeys.InputVector] = Vector2.Zero;
+        Blackboard[BlackboardKeys.MoveDirection] = Vector2.Zero;
+        Blackboard[BlackboardKeys.MoveSpeed] = 0f; // 0 表示使用 MovementComponent 的默认值
+        Blackboard[BlackboardKeys.IsDead] = false;
+        Blackboard[BlackboardKeys.IsAttacking] = false;
+        Blackboard[BlackboardKeys.State] = "None";
+        Blackboard[BlackboardKeys.DamagePending] = false;
+        Blackboard[BlackboardKeys.DamageAmount] = 0;
+        Blackboard[BlackboardKeys.DamageSource] = HealthComponent.NoSourcePosition;
+        Blackboard[BlackboardKeys.HitPending] = false;
+        Blackboard[BlackboardKeys.HitSource] = HealthComponent.NoSourcePosition;
+        Blackboard[BlackboardKeys.Velocity] = Vector2.Zero;
     }
 
-    public void SetBlackboardValue(string key, Variant value)
+    public void SetBlackboardValue(StringName key, Variant value)
     {
         Blackboard[key] = value;
-        EmitSignal(SignalName.BlackboardChanged, key, value);
+        // 注意：Signal 依然传递 string key 以保持通用兼容性，或者你也可以把 Signal 改为传 StringName
+        EmitSignal(SignalName.BlackboardChanged, key.ToString(), value); 
     }
 
-    public void SetBlackboardValueIfChanged(string key, Variant value)
+    public void SetBlackboardValueIfChanged(StringName key, Variant value)
     {
-        if (Blackboard.TryGetValue(key, out var existing) && existing.Equals(value))
-        {
-            return;
-        }
-
+        if (Blackboard.TryGetValue(key, out var existing) && existing.Equals(value)) return;
         SetBlackboardValue(key, value);
     }
 
-    public bool TryGetBlackboardValue(string key, out Variant value)
+    public bool TryGetBlackboardValue(StringName key, out Variant value)
     {
         return Blackboard.TryGetValue(key, out value);
     }
 
-    public Vector2 GetBlackboardVector(string key, Vector2 defaultValue)
+    public Vector2 GetBlackboardVector(StringName key, Vector2 defaultValue = default)
     {
-        return Blackboard.TryGetValue(key, out var value) ? value.AsVector2() : defaultValue;
+        return Blackboard.TryGetValue(key, out var val) ? val.AsVector2() : defaultValue;
+    }
+    
+    public bool GetBlackboardBool(StringName key, bool defaultValue = false)
+    {
+        return Blackboard.TryGetValue(key, out var val) ? val.AsBool() : defaultValue;
+    }
+    
+    public int GetBlackboardInt(StringName key, int defaultValue = 0)
+    {
+        return Blackboard.TryGetValue(key, out var val) ? val.AsInt32() : defaultValue;
     }
 
-    public bool GetBlackboardBool(string key, bool defaultValue)
+    public float GetBlackboardFloat(StringName key, float defaultValue = 0f)
     {
-        return Blackboard.TryGetValue(key, out var value) ? value.AsBool() : defaultValue;
+        return Blackboard.TryGetValue(key, out var val) ? val.AsSingle() : defaultValue;
     }
 
-    public int GetBlackboardInt(string key, int defaultValue)
-    {
-        return Blackboard.TryGetValue(key, out var value) ? value.AsInt32() : defaultValue;
-    }
-
-    public float GetBlackboardFloat(string key, float defaultValue)
-    {
-        return Blackboard.TryGetValue(key, out var value) ? value.AsSingle() : defaultValue;
-    }
-
+    // ==========================================
+    // 6. 状态机操作封装
+    // ==========================================
+    
     /// <summary>
     /// 请求切换到指定状态（通过状态机）
     /// </summary>
-    public void RequestStateChange<T>() where T : State
-    {
-        _stateMachine?.ChangeStateByType<T>();
-    }
+    public void RequestStateChange<T>() where T : State => StateMachine?.ChangeStateByType<T>();
 
     /// <summary>
     /// 请求切换到指定状态（通过名称）
     /// </summary>
-    public void RequestStateChangeByName(string stateName)
-    {
-        _stateMachine?.ChangeStateByName(stateName);
-    }
+    public void RequestStateChangeByName(string stateName) => StateMachine?.ChangeStateByName(stateName);
 
+    // ==========================================
+    // 7. 数据请求方法（不包含业务逻辑）
+    // ==========================================
+    
+    /// <summary>
+    /// 请求伤害处理（仅设置 Blackboard 数据，不包含业务逻辑）
+    /// </summary>
     public void RequestDamage(int amount, Vector2? sourcePosition = null)
     {
-        if (amount <= 0)
-        {
-            return;
-        }
+        if (amount <= 0) return;
 
-        int existing = 0;
-        if (GetBlackboardBool(KeyDamagePending, false))
-        {
-            existing = GetBlackboardInt(KeyDamageAmount, 0);
-        }
+        int existing = GetBlackboardBool(BlackboardKeys.DamagePending, false) 
+            ? GetBlackboardInt(BlackboardKeys.DamageAmount, 0) 
+            : 0;
 
-        SetBlackboardValue(KeyDamageAmount, existing + amount);
-        SetBlackboardValue(KeyDamageSource, sourcePosition ?? HealthComponent.NoSourcePosition);
-        SetBlackboardValue(KeyDamagePending, true);
+        SetBlackboardValue(BlackboardKeys.DamageAmount, existing + amount);
+        SetBlackboardValue(BlackboardKeys.DamageSource, sourcePosition ?? HealthComponent.NoSourcePosition);
+        SetBlackboardValue(BlackboardKeys.DamagePending, true);
     }
 
-    protected virtual void HandleHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition)
+    // ==========================================
+    // 8. 事件处理（仅转发信号，不包含业务逻辑）
+    // ==========================================
+    
+    private void OnStateMachineStateChanged(string newStateName)
     {
-        if (GetBlackboardBool(KeyIsDead, false))
-        {
-            return;
-        }
-
-        bool hasSource = !float.IsNaN(sourcePosition.X) && !float.IsNaN(sourcePosition.Y);
-        if (hasSource)
-        {
-            SetBlackboardValue(KeyHitSource, sourcePosition);
-            SetBlackboardValue(KeyHitPending, true);
-            
-            // 状态机会在状态更新时检查 KeyHitPending 并转换到 StaggerState
-            // StaggerState 会处理击退逻辑
-        }
-        else
-        {
-            SetBlackboardValue(KeyHitSource, HealthComponent.NoSourcePosition);
-        }
+        SetBlackboardValue(BlackboardKeys.State, newStateName); // 同步状态回 Blackboard
+        EmitSignal(SignalName.StateChanged, newStateName);
     }
 
-    protected virtual void HandleDied()
-    {
-        if (GetBlackboardBool(KeyIsDead, false))
-        {
-            return;
-        }
-
-        Velocity = Vector2.Zero;
-        SetBlackboardValue(KeyIsDead, true);
-        
-        // 直接请求转换到死亡状态
-        RequestStateChange<DeadState>();
-    }
-
+    // ==========================================
+    // 9. 组件操作工具方法（简单的组件封装）
+    // ==========================================
+    
     public void SetCollisionEnabled(bool enabled)
     {
-        if (_collisionShape != null)
+        if (CollisionShape != null)
         {
-            _collisionShape.SetDeferred("disabled", !enabled);
+            CollisionShape.SetDeferred("disabled", !enabled);
         }
     }
 
     public void SetHurtboxEnabled(bool enabled)
     {
-        if (_hurtboxComponent != null)
+        if (HurtboxComponent != null)
         {
-            _hurtboxComponent.SetDeferred("monitoring", enabled);
-            _hurtboxComponent.SetDeferred("monitorable", enabled);
+            HurtboxComponent.SetDeferred("monitoring", enabled);
+            HurtboxComponent.SetDeferred("monitorable", enabled);
         }
     }
 
+    public void ApplyMovement()
+    {
+        if (!IsAlive) return;
+        MoveAndSlide();
+        SetBlackboardValueIfChanged(BlackboardKeys.Velocity, Velocity);
+    }
 }

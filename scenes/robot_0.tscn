@@ -1,12 +1,16 @@
-[gd_scene load_steps=16 format=3 uid="uid://dsftw85vqphm"]
+[gd_scene load_steps=20 format=3 uid="uid://dsftw85vqphm"]
 
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://sprites/robot.png" id="1_8kwrt"]
 [ext_resource type="Script" uid="uid://eee2pnmbdd7w" path="res://scripts/Robot0.cs" id="1_w0dvl"]
 [ext_resource type="Script" uid="uid://c6ydw0bq7qkyd" path="res://scripts/AnimationController.cs" id="2_edo0t"]
-[ext_resource type="Script" uid="uid://u1ykjx61t81p" path="res://scripts/MovementSmoothingComponent.cs" id="5_2gpyy"]
 [ext_resource type="Script" uid="uid://n7fben52525" path="res://scripts/MovementComponent.cs" id="5_wxql2"]
 [ext_resource type="Script" uid="uid://dmnyh0w153ree" path="res://scripts/HealthComponent.cs" id="6_utrwa"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://scenes/shadow.tscn" id="7_utrwa"]
+[ext_resource type="Script" uid="uid://bybftr6oa7248" path="res://scripts/StateMachine.cs" id="8_hiucr"]
+[ext_resource type="Script" uid="uid://lawgawt1uw1l" path="res://scripts/RunState.cs" id="9_28whl"]
+[ext_resource type="Script" uid="uid://p7mcjjldalxq" path="res://scripts/IdleState.cs" id="10_mv5oq"]
+[ext_resource type="Script" uid="uid://ck4i11l8letwo" path="res://scripts/DeadState.cs" id="11_f2n1b"]
+[ext_resource type="Script" uid="uid://d3y5luc10ht7d" path="res://scripts/AttackState.cs" id="12_28whl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0
@@ -108,7 +112,7 @@ _data = {
 &"move_front": SubResource("Animation_w0dvl")
 }
 
-[node name="Robot0" type="CharacterBody2D" node_paths=PackedStringArray("_rayCast", "_moveTimer")]
+[node name="Robot0" type="CharacterBody2D" node_paths=PackedStringArray("_rayCast", "_moveTimer", "StateMachine", "HealthComponent", "AnimationController", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 4
 collision_mask = 2
@@ -117,6 +121,11 @@ script = ExtResource("1_w0dvl")
 _rayCast = NodePath("RayCast2D")
 _moveTimer = NodePath("Timer")
 Speed = 20.0
+StateMachine = NodePath("StateMachine")
+HealthComponent = NodePath("CoreComponents/Health")
+AnimationController = NodePath("CoreComponents/AnimationController")
+HurtboxComponent = NodePath("Hurtbox")
+CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -157,17 +166,29 @@ libraries = {
 &"": SubResource("AnimationLibrary_utrwa")
 }
 
-[node name="MovementSmoothingComponent" type="Node" parent="CoreComponents"]
-script = ExtResource("5_2gpyy")
+[node name="Movement" type="Node" parent="CoreComponents"]
+script = ExtResource("5_wxql2")
 Acceleration = 100.0
 Friction = 50.0
 
-[node name="MovementComponent2" type="Node" parent="CoreComponents"]
-script = ExtResource("5_wxql2")
-
-[node name="HealthComponent" type="Node" parent="CoreComponents"]
+[node name="Health" type="Node" parent="CoreComponents"]
 script = ExtResource("6_utrwa")
 MaxHealth = 50
 
 [node name="Shadow" parent="." instance=ExtResource("7_utrwa")]
 scale = Vector2(1, 0.5)
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("8_hiucr")
+
+[node name="Run" type="Node" parent="StateMachine"]
+script = ExtResource("9_28whl")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("10_mv5oq")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("11_f2n1b")
+
+[node name="Attack" type="Node" parent="StateMachine"]
+script = ExtResource("12_28whl")

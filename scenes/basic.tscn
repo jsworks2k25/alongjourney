@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://du4uisvl0wd7j"]
+[gd_scene load_steps=17 format=4 uid="uid://du4uisvl0wd7j"]
 
 [ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://sprites/spritesheet.png" id="1_ampw4"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="2_mwhox"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bjmid78a1unwj" path="res://scenes/ghost.tscn" id="8_txgak"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="11_isf7u"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="12_0cc3o"]
+[ext_resource type="Script" uid="uid://d1obudl21nmav" path="res://scripts/SelectionManager.cs" id="12_mwhox"]
 
 [sub_resource type="Resource" id="Resource_tglyx"]
 script = ExtResource("12_0cc3o")
@@ -333,3 +334,6 @@ collision_priority = 3.0
 [node name="ghost" parent="ObjectLayer" instance=ExtResource("8_txgak")]
 position = Vector2(81, -74)
 collision_mask = 1
+
+[node name="SelectionManager" type="Node" parent="."]
+script = ExtResource("12_mwhox")

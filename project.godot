@@ -25,8 +25,9 @@ aseprite_executable_path="C:/Program Files (x86)/Steam/steamapps/common/Aseprite
 
 [autoload]
 
-GameConfig="*res://scripts/GameConfig.cs"
 GameManager="*res://scripts/GameManager.cs"
+GameConfig="*res://scripts/GameConfig.cs"
+ItemDatabase="*res://scripts/ItemDatabase.cs"
 PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
 
 [display]

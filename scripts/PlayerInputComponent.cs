@@ -6,9 +6,22 @@ using Godot;
 /// </summary>
 public partial class PlayerInputComponent : BaseComponent
 {
+    public override void _Ready()
+    {
+        base._Ready();
+        // 确保物理处理被启用
+        SetPhysicsProcess(true);
+    }
+
     public override void _PhysicsProcess(double delta)
     {
-        if (Owner == null || !Owner.IsAlive)
+        if (Owner == null)
+        {
+            GD.PushError($"{Name}: PlayerInputComponent Owner is null!");
+            return;
+        }
+        
+        if (!Owner.IsAlive)
         {
             return;
         }
@@ -17,7 +30,7 @@ public partial class PlayerInputComponent : BaseComponent
         Vector2 input = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
         
         // 同时写入两个键以保持兼容性
-        Owner.SetBlackboardValue(Actor.KeyInputVector, input);
-        Owner.SetBlackboardValue(Actor.KeyMoveDirection, input);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.InputVector, input);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, input);
     }
 }

@@ -10,14 +10,33 @@ public partial class BaseComponent : Node
 
     public override void _Ready()
     {
-        Owner = ActorHelper.FindActorOwner(this);
+        // 向上查找 Actor 父节点（可能通过 CoreComponents 等中间节点）
+        Owner = GetParent() as Actor;
         if (Owner == null)
         {
-            GD.PushWarning($"{Name}: BaseComponent requires an Actor parent.");
+            // 如果直接父节点不是 Actor，向上递归查找
+            Node current = GetParent();
+            while (current != null && Owner == null)
+            {
+                if (current is Actor actor)
+                {
+                    Owner = actor;
+                    break;
+                }
+                current = current.GetParent();
+            }
+        }
+        
+        if (Owner == null)
+        {
+            GD.PushError($"{Name}: BaseComponent requires an Actor parent. Path: {GetPath()}");
             return;
         }
 
-        Owner.StateChangedTyped += OnOwnerStateChanged;
+        // 确保组件可以处理物理更新（Node 默认不会调用 _PhysicsProcess）
+        ProcessMode = ProcessModeEnum.Inherit;
+
+        Owner.StateChanged += OnOwnerStateChanged;
         Owner.BlackboardChanged += OnOwnerBlackboardChanged;
         Initialize();
     }
@@ -26,7 +45,7 @@ public partial class BaseComponent : Node
     {
     }
 
-    protected virtual void OnOwnerStateChanged(Actor.ActorState newState)
+    protected virtual void OnOwnerStateChanged(string newStateName)
     {
     }
 

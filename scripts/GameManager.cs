@@ -2,8 +2,10 @@ using Godot;
 
 public partial class GameManager : Node
 {
+    [ExportGroup("Respawn Settings")]
+    [Export] public float RespawnDelay = 3.0f;
+    
     private const string SpawnPointGroup = "PlayerSpawn";
-
     private PackedScene _playerScene;
 
     private Player _currentPlayer;
@@ -120,6 +122,9 @@ public partial class GameManager : Node
         if (_respawnInProgress) return;
         _respawnInProgress = true;
 
+        // 先清理信号订阅，避免在删除过程中触发信号
+        ClearPlayerSubscription();
+
         float delay = GetRespawnDelay();
         if (delay > 0f)
         {
@@ -153,7 +158,7 @@ public partial class GameManager : Node
 
     private float GetRespawnDelay()
     {
-        return GameConfig.Instance != null ? GameConfig.Instance.RespawnDelay : 3.0f;
+        return RespawnDelay;
     }
 
     private void SpawnPlayer()
@@ -180,6 +185,14 @@ public partial class GameManager : Node
         {
             player.CollisionLayer = _playerCollisionLayer;
             player.CollisionMask = _playerCollisionMask;
+            
+            // 确保新玩家处于正确状态：启用碰撞和受击盒
+            player.SetCollisionEnabled(true);
+            player.SetHurtboxEnabled(true);
+            
+            // 重置组件状态（确保从干净状态开始）
+            ResetPlayerComponents(player);
+            
             RegisterPlayer(player);
             UpdatePhantomCameraFollowTarget(player);
         }
@@ -187,6 +200,28 @@ public partial class GameManager : Node
         {
             GD.PushError("GameManager: Instanced player is not a Player.");
         }
+    }
+
+    /// <summary>
+    /// 重置玩家组件状态（用于重生）
+    /// </summary>
+    private void ResetPlayerComponents(Player player)
+    {
+        // 重置击退组件
+        var knockback = player.GetNodeOrNull<KnockbackComponent>("CoreComponents/Knockback")
+            ?? player.GetNodeOrNull<KnockbackComponent>("Knockback");
+        knockback?.Reset();
+
+        // 重置受击效果组件
+        var hitEffect = player.GetNodeOrNull<HitEffectComponent>("CoreComponents/HitEffect")
+            ?? player.GetNodeOrNull<HitEffectComponent>("HitEffect");
+        hitEffect?.Reset();
+
+        // 确保血量已恢复（HealthComponent.Initialize() 会在 _Ready 时自动调用）
+        // 但为了安全，显式调用 FullHeal
+        var health = player.GetNodeOrNull<HealthComponent>("CoreComponents/Health")
+            ?? player.GetNodeOrNull<HealthComponent>("Health");
+        health?.FullHeal();
     }
 
     /// <summary>

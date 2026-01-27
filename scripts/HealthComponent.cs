@@ -31,21 +31,22 @@ public partial class HealthComponent : BaseComponent
             return;
         }
 
-        if (key != Actor.KeyDamagePending || !value.AsBool())
+        // 比较字符串键（信号传递的是 string）
+        if (key != Actor.BlackboardKeys.DamagePending.ToString() || !value.AsBool())
         {
             return;
         }
 
-        int amount = Owner.GetBlackboardInt(Actor.KeyDamageAmount, 0);
-        Vector2 source = Owner.GetBlackboardVector(Actor.KeyDamageSource, NoSourcePosition);
+        int amount = Owner.GetBlackboardInt(Actor.BlackboardKeys.DamageAmount, 0);
+        Vector2 source = Owner.GetBlackboardVector(Actor.BlackboardKeys.DamageSource, NoSourcePosition);
         if (amount > 0)
         {
             ApplyDamage(amount, source);
         }
 
-        Owner.SetBlackboardValue(Actor.KeyDamagePending, false);
-        Owner.SetBlackboardValue(Actor.KeyDamageAmount, 0);
-        Owner.SetBlackboardValue(Actor.KeyDamageSource, NoSourcePosition);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.DamagePending, false);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.DamageAmount, 0);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.DamageSource, NoSourcePosition);
     }
 
     public void TakeDamage(int amount, Vector2? sourcePosition = null)
@@ -129,8 +130,8 @@ public partial class HealthComponent : BaseComponent
             return;
         }
 
-        Owner.SetBlackboardValue(Actor.KeyCurrentHealth, _currentHealth);
-        Owner.SetBlackboardValue(Actor.KeyMaxHealth, MaxHealth);
-        Owner.SetBlackboardValue(Actor.KeyIsDead, _isDead);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.CurrentHealth, _currentHealth);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.MaxHealth, MaxHealth);
+        Owner.SetBlackboardValue(Actor.BlackboardKeys.IsDead, _isDead);
     }
 }
