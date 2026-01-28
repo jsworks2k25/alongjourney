@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://dj8mj2ea8x5u4" path="res://Entities/Player/States/DeadState.cs" id="21_ke2ow"]
 [ext_resource type="Script" uid="uid://cxffbk7dra3y7" path="res://Entities/Player/States/StaggerState.cs" id="22_ujl30"]
 [ext_resource type="Script" uid="uid://cux04vlwjftrw" path="res://Entities/Player/States/AttackState.cs" id="23_4ni07"]
+[ext_resource type="Script" uid="uid://ckedmoevht7w4" path="res://Components/SelectionManager.cs" id="24_u8v8j"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
 radius = 3.0
@@ -352,13 +353,15 @@ _data = {
 &"move_front": SubResource("Animation_d2wvv")
 }
 
-[node name="player" type="CharacterBody2D" unique_id=720218635 node_paths=PackedStringArray("StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "CollisionShape")]
+[node name="player" type="CharacterBody2D" unique_id=720218635 node_paths=PackedStringArray("WeaponHolder", "_selectionManager", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 2
 collision_mask = 28
 motion_mode = 1
 safe_margin = 0.2
 script = ExtResource("1_g2els")
+WeaponHolder = NodePath("WeaponPivot")
+_selectionManager = NodePath("CoreComponents/SelectionManager")
 StateMachine = NodePath("StateMachine")
 HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
@@ -387,6 +390,7 @@ shape = SubResource("CapsuleShape2D_3v2ag")
 
 [node name="WeaponPivot" type="Marker2D" parent="." unique_id=670927465]
 y_sort_enabled = true
+position = Vector2(0, -8)
 
 [node name="Axe" parent="WeaponPivot" unique_id=971752055 instance=ExtResource("9_ur7pv")]
 
@@ -416,6 +420,9 @@ script = ExtResource("14_f1ej7")
 
 [node name="Knockback" type="Node" parent="CoreComponents" unique_id=1466644045]
 script = ExtResource("16_qfm1y")
+
+[node name="SelectionManager" type="Node" parent="CoreComponents" unique_id=1334158924]
+script = ExtResource("24_u8v8j")
 
 [node name="Shadow" parent="." unique_id=1015195075 instance=ExtResource("15_oprun")]
 scale = Vector2(1, 0.5)

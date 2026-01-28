@@ -12,8 +12,9 @@ public partial class Player : Actor
     [Signal]
     public delegate void PlayerDiedEventHandler(Player player);
 
-    private Marker2D _weaponHolder;
     private Weapon _currentWeapon;
+
+    [Export] public Marker2D WeaponHolder;
 
     [ExportGroup("References")]
     [Export] private SelectionManager _selectionManager;
@@ -32,12 +33,9 @@ public partial class Player : Actor
             HealthComponent.HealthChanged += HandleHealthChanged;
         }
 
-        _weaponHolder = GetNodeOrNull<Marker2D>("WeaponPivot")
-            ?? GetNodeOrNull<Marker2D>("WeaponHolder");
-
-        if (_weaponHolder != null && _weaponHolder.GetChildCount() > 0)
+        if (WeaponHolder != null && WeaponHolder.GetChildCount() > 0)
         {
-            _currentWeapon = _weaponHolder.GetChild<Weapon>(0);
+            _currentWeapon = WeaponHolder.GetChild<Weapon>(0);
             _currentWeapon.AttackFinished += OnWeaponAttackFinished;
         }
     }
@@ -54,7 +52,6 @@ public partial class Player : Actor
 
     public override void _PhysicsProcess(double delta)
     {
-        // 死亡时不处理物理
         if (!IsAlive)
         {
             return;
@@ -141,7 +138,7 @@ public partial class Player : Actor
 
     private void HandleWeaponAiming()
     {
-        if (_weaponHolder == null)
+        if (WeaponHolder == null)
         {
             return;
         }
@@ -167,8 +164,8 @@ public partial class Player : Actor
             targetDir = (GetGlobalMousePosition() - GlobalPosition).Normalized();
         }
 
-        _weaponHolder.Rotation = targetDir.Angle();
-        _weaponHolder.Scale = new Vector2(1, targetDir.X < 0 ? -1 : 1);
+        WeaponHolder.Rotation = targetDir.Angle();
+        WeaponHolder.Scale = new Vector2(1, targetDir.X < 0 ? -1 : 1);
     }
 
     private void OnWeaponAttackFinished()

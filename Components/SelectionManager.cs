@@ -1,4 +1,4 @@
-namespace AlongJourney.Core;
+namespace AlongJourney.Components;
 
 using Godot;
 using System.Collections.Generic;

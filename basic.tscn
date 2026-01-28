@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://Entities/Environment/rock.tscn" id="9_rv4ag"]
 [ext_resource type="PackedScene" uid="uid://df01wn734v1rp" path="res://Entities/Environment/tree_0.tscn" id="10_7t5rf"]
 [ext_resource type="PackedScene" uid="uid://bjmid78a1unwj" path="res://Entities/Enemies/ghost.tscn" id="11_cmjf8"]
-[ext_resource type="Script" uid="uid://ckedmoevht7w4" path="res://Core/SelectionManager.cs" id="12_eyhdp"]
 
 [sub_resource type="Resource" id="Resource_tglyx"]
 script = ExtResource("4_o6kd5")
@@ -211,10 +210,9 @@ tile_set = SubResource("TileSet_gp2vx")
 [node name="ObjectLayer" type="Node2D" parent="." unique_id=726467305]
 y_sort_enabled = true
 
-[node name="Player" parent="ObjectLayer" unique_id=1983443412 node_paths=PackedStringArray("_selectionManager") instance=ExtResource("7_40ovt")]
+[node name="Player" parent="ObjectLayer" unique_id=1983443412 instance=ExtResource("7_40ovt")]
 position = Vector2(0, 9)
 collision_mask = 57
-_selectionManager = NodePath("../../SelectionManager")
 
 [node name="Robot0" parent="ObjectLayer" unique_id=660021469 instance=ExtResource("8_m5kuc")]
 position = Vector2(0, -22)
@@ -234,6 +232,5 @@ collision_priority = 3.0
 [node name="ghost" parent="ObjectLayer" unique_id=1184619704 instance=ExtResource("11_cmjf8")]
 position = Vector2(81, -74)
 collision_mask = 1
+HurtboxComponentPath = null
 
-[node name="SelectionManager" type="Node" parent="." unique_id=495201914]
-script = ExtResource("12_eyhdp")
