@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://uxm7b02wry10"]
+[gd_scene format=3 uid="uid://uxm7b02wry10"]
 
 [ext_resource type="Script" uid="uid://yje4cun233o7" path="res://addons/AsepriteWizard/interface/docks/dock_fields.gd" id="1_f3w00"]
 [ext_resource type="PackedScene" uid="uid://x1f1t87m582u" path="res://addons/AsepriteWizard/interface/shared/animation_player_drop_button.tscn" id="1_gh7xg"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://ceelq6qrb41uf"]
+[gd_scene format=3 uid="uid://ceelq6qrb41uf"]
 
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="2_47xf2"]
 [ext_resource type="Script" uid="uid://bkr71vxe2t18n" path="res://addons/phantom_camera/examples/scripts/3D/player_controller_third_person_4.4.gd" id="2_uhq7m"]

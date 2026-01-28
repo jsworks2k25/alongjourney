@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://d0whlywijwa6s"]
+[gd_scene format=3 uid="uid://d0whlywijwa6s"]
 
 [ext_resource type="Script" uid="uid://66ct0chhwb4h" path="res://addons/AsepriteWizard/config/config_dialog.gd" id="1"]
 

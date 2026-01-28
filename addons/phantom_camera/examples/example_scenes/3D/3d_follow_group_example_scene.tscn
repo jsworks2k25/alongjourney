@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dbfiy6svpcqap"]
+[gd_scene format=3 uid="uid://dbfiy6svpcqap"]
 
 [ext_resource type="PackedScene" uid="uid://cixlwqycoox8h" path="res://addons/phantom_camera/examples/models/3d_cube_dark.tscn" id="1_r00ve"]
 [ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="2_pi7mp"]

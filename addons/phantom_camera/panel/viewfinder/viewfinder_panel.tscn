@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dbkr3d716wtx0"]
+[gd_scene format=3 uid="uid://dbkr3d716wtx0"]
 
 [ext_resource type="Script" uid="uid://drmv3363t8amc" path="res://addons/phantom_camera/scripts/panel/viewfinder/viewfinder.gd" id="1_utvi8"]
 [ext_resource type="StyleBox" uid="uid://dpa7yvxlq043a" path="res://addons/phantom_camera/panel/viewfinder/deadzone_style_box.tres" id="2_uabt4"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cb83in8f0tbb1"]
+[gd_scene format=3 uid="uid://cb83in8f0tbb1"]
 
 [ext_resource type="Script" uid="uid://tgv6xpi88sd0" path="res://addons/phantom_camera/examples/scripts/3D/player_controller_4.4.gd" id="1_pl87s"]
 

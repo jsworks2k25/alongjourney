@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c1l0bk12iwln3"]
+[gd_scene format=3 uid="uid://c1l0bk12iwln3"]
 
 [ext_resource type="Script" uid="uid://ctf8re8bekyl1" path="res://addons/AsepriteWizard/interface/shared/tree/inline_warning_panel.gd" id="1_aomsj"]
 

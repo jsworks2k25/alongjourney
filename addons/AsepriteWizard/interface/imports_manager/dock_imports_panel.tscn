@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ci67r2f2btg5"]
+[gd_scene format=3 uid="uid://ci67r2f2btg5"]
 
 [ext_resource type="Script" uid="uid://ll67u43bmpjh" path="res://addons/AsepriteWizard/interface/imports_manager/dock_imports_panel.gd" id="1_1xyeb"]
 [ext_resource type="PackedScene" uid="uid://cisgsfvp4nf1g" path="res://addons/AsepriteWizard/interface/shared/tree/resource_tree.tscn" id="2_d1s4o"]

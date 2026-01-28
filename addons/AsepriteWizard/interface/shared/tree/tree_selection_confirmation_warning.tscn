@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://qgmln507kjnm"]
+[gd_scene format=3 uid="uid://qgmln507kjnm"]
 
 [ext_resource type="Script" uid="uid://blkfslrprkfmv" path="res://addons/AsepriteWizard/interface/shared/tree/tree_selection_confirmation_warning.gd" id="1_7gtu1"]
 
