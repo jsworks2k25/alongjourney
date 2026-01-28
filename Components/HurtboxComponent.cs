@@ -1,0 +1,23 @@
+namespace AlongJourney.Components;
+
+using Godot;
+using AlongJourney.Entities;
+using AlongJourney.Interfaces;
+
+/// <summary>
+/// 受击区域组件：实现 IDamageable 接口，通过 Actor 黑板系统处理伤害
+/// </summary>
+public partial class HurtboxComponent : Area2D, IDamageable
+{
+    private Actor _owner;
+
+    public override void _Ready()
+    {
+        _owner = GetParent<Actor>();
+    }
+
+    public void TakeDamage(int amount, Vector2? sourcePosition = null)
+    {      
+        _owner.RequestDamage(amount, sourcePosition);
+    }
+}

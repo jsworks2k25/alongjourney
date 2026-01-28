@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://btn6jgv0vix7"]
+[gd_scene format=3 uid="uid://btn6jgv0vix7"]
 
 [ext_resource type="FontFile" uid="uid://dve7mgsjik4dg" path="res://addons/phantom_camera/fonts/Nunito-Regular.ttf" id="1_anjxo"]
 [ext_resource type="Theme" uid="uid://bhppejri5dbsf" path="res://addons/phantom_camera/themes/theme.tres" id="1_wql5t"]

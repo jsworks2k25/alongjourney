@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cuqkqsp3ikv5u"]
+[gd_scene format=3 uid="uid://cuqkqsp3ikv5u"]
 
 [ext_resource type="FontFile" uid="uid://c4mm3of2mc8o5" path="res://addons/phantom_camera/fonts/Nunito-Black.ttf" id="1_5e5k4"]
 [ext_resource type="Script" uid="uid://bwc42i46603qn" path="res://addons/phantom_camera/scripts/panel/updater/update_button.gd" id="1_xtaw5"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bry46a3e3vedy"
-path="res://.godot/imported/template-rear-stand-Sheet.png-e6f6d0e64b8ac560caad4b74d23cacf8.ctex"
+uid="uid://dumpbq5yp6boy"
+path="res://.godot/imported/template-rear-stand-Sheet.png-df0dafc7de677da551258bdff6d20d3a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/template-rear-stand-Sheet.png"
-dest_files=["res://.godot/imported/template-rear-stand-Sheet.png-e6f6d0e64b8ac560caad4b74d23cacf8.ctex"]
+source_file="res://Sprites/template-rear-stand-Sheet.png"
+dest_files=["res://.godot/imported/template-rear-stand-Sheet.png-df0dafc7de677da551258bdff6d20d3a.ctex"]
 
 [params]
 

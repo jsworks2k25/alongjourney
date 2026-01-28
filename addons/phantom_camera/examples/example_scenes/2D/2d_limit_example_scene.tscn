@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://w20wokw3ohsq"]
+[gd_scene format=3 uid="uid://w20wokw3ohsq"]
 
 [ext_resource type="Script" uid="uid://c5yewe1hewu7j" path="res://addons/phantom_camera/examples/scripts/2D/2d_room_limit_tween.gd" id="1_ijqyv"]
 [ext_resource type="Texture2D" uid="uid://c77npili4pel4" path="res://addons/phantom_camera/examples/textures/2D/level_spritesheet.png" id="1_wmhqb"]

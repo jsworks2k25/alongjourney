@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://b1jb5yierm2bq"]
+[gd_scene format=3 uid="uid://b1jb5yierm2bq"]
 
 [ext_resource type="Script" uid="uid://bbcunrpgig552" path="res://addons/AsepriteWizard/interface/docks/wizard/wizard_nodes/details.gd" id="1_1v4dc"]
 

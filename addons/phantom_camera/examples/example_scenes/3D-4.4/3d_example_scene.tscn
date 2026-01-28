@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://cypbptekk8etg"]
+[gd_scene format=3 uid="uid://cypbptekk8etg"]
 
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="1_u86qq"]
 [ext_resource type="PackedScene" uid="uid://bulsh7s0ibmao" path="res://addons/phantom_camera/examples/example_scenes/3D/sub_scenes/playable_character_3d.tscn" id="2_jl1he"]

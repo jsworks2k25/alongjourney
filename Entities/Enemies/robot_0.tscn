@@ -1,0 +1,191 @@
+[gd_scene format=3 uid="uid://dsftw85vqphm"]
+
+[ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://Sprites/robot.png" id="1_8kwrt"]
+[ext_resource type="Script" uid="uid://dbuahw42jt40u" path="res://Entities/Enemies/Robot0.cs" id="1_w0dvl"]
+[ext_resource type="Script" uid="uid://bq7kokxio5iif" path="res://Components/AnimationController.cs" id="2_edo0t"]
+[ext_resource type="Script" uid="uid://bmgna558so5yc" path="res://Components/MovementComponent.cs" id="5_wxql2"]
+[ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://Components/HealthComponent.cs" id="6_utrwa"]
+[ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="7_utrwa"]
+[ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="8_hiucr"]
+[ext_resource type="Script" uid="uid://d1h1usnwy8f5q" path="res://Entities/Player/States/RunState.cs" id="9_28whl"]
+[ext_resource type="Script" uid="uid://bviqnfqsuhf8o" path="res://Entities/Player/States/IdleState.cs" id="10_mv5oq"]
+[ext_resource type="Script" uid="uid://dj8mj2ea8x5u4" path="res://Entities/Player/States/DeadState.cs" id="11_f2n1b"]
+[ext_resource type="Script" uid="uid://cux04vlwjftrw" path="res://Entities/Player/States/AttackState.cs" id="12_28whl"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
+radius = 4.0
+height = 18.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_osokj"]
+radius = 6.0
+height = 20.0
+
+[sub_resource type="Animation" id="Animation_wxql2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_2gpyy"]
+resource_name = "idle_up"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [4, 6]
+}
+
+[sub_resource type="Animation" id="Animation_edo0t"]
+resource_name = "idle_down"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 2]
+}
+
+[sub_resource type="Animation" id="Animation_osokj"]
+resource_name = "move_up"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_w0dvl"]
+resource_name = "move_down"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_utrwa"]
+_data = {
+&"RESET": SubResource("Animation_wxql2"),
+&"idle_back": SubResource("Animation_2gpyy"),
+&"idle_front": SubResource("Animation_edo0t"),
+&"move_back": SubResource("Animation_osokj"),
+&"move_front": SubResource("Animation_w0dvl")
+}
+
+[node name="Robot0" type="CharacterBody2D" unique_id=113230676 node_paths=PackedStringArray("_rayCast", "_moveTimer", "StateMachine", "HealthComponent", "AnimationController", "CollisionShape")]
+y_sort_enabled = true
+collision_layer = 4
+collision_mask = 2
+safe_margin = 0.2
+script = ExtResource("1_w0dvl")
+_rayCast = NodePath("RayCast2D")
+_moveTimer = NodePath("Timer")
+Speed = 20.0
+StateMachine = NodePath("StateMachine")
+HealthComponent = NodePath("CoreComponents/Health")
+AnimationController = NodePath("CoreComponents/AnimationController")
+CollisionShape = NodePath("CollisionShape2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1657351058]
+texture_filter = 1
+texture = ExtResource("1_8kwrt")
+offset = Vector2(0, -8)
+hframes = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=881431331]
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_w0dvl")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1246626033]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=731479079]
+position = Vector2(0, -3)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_osokj")
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=555715957]
+position = Vector2(0, 7)
+collision_mask = 3
+
+[node name="Timer" type="Timer" parent="." unique_id=328474611]
+autostart = true
+
+[node name="CoreComponents" type="Node" parent="." unique_id=710835562]
+
+[node name="AnimationController" type="Node" parent="CoreComponents" unique_id=1477453067 node_paths=PackedStringArray("_animPlayer", "_sprite")]
+script = ExtResource("2_edo0t")
+_animPlayer = NodePath("AnimationPlayer")
+_sprite = NodePath("../../Sprite2D")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CoreComponents/AnimationController" unique_id=281957186]
+root_node = NodePath("../../..")
+libraries/ = SubResource("AnimationLibrary_utrwa")
+
+[node name="Movement" type="Node" parent="CoreComponents" unique_id=1382860870]
+script = ExtResource("5_wxql2")
+Acceleration = 100.0
+Friction = 50.0
+
+[node name="Health" type="Node" parent="CoreComponents" unique_id=146410026]
+script = ExtResource("6_utrwa")
+MaxHealth = 50
+
+[node name="Shadow" parent="." unique_id=663733863 instance=ExtResource("7_utrwa")]
+scale = Vector2(1, 0.5)
+
+[node name="StateMachine" type="Node" parent="." unique_id=1792361086]
+script = ExtResource("8_hiucr")
+
+[node name="Run" type="Node" parent="StateMachine" unique_id=314494556]
+script = ExtResource("9_28whl")
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=1293986234]
+script = ExtResource("10_mv5oq")
+
+[node name="Dead" type="Node" parent="StateMachine" unique_id=1019178293]
+script = ExtResource("11_f2n1b")
+
+[node name="Attack" type="Node" parent="StateMachine" unique_id=168610079]
+script = ExtResource("12_28whl")

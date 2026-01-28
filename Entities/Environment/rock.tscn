@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dgl0m2dggs3ef"]
+
+[ext_resource type="Texture2D" uid="uid://bfjnx5ftj1jel" path="res://Sprites/rock.png" id="1_lgx4v"]
+[ext_resource type="Script" uid="uid://c4gctuni5l2fo" path="res://Entities/Environment/TranslucentObstacle.cs" id="1_mek2u"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lgx4v"]
+radius = 4.0
+height = 16.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bpoff"]
+radius = 11.0
+height = 28.0
+
+[node name="rock" type="StaticBody2D" unique_id=1554602576]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 0
+collision_priority = 3.0
+script = ExtResource("1_mek2u")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1997473432]
+texture_filter = 1
+texture = ExtResource("1_lgx4v")
+offset = Vector2(0, -12)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=214812111]
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_lgx4v")
+
+[node name="OcclusionArea" type="Area2D" parent="." unique_id=302983687]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OcclusionArea" unique_id=858086263]
+position = Vector2(0, -10)
+shape = SubResource("CapsuleShape2D_bpoff")
