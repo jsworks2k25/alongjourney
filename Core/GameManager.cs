@@ -8,7 +8,7 @@ public partial class GameManager : Node
 {
     [ExportGroup("Respawn Settings")]
     [Export] public float RespawnDelay = 3.0f;
-    
+
     private const string SpawnPointGroup = "PlayerSpawn";
     private PackedScene _playerScene;
 
@@ -194,9 +194,6 @@ public partial class GameManager : Node
             player.SetCollisionEnabled(true);
             player.SetHurtboxEnabled(true);
             
-            // 重置组件状态（确保从干净状态开始）
-            ResetPlayerComponents(player);
-            
             RegisterPlayer(player);
             UpdatePhantomCameraFollowTarget(player);
         }
@@ -204,27 +201,6 @@ public partial class GameManager : Node
         {
             GD.PushError("GameManager: Instanced player is not a Player.");
         }
-    }
-
-    /// <summary>
-    /// 重置玩家组件状态（用于重生）
-    /// </summary>
-    private void ResetPlayerComponents(Player player)
-    {
-        // 重置击退组件
-        var knockback = player.GetNodeOrNull<KnockbackComponent>("CoreComponents/Knockback")
-            ?? player.GetNodeOrNull<KnockbackComponent>("Knockback");
-
-        // 重置受击效果组件
-        var hitEffect = player.GetNodeOrNull<HitEffectComponent>("CoreComponents/HitEffect")
-            ?? player.GetNodeOrNull<HitEffectComponent>("HitEffect");
-        hitEffect?.Reset();
-
-        // 确保血量已恢复（HealthComponent.Initialize() 会在 _Ready 时自动调用）
-        // 但为了安全，显式调用 FullHeal
-        var health = player.GetNodeOrNull<HealthComponent>("CoreComponents/Health")
-            ?? player.GetNodeOrNull<HealthComponent>("Health");
-        health?.FullHeal();
     }
 
     /// <summary>

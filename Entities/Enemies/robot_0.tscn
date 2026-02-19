@@ -124,6 +124,7 @@ Speed = 20.0
 StateMachine = NodePath("StateMachine")
 HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
+HurtboxComponentPath = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1657351058]

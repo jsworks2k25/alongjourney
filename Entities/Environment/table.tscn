@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cqblmfm7y7nr8"]
+
+[ext_resource type="Texture2D" uid="uid://4grxu08rrs20" path="res://Sprites/table0.png" id="1_ieov4"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v3n4c"]
+radius = 3.0
+height = 12.0
+
+[node name="Table" type="StaticBody2D" unique_id=1378618975]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=466072150]
+y_sort_enabled = true
+texture_filter = 1
+texture = ExtResource("1_ieov4")
+offset = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=315585755]
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_v3n4c")

@@ -367,6 +367,7 @@ HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
 HitEffectComponent = NodePath("CoreComponents/HitEffect")
 KnockbackComponent = NodePath("CoreComponents/Knockback")
+HurtboxComponentPath = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=17696463]
@@ -393,6 +394,8 @@ y_sort_enabled = true
 position = Vector2(0, -8)
 
 [node name="Axe" parent="WeaponPivot" unique_id=971752055 instance=ExtResource("9_ur7pv")]
+position = Vector2(4, 0)
+Damage = 15
 
 [node name="CoreComponents" type="Node" parent="." unique_id=712897908]
 
@@ -401,6 +404,9 @@ script = ExtResource("7_y4r1p")
 
 [node name="Movement" type="Node" parent="CoreComponents" unique_id=106894129]
 script = ExtResource("13_jej6c")
+Speed = 120.0
+Acceleration = 300.0
+Friction = 500.0
 
 [node name="HitEffect" type="Node" parent="CoreComponents" unique_id=1533843793]
 script = ExtResource("10_y4r1p")
