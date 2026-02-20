@@ -4,7 +4,9 @@ using System;
 public partial class BuildingSystem : Node2D
 {
     [ExportCategory("Config")]
+
     [Export] public TileMapLayer GroundLayer;
+    [Export] public Node2D ObjectLayer;
     [Export] public int Subdivisions = 2; // 子网格细分等级：2 = 半格对齐，4 = 1/4格对齐
     [Export] public float TileWidth = 32f;
     [Export] public float TileHeight = 16f;
@@ -103,7 +105,7 @@ public partial class BuildingSystem : Node2D
         
         // 将物体添加到场景中（通常添加到 Y-Sort 节点下，而不是 BuildingSystem 下）
         // 这里假设 GroundLayer 的父节点是主要的 Y-Sort 容器
-        GroundLayer.GetParent().AddChild(newBuilding);
+        ObjectLayer.AddChild(newBuilding);
 
         // 可选：放置后是否退出建造模式？
         // _isBuildingMode = false; 

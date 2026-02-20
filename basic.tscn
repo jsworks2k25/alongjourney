@@ -229,11 +229,10 @@ position = Vector2(166, -126)
 collision_mask = 1
 HurtboxComponentPath = null
 
-[node name="BuildingSystem" type="Node2D" parent="." unique_id=7709074 node_paths=PackedStringArray("GroundLayer")]
+[node name="BuildingSystem" type="Node2D" parent="." unique_id=7709074 node_paths=PackedStringArray("GroundLayer", "ObjectLayer")]
 y_sort_enabled = true
 script = ExtResource("12_t15vj")
 GroundLayer = NodePath("../GoundLayer")
+ObjectLayer = NodePath("../ObjectLayer")
 Subdivisions = 1
-TileWidth = 32.0
-TileHeight = 16.0
 ObjectToPlace = ExtResource("11_d7s5t")
