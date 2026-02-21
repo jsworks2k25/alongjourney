@@ -15,6 +15,7 @@ export_presets.cfg
 .vs/
 .vscode/
 .idea/
+.cursor/
 .DS_Store
 Thumbs.db
 *.log
@@ -28,4 +29,3 @@ obj/
 *.csproj.old
 *.cs.uid
 
-.cursor/
