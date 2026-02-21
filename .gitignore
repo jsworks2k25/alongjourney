@@ -27,3 +27,5 @@ obj/
 *.csproj
 *.csproj.old
 *.cs.uid
+
+.cursor/
