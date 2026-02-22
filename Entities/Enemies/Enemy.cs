@@ -79,27 +79,17 @@ public partial class Enemy : Actor
         if (targetPos.HasValue)
         {
             Vector2 direction = (targetPos.Value - GlobalPosition).Normalized();
-            // 写入移动意图到黑板，由 MovementComponent 处理
-            // 状态机会根据移动方向自动在 Idle 和 Run 之间切换
             SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, direction);
         }
         else
         {
-            // 没有目标时停止移动
             SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, Vector2.Zero);
         }
     }
 
     private void HandleDied()
     {
-        if (GetBlackboardBool(Actor.BlackboardKeys.IsDead, false))
-        {
-            return;
-        }
-        SetBlackboardValue(Actor.BlackboardKeys.IsDead, true);
         RequestStateChange<DeadState>();
-
-        // 延迟销毁，让动画播放完
         GetTree().CreateTimer(0.5f).Timeout += QueueFree;
     }
 

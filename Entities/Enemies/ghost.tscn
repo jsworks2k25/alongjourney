@@ -10,10 +10,11 @@
 [ext_resource type="Script" uid="uid://bwlybm005er1a" path="res://Components/HitEffectComponent.cs" id="9_4pqta"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="9_seks5"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="11_c10vd"]
-[ext_resource type="Script" uid="uid://d1h1usnwy8f5q" path="res://Entities/Player/States/RunState.cs" id="12_uehw0"]
-[ext_resource type="Script" uid="uid://bviqnfqsuhf8o" path="res://Entities/Player/States/IdleState.cs" id="13_pe3fk"]
-[ext_resource type="Script" uid="uid://dj8mj2ea8x5u4" path="res://Entities/Player/States/DeadState.cs" id="14_p0uf5"]
-[ext_resource type="Script" uid="uid://cux04vlwjftrw" path="res://Entities/Player/States/AttackState.cs" id="15_uehw0"]
+[ext_resource type="Script" uid="uid://dnt0eyy54575i" path="res://Entities/Enemies/States/ChaseState.cs" id="11_tqccv"]
+[ext_resource type="Script" uid="uid://bkicy84jh7kjo" path="res://Entities/Enemies/States/IdleState.cs" id="12_bip5n"]
+[ext_resource type="Script" uid="uid://crnaylmoo0yva" path="res://Entities/Enemies/States/DeadState.cs" id="13_pbjeb"]
+[ext_resource type="Script" uid="uid://gas4t05lyk4c" path="res://Entities/Enemies/States/AttackState.cs" id="14_gtx6n"]
+[ext_resource type="Script" uid="uid://dp8qxqncmuthy" path="res://Entities/Enemies/States/StaggerState.cs" id="15_ljlpa"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
 radius = 4.0
@@ -146,7 +147,7 @@ _data = {
 &"move_front": SubResource("Animation_t76o2")
 }
 
-[node name="ghost" type="CharacterBody2D" node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "HurtboxComponentPath", "CollisionShape")]
+[node name="ghost" type="CharacterBody2D" unique_id=1799617584 node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 0
 collision_mask = 0
@@ -162,7 +163,7 @@ HitEffectComponent = NodePath("CoreComponents/HitEffect")
 HurtboxComponentPath = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1051568481]
 modulate = Color(1, 1, 1, 0.78431374)
 texture_filter = 1
 texture = ExtResource("2_lv6vd")
@@ -193,79 +194,80 @@ metadata/_aseprite_wizard_config_ = {
 "source_uid": 1830734069883474141
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=684697475]
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_l5lq6")
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1651166173]
 collision_layer = 32
 collision_mask = 0
 script = ExtResource("3_sv5gc")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=379636320]
 position = Vector2(0, -2)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_o57ao")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=1204987791]
 position = Vector2(0, -8)
 scale = Vector2(1, 0.5)
 collision_layer = 0
 collision_mask = 16
 script = ExtResource("5_seks5")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1989313953]
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_8ky03")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=1883011936]
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1271422478]
 scale = Vector2(1, 0.5)
 shape = SubResource("CircleShape2D_lv6vd")
 
-[node name="CoreComponents" type="Node" parent="."]
+[node name="CoreComponents" type="Node" parent="." unique_id=388181798]
 
-[node name="Health" type="Node" parent="CoreComponents"]
+[node name="Health" type="Node" parent="CoreComponents" unique_id=263475603]
 script = ExtResource("4_wj1r3")
-MaxHealth = 50
+MaxHealth = 30
 
-[node name="Movement" type="Node" parent="CoreComponents"]
+[node name="Movement" type="Node" parent="CoreComponents" unique_id=563028956]
 script = ExtResource("8_wj1r3")
 Acceleration = 100.0
 Friction = 50.0
 
-[node name="AnimationController" type="Node" parent="CoreComponents" node_paths=PackedStringArray("_animPlayer", "_sprite")]
+[node name="AnimationController" type="Node" parent="CoreComponents" unique_id=1657591417 node_paths=PackedStringArray("_animPlayer", "_sprite")]
 script = ExtResource("5_lv6vd")
 _animPlayer = NodePath("AnimationPlayer")
 _sprite = NodePath("../../Sprite2D")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CoreComponents/AnimationController"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CoreComponents/AnimationController" unique_id=1656583614]
 root_node = NodePath("../../..")
-libraries = {
-&"": SubResource("AnimationLibrary_l5lq6")
-}
+libraries/ = SubResource("AnimationLibrary_l5lq6")
 
-[node name="HitEffect" type="Node" parent="CoreComponents"]
+[node name="HitEffect" type="Node" parent="CoreComponents" unique_id=1219430084]
 script = ExtResource("9_4pqta")
 FlashDuration = 0.2
 
-[node name="Shadow" parent="." instance=ExtResource("9_seks5")]
+[node name="Shadow" parent="." unique_id=1709244803 instance=ExtResource("9_seks5")]
 scale = Vector2(1, 0.5)
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="." unique_id=554247358]
 script = ExtResource("11_c10vd")
 
-[node name="Run" type="Node" parent="StateMachine"]
-script = ExtResource("12_uehw0")
+[node name="Chase" type="Node" parent="StateMachine" unique_id=20016212]
+script = ExtResource("11_tqccv")
 
-[node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("13_pe3fk")
+[node name="Idle" type="Node" parent="StateMachine" unique_id=1546454573]
+script = ExtResource("12_bip5n")
 
-[node name="Dead" type="Node" parent="StateMachine"]
-script = ExtResource("14_p0uf5")
+[node name="Dead" type="Node" parent="StateMachine" unique_id=1317422290]
+script = ExtResource("13_pbjeb")
 
-[node name="Attack" type="Node" parent="StateMachine"]
-script = ExtResource("15_uehw0")
+[node name="Attack" type="Node" parent="StateMachine" unique_id=1615604659]
+script = ExtResource("14_gtx6n")
+
+[node name="Stagger" type="Node" parent="StateMachine" unique_id=1535659242]
+script = ExtResource("15_ljlpa")
