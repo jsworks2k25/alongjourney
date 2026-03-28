@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://Sprites/robot.png" id="1_8kwrt"]
 [ext_resource type="Script" uid="uid://dbuahw42jt40u" path="res://Entities/Enemies/Robot0.cs" id="1_w0dvl"]
 [ext_resource type="Script" uid="uid://bq7kokxio5iif" path="res://Components/AnimationController.cs" id="2_edo0t"]
+[ext_resource type="Script" uid="uid://cdpj2qq7mig3y" path="res://Components/HurtboxComponent.cs" id="3_jt7hj"]
 [ext_resource type="Script" uid="uid://bmgna558so5yc" path="res://Components/MovementComponent.cs" id="5_wxql2"]
 [ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://Components/HealthComponent.cs" id="6_utrwa"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="7_utrwa"]
@@ -138,8 +139,9 @@ rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_w0dvl")
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1246626033]
-collision_layer = 4
+collision_layer = 32
 collision_mask = 0
+script = ExtResource("3_jt7hj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=731479079]
 position = Vector2(0, -3)

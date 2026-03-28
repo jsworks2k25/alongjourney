@@ -404,9 +404,8 @@ script = ExtResource("7_y4r1p")
 
 [node name="Movement" type="Node" parent="CoreComponents" unique_id=106894129]
 script = ExtResource("13_jej6c")
-Speed = 120.0
-Acceleration = 300.0
-Friction = 500.0
+Acceleration = 500.0
+Friction = 1000.0
 
 [node name="HitEffect" type="Node" parent="CoreComponents" unique_id=1533843793]
 script = ExtResource("10_y4r1p")

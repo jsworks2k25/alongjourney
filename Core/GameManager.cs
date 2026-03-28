@@ -2,7 +2,6 @@ namespace AlongJourney.Core;
 
 using Godot;
 using AlongJourney.Entities.Player;
-using AlongJourney.Components;
 
 public partial class GameManager : Node
 {
@@ -108,8 +107,9 @@ public partial class GameManager : Node
 
     private void RegisterPlayer(Player player)
     {
+        player.PlayerDied -= OnPlayerDied;
         _currentPlayer = player;
-        _currentPlayer.PlayerDied += OnPlayerDied;
+        player.PlayerDied += OnPlayerDied;
     }
 
     private void ClearPlayerSubscription()
@@ -129,7 +129,7 @@ public partial class GameManager : Node
         // 先清理信号订阅，避免在删除过程中触发信号
         ClearPlayerSubscription();
 
-        float delay = GetRespawnDelay();
+        float delay = RespawnDelay;
         if (delay > 0f)
         {
             await ToSignal(GetTree().CreateTimer(delay), SceneTreeTimer.SignalName.Timeout);
@@ -160,11 +160,6 @@ public partial class GameManager : Node
         _respawnInProgress = false;
     }
 
-    private float GetRespawnDelay()
-    {
-        return RespawnDelay;
-    }
-
     private void SpawnPlayer()
     {
         if (_playerScene == null)
@@ -174,11 +169,11 @@ public partial class GameManager : Node
         }
 
         Node playerNode = _playerScene.Instantiate();
-        Node parent = _playerParent ?? GetTree().CurrentScene ?? this;
-        parent.AddChild(playerNode);
-
         // 与 basic 等场景中实例名 "Player" 及 PhantomCamera follow_target 路径 "../ObjectLayer/Player" 保持一致
         playerNode.Name = "Player";
+
+        Node parent = _playerParent ?? GetTree().CurrentScene ?? this;
+        parent.AddChild(playerNode);
 
         if (playerNode is Node2D node2D)
         {
@@ -193,8 +188,7 @@ public partial class GameManager : Node
             // 确保新玩家处于正确状态：启用碰撞和受击盒
             player.SetCollisionEnabled(true);
             player.SetHurtboxEnabled(true);
-            
-            RegisterPlayer(player);
+
             UpdatePhantomCameraFollowTarget(player);
         }
         else
