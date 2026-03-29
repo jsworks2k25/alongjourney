@@ -33,8 +33,7 @@ public partial class Enemy : Actor
             return;
         _target = null;
 
-        string groupName = GameConfig.GetPlayerGroupName();
-        var players = GetTree().GetNodesInGroup(groupName);
+        var players = GetTree().GetNodesInGroup(GameConstants.PlayerGroupName);
 
         foreach (var player in players)
         {

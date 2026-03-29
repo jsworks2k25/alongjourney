@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://dgusoyopa8dog"]
+
+[ext_resource type="Script" uid="uid://232a8hab5vfc" path="res://UI/MainMenu.cs" id="1_main"]
+
+[node name="MainMenu" type="Control" unique_id=930231780]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="Center" type="CenterContainer" parent="." unique_id=406558750]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center" unique_id=938326236]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Center/VBox" unique_id=711089168]
+layout_mode = 2
+text = "A Long Journey"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Start" type="Button" parent="Center/VBox" unique_id=437295277]
+layout_mode = 2
+text = "Start game"
+
+[node name="Quit" type="Button" parent="Center/VBox" unique_id=1974687550]
+layout_mode = 2
+text = "Quit"

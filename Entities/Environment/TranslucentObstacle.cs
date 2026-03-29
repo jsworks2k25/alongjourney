@@ -27,8 +27,7 @@ public partial class TranslucentObstacle : StaticBody2D
 
     private void OnBodyEntered(Node2D body)
     {
-        string groupName = GameConfig.GetPlayerGroupName();
-        if (body.IsInGroup(groupName) || body is ITargetable)
+        if (body.IsInGroup(GameConstants.PlayerGroupName) || body is ITargetable)
         {
             FadeTo(TransparencyAlpha);
         }
@@ -36,8 +35,7 @@ public partial class TranslucentObstacle : StaticBody2D
 
     private void OnBodyExited(Node2D body)
     {
-        string groupName = GameConfig.GetPlayerGroupName();
-        if (body.IsInGroup(groupName) || body is ITargetable)
+        if (body.IsInGroup(GameConstants.PlayerGroupName) || body is ITargetable)
         {
             FadeTo(1.0f);
         }

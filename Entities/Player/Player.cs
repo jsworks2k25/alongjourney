@@ -24,7 +24,7 @@ public partial class Player : Actor
         base._Ready();
 
         // 添加到 Player 组
-        AddToGroup(GameConfig.GetPlayerGroupName());
+        AddToGroup(GameConstants.PlayerGroupName);
 
         // 订阅 HealthComponent 信号
         if (HealthComponent != null)

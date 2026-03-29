@@ -55,7 +55,7 @@ public partial class GameManager : Node
 
     private Player FindPlayer()
     {
-        return GetTree().GetFirstNodeInGroup(GameConfig.GetPlayerGroupName()) as Player;
+        return GetTree().GetFirstNodeInGroup(GameConstants.PlayerGroupName) as Player;
     }
 
     private void SetupPlayer(Player player)
@@ -124,6 +124,11 @@ public partial class GameManager : Node
     private async void OnPlayerDied(Player player)
     {
         if (_respawnInProgress) return;
+        if (GetNodeOrNull<GameFlow>("/root/GameFlow") is { } flow && flow.Current != GamePhase.Playing)
+        {
+            return;
+        }
+
         _respawnInProgress = true;
 
         // 先清理信号订阅，避免在删除过程中触发信号
