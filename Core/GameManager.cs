@@ -1,5 +1,7 @@
 namespace AlongJourney.Core;
 
+using System;
+using System.Threading.Tasks;
 using Godot;
 using AlongJourney.Entities.Player;
 
@@ -55,7 +57,7 @@ public partial class GameManager : Node
 
     private Player FindPlayer()
     {
-        return GetTree().GetFirstNodeInGroup(GameConfig.GetPlayerGroupName()) as Player;
+        return GetTree().GetFirstNodeInGroup(GameConstants.PlayerGroupName) as Player;
     }
 
     private void SetupPlayer(Player player)
@@ -124,6 +126,11 @@ public partial class GameManager : Node
     private async void OnPlayerDied(Player player)
     {
         if (_respawnInProgress) return;
+        if (GetNodeOrNull<GameFlow>("/root/GameFlow") is { Current: GamePhase.MainMenu })
+        {
+            return;
+        }
+
         _respawnInProgress = true;
 
         // 先清理信号订阅，避免在删除过程中触发信号
@@ -132,7 +139,7 @@ public partial class GameManager : Node
         float delay = RespawnDelay;
         if (delay > 0f)
         {
-            await ToSignal(GetTree().CreateTimer(delay), SceneTreeTimer.SignalName.Timeout);
+            await WaitRespawnDelayRespectingPause(delay);
         }
 
         if (!IsInsideTree())
@@ -158,6 +165,44 @@ public partial class GameManager : Node
 
         SpawnPlayer();
         _respawnInProgress = false;
+    }
+
+    /// <summary>
+    /// 重生等待仅在「游戏中且未暂停」时推进；暂停或打开暂停菜单时冻结，避免 SceneTreeTimer 仍计时。
+    /// </summary>
+    private async Task WaitRespawnDelayRespectingPause(float seconds)
+    {
+        var flow = GetNodeOrNull<GameFlow>("/root/GameFlow");
+        if (flow == null)
+        {
+            if (seconds > 0f)
+            {
+                await ToSignal(GetTree().CreateTimer(seconds), SceneTreeTimer.SignalName.Timeout);
+            }
+
+            return;
+        }
+
+        float remaining = seconds;
+        while (remaining > 0f)
+        {
+            if (!IsInsideTree())
+            {
+                return;
+            }
+
+            if (flow.Current != GamePhase.Playing || GetTree().Paused)
+            {
+                await ToSignal(flow, "process_frame");
+                continue;
+            }
+
+            float step = Math.Min(0.05f, remaining);
+            await ToSignal(
+                GetTree().CreateTimer(step, processAlways: false),
+                SceneTreeTimer.SignalName.Timeout);
+            remaining -= step;
+        }
     }
 
     private void SpawnPlayer()

@@ -128,8 +128,7 @@ public partial class ItemDrop : Area2D
     /// </summary>
     private void OnBodyEntered(Node2D body)
     {
-        string groupName = GameConfig.GetPlayerGroupName();
-        if (body.IsInGroup(groupName))
+        if (body.IsInGroup(GameConstants.PlayerGroupName))
         {
             _isMagnetized = true;
             _playerTarget = body;
