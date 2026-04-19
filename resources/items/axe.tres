@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://Resources/Items/ItemData.cs" id="1_itemdata"]
+[ext_resource type="Texture2D" path="res://Sprites/axe.png" id="2_icon"]
+[ext_resource type="PackedScene" path="res://Entities/Items/axe.tscn" id="3_scene"]
+
+[resource]
+script = ExtResource("1_itemdata")
+Id = "axe"
+Name = "Axe"
+Description = "一把基础斧头，可以砍树。"
+Icon = ExtResource("2_icon")
+Type = 3
+MaxStack = 1
+IsStackable = false
+AttackPower = 15
+UseCooldown = 0.1
+UseMode = 1
+ToolAction = 1
+EquipScene = ExtResource("3_scene")
+EquipOffset = Vector2(4, 0)

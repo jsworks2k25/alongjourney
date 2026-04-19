@@ -3,6 +3,7 @@ namespace AlongJourney.Entities.Items;
 using Godot;
 using AlongJourney.Interfaces;
 using AlongJourney.Components;
+using AlongJourney.Resources.Items;
 
 /// <summary>
 /// 武器攻击范围类型
@@ -23,11 +24,13 @@ public abstract partial class Weapon : Node2D
     [ExportGroup("Attack Range")]
     [Export] public AttackRangeType AttackRange = AttackRangeType.Melee;
     [Export] public float MeleeRange = 50f; // 近战攻击范围（像素）
+    [Export] public ToolActionType ToolAction = ToolActionType.None;
 
     [Export] protected HitboxComponent _hitbox;
 
     protected bool _isAttacking = false;
     protected bool _isOnCooldown = false;
+    public ItemData SourceItemData { get; private set; }
 
     public override void _Ready()
     {
@@ -36,6 +39,31 @@ public abstract partial class Weapon : Node2D
 
         if (_hitbox != null)
             _hitbox.DamageAmount = Damage;
+    }
+
+    public virtual void ConfigureFromItem(ItemData sourceItem)
+    {
+        SourceItemData = sourceItem;
+        if (sourceItem == null)
+        {
+            return;
+        }
+
+        ToolAction = sourceItem.ToolAction;
+        if (sourceItem.AttackPower > 0)
+        {
+            Damage = sourceItem.AttackPower;
+        }
+
+        if (sourceItem.UseCooldown > 0f)
+        {
+            Cooldown = sourceItem.UseCooldown;
+        }
+
+        if (_hitbox != null)
+        {
+            _hitbox.DamageAmount = Damage;
+        }
     }
 
     /// <summary>

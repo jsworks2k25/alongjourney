@@ -59,7 +59,7 @@ public partial class ItemDatabase : Node
         _items.Clear();
         IsLoaded = false;
 
-        string itemsPath = "res://resources/items/";
+        string itemsPath = "res://Resources/Items/";
         
         // 检查目录是否存在
         if (!DirAccess.DirExistsAbsolute(itemsPath))

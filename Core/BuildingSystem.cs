@@ -3,6 +3,9 @@ using System;
 
 public partial class BuildingSystem : Node2D
 {
+    [Signal] public delegate void BuildingModeChangedEventHandler(bool isBuildingMode);
+    [Signal] public delegate void ObjectPlacedEventHandler(PackedScene scene, Vector2 position);
+
     [ExportCategory("Config")]
 
     [Export] public TileMapLayer GroundLayer;
@@ -16,6 +19,8 @@ public partial class BuildingSystem : Node2D
 
     private Node2D _previewIllusion; // 预览的虚影
     private bool _isBuildingMode = false;
+    public bool IsBuildingMode => _isBuildingMode;
+    public PackedScene CurrentBuildingTarget => ObjectToPlace;
 
     public override void _Ready()
     {
@@ -39,20 +44,29 @@ public partial class BuildingSystem : Node2D
         // 点击左键放置
         if (@event.IsActionPressed("mouse_left")) // 确保你在 InputMap 里设置了 "mouse_left"
         {
-            PlaceObject();
+            if (PlaceObject())
+            {
+                GetViewport().SetInputAsHandled();
+            }
         }
         
         // 右键取消/旋转（这里先写取消）
         if (@event.IsActionPressed("mouse_right"))
         {
-            _isBuildingMode = false;
-            _previewIllusion.Visible = false;
+            CancelBuildingMode();
+            GetViewport().SetInputAsHandled();
         }
     }
 
     // 核心方法：设置当前要建造的物体
     public void SetBuildingTarget(PackedScene scene)
     {
+        if (scene == null)
+        {
+            CancelBuildingMode();
+            return;
+        }
+
         // 清理旧 Ghost
         if (_previewIllusion != null)
         {
@@ -72,12 +86,28 @@ public partial class BuildingSystem : Node2D
             
             AddChild(_previewIllusion);
             _isBuildingMode = true;
+            UpdateIllusionPosition();
+            EmitSignal(SignalName.BuildingModeChanged, _isBuildingMode);
         }
         else
         {
             GD.PrintErr("BuildingSystem: Trying to place a non-Node2D object!");
             instance.QueueFree();
         }
+    }
+
+    public void CancelBuildingMode()
+    {
+        _isBuildingMode = false;
+        ObjectToPlace = null;
+
+        if (_previewIllusion != null)
+        {
+            _previewIllusion.QueueFree();
+            _previewIllusion = null;
+        }
+
+        EmitSignal(SignalName.BuildingModeChanged, _isBuildingMode);
     }
 
     private void UpdateIllusionPosition()
@@ -93,9 +123,12 @@ public partial class BuildingSystem : Node2D
         _previewIllusion.ZIndex = 1; 
     }
 
-    private void PlaceObject()
+    private bool PlaceObject()
     {
-        if (ObjectToPlace == null) return;
+        if (ObjectToPlace == null)
+        {
+            return false;
+        }
 
         // 真正的实例化
         Node2D newBuilding = ObjectToPlace.Instantiate<Node2D>();
@@ -106,11 +139,13 @@ public partial class BuildingSystem : Node2D
         // 将物体添加到场景中（通常添加到 Y-Sort 节点下，而不是 BuildingSystem 下）
         // 这里假设 GroundLayer 的父节点是主要的 Y-Sort 容器
         ObjectLayer.AddChild(newBuilding);
+        EmitSignal(SignalName.ObjectPlaced, ObjectToPlace, newBuilding.GlobalPosition);
 
         // 可选：放置后是否退出建造模式？
         // _isBuildingMode = false; 
         // _previewIllusion.QueueFree();
         // _previewIllusion = null;
+        return true;
     }
 
     // --- 核心数学逻辑 ---

@@ -30,6 +30,29 @@ public enum ItemRarity
 }
 
 /// <summary>
+/// 物品使用模式
+/// </summary>
+public enum ItemUseMode
+{
+    None,
+    Tool,
+    Placeable,
+    Consumable
+}
+
+/// <summary>
+/// 工具行为类型，用于数据驱动交互
+/// </summary>
+public enum ToolActionType
+{
+    None,
+    Chop,
+    Mine,
+    Dig,
+    Harvest
+}
+
+/// <summary>
 /// 物品数据资源，使用 Godot Resource 系统
 /// 在编辑器中创建 .tres 文件来定义物品属性
 /// </summary>
@@ -65,7 +88,11 @@ public partial class ItemData : Resource
     [Export] public bool HasUseEffect = false;
     [Export] public int HealAmount = 0;       // 使用后恢复的生命值
     [Export] public float UseCooldown = 0f;  // 使用冷却时间（秒）
-    
+    [Export] public ItemUseMode UseMode = ItemUseMode.None;
+    [Export] public ToolActionType ToolAction = ToolActionType.None;
+    [Export] public PackedScene EquipScene;   // 装备到手上的工具/武器场景
+    [Export] public Vector2 EquipOffset = Vector2.Zero;
+
     [ExportGroup("Advanced")]
     [Export] public PackedScene Prefab;       // 物品预制体（如建筑、特殊物品）
     // 注意：Godot 不支持直接导出 Dictionary，如需自定义数据请使用其他方式
@@ -108,6 +135,18 @@ public partial class ItemData : Resource
             errorMessage = "攻击速度必须大于 0";
             return false;
         }
+
+        if (UseMode == ItemUseMode.Tool && EquipScene == null)
+        {
+            errorMessage = "工具类物品必须配置 EquipScene";
+            return false;
+        }
+
+        if (UseMode == ItemUseMode.Placeable && Prefab == null)
+        {
+            errorMessage = "可放置物品必须配置 Prefab";
+            return false;
+        }
         
         return true;
     }
@@ -145,6 +184,10 @@ public partial class ItemData : Resource
             desc += $"\n攻击速度: {AttackSpeed:P0}";
         if (IsConsumable && HealAmount > 0)
             desc += $"\n使用效果: 恢复 {HealAmount} 生命值";
+        if (UseMode == ItemUseMode.Tool && ToolAction != ToolActionType.None)
+            desc += $"\n工具行为: {ToolAction}";
+        if (UseMode == ItemUseMode.Placeable)
+            desc += "\n可放置";
         
         return desc;
     }
@@ -158,5 +201,20 @@ public partial class ItemData : Resource
                Type == ItemType.Equipment || 
                AttackPower > 0 || 
                DefensePower > 0;
+    }
+
+    public bool IsToolItem()
+    {
+        return UseMode == ItemUseMode.Tool;
+    }
+
+    public bool IsPlaceableItem()
+    {
+        return UseMode == ItemUseMode.Placeable && Prefab != null;
+    }
+
+    public bool IsConsumableItem()
+    {
+        return UseMode == ItemUseMode.Consumable || IsConsumable || (HasUseEffect && HealAmount > 0);
     }
 }

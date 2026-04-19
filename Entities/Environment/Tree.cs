@@ -130,8 +130,7 @@ public partial class Tree : TranslucentObstacle, IDamageable, IInteractable
 
     public bool CanInteractWith(Weapon weapon)
     {
-        // 只有斧头可以砍树（未来可以扩展支持其他工具）
-        return weapon is Axe;
+        return weapon != null && weapon.ToolAction == ToolActionType.Chop;
     }
 
     public void OnHoverEnter()

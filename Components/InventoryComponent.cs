@@ -23,9 +23,13 @@ public partial class InventoryComponent : BaseComponent
 
     [ExportGroup("Inventory Settings")]
     [Export] public int Capacity = 20;
+    [Export] public string[] StartingItemIds = System.Array.Empty<string>();
+    [Export] public int[] StartingItemCounts = System.Array.Empty<int>();
 
     // 核心数据：槽位列表
     public List<Slot> Slots { get; private set; } = new List<Slot>();
+    private bool _startingItemsApplied;
+    private bool _waitingForDatabase;
 
     // 信号：物品变化时发出，UI 可以监听此信号刷新显示
     [Signal] public delegate void InventoryUpdatedEventHandler();
@@ -40,6 +44,8 @@ public partial class InventoryComponent : BaseComponent
         {
             Slots.Add(new Slot());
         }
+
+        TryApplyStartingItems();
     }
 
     /// <summary>
@@ -164,6 +170,21 @@ public partial class InventoryComponent : BaseComponent
         return total;
     }
 
+    public Slot GetSlot(int index)
+    {
+        if (index < 0 || index >= Slots.Count)
+        {
+            return null;
+        }
+
+        return Slots[index];
+    }
+
+    public bool IsValidSlotIndex(int index)
+    {
+        return index >= 0 && index < Slots.Count;
+    }
+
     /// <summary>
     /// 检查是否有足够的物品
     /// </summary>
@@ -200,5 +221,77 @@ public partial class InventoryComponent : BaseComponent
         }
 
         EmitSignal(SignalName.InventoryUpdated);
+    }
+
+    public override void _ExitTree()
+    {
+        DisconnectDatabaseSignal();
+    }
+
+    private void TryApplyStartingItems()
+    {
+        if (_startingItemsApplied || StartingItemIds.Length == 0)
+        {
+            return;
+        }
+
+        if (ItemDatabase.Instance == null)
+        {
+            return;
+        }
+
+        if (!ItemDatabase.Instance.IsLoaded)
+        {
+            if (!_waitingForDatabase)
+            {
+                ItemDatabase.Instance.DatabaseLoaded += OnItemDatabaseLoaded;
+                _waitingForDatabase = true;
+            }
+
+            return;
+        }
+
+        for (int i = 0; i < StartingItemIds.Length; i++)
+        {
+            string itemId = StartingItemIds[i];
+            if (string.IsNullOrWhiteSpace(itemId))
+            {
+                continue;
+            }
+
+            int count = 1;
+            if (i < StartingItemCounts.Length)
+            {
+                count = System.Math.Max(StartingItemCounts[i], 1);
+            }
+
+            var itemData = ItemDatabase.Instance.GetItem(itemId);
+            if (itemData == null)
+            {
+                GD.PushWarning($"{Name}: 未找到初始物品 {itemId}");
+                continue;
+            }
+
+            AddItem(itemData, count);
+        }
+
+        _startingItemsApplied = true;
+        DisconnectDatabaseSignal();
+    }
+
+    private void OnItemDatabaseLoaded()
+    {
+        TryApplyStartingItems();
+    }
+
+    private void DisconnectDatabaseSignal()
+    {
+        if (!_waitingForDatabase || ItemDatabase.Instance == null)
+        {
+            return;
+        }
+
+        ItemDatabase.Instance.DatabaseLoaded -= OnItemDatabaseLoaded;
+        _waitingForDatabase = false;
     }
 }
