@@ -3,6 +3,8 @@ namespace AlongJourney.Core;
 using System;
 using System.Threading.Tasks;
 using Godot;
+using System.Collections.Generic;
+using AlongJourney.Components;
 using AlongJourney.Entities.Player;
 
 public partial class GameManager : Node
@@ -19,6 +21,8 @@ public partial class GameManager : Node
     private uint _playerCollisionLayer;
     private uint _playerCollisionMask;
     private bool _respawnInProgress;
+    private List<InventoryComponent.SlotSnapshot> _cachedInventorySnapshot;
+    private int _cachedActiveSlotIndex = -1;
 
     public override void _Ready()
     {
@@ -31,6 +35,8 @@ public partial class GameManager : Node
     {
         ClearPlayerSubscription();
         _respawnInProgress = false;
+        _cachedInventorySnapshot = null;
+        _cachedActiveSlotIndex = -1;
         CallDeferred(nameof(TryInitializeFromScene));
     }
 
@@ -132,6 +138,7 @@ public partial class GameManager : Node
         }
 
         _respawnInProgress = true;
+        CacheInventoryState(player);
 
         // 先清理信号订阅，避免在删除过程中触发信号
         ClearPlayerSubscription();
@@ -233,6 +240,7 @@ public partial class GameManager : Node
             // 确保新玩家处于正确状态：启用碰撞和受击盒
             player.SetCollisionEnabled(true);
             player.SetHurtboxEnabled(true);
+            RestoreInventoryState(player);
 
             UpdatePhantomCameraFollowTarget(player);
         }
@@ -254,5 +262,30 @@ public partial class GameManager : Node
         if (pcam == null) return;
 
         pcam.Call("set_follow_target", newPlayer);
+    }
+
+    private void CacheInventoryState(Player player)
+    {
+        if (player?.Inventory == null)
+        {
+            _cachedInventorySnapshot = null;
+            _cachedActiveSlotIndex = -1;
+            return;
+        }
+
+        _cachedInventorySnapshot = player.Inventory.CaptureSnapshot();
+        _cachedActiveSlotIndex = player.ActiveSlotIndex;
+    }
+
+    private void RestoreInventoryState(Player player)
+    {
+        if (player?.Inventory == null || _cachedInventorySnapshot == null)
+        {
+            return;
+        }
+
+        player.Inventory.RestoreSnapshot(_cachedInventorySnapshot);
+        int slotIndex = _cachedActiveSlotIndex;
+        player.CallDeferred(nameof(Player.SelectInventorySlot), slotIndex);
     }
 }

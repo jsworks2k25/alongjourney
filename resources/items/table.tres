@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://Resources/Items/ItemData.cs" id="1_itemdata"]
+[ext_resource type="Texture2D" path="res://Sprites/table0.png" id="2_icon"]
+[ext_resource type="PackedScene" path="res://Entities/Environment/table.tscn" id="3_prefab"]
+
+[resource]
+script = ExtResource("1_itemdata")
+Id = "table"
+Name = "Table"
+Description = "可放置的基础家具。"
+Icon = ExtResource("2_icon")
+Type = 6
+MaxStack = 10
+IsStackable = true
+UseMode = 2
+Prefab = ExtResource("3_prefab")
