@@ -19,8 +19,9 @@ public partial class GameInventoryUI : CanvasLayer
     private PanelContainer _inventoryPanel;
     private GridContainer _inventoryGrid;
     private Label _selectedItemLabel;
-    private readonly List<Button> _hotbarButtons = new();
-    private readonly List<Button> _inventoryButtons = new();
+    private Label _dragHintLabel;
+    private readonly List<InventorySlotView> _hotbarButtons = new();
+    private readonly List<InventorySlotView> _inventoryButtons = new();
     private double _rebindCooldown;
 
     public override void _Ready()
@@ -80,6 +81,15 @@ public partial class GameInventoryUI : CanvasLayer
         _selectedItemLabel.SetAnchorsPreset(Control.LayoutPreset.TopLeft);
         _selectedItemLabel.Position = new Vector2(20, 20);
         _root.AddChild(_selectedItemLabel);
+
+        _dragHintLabel = new Label
+        {
+            Text = "拖拽槽位可交换或合并物品",
+            MouseFilter = Control.MouseFilterEnum.Ignore,
+        };
+        _dragHintLabel.SetAnchorsPreset(Control.LayoutPreset.TopLeft);
+        _dragHintLabel.Position = new Vector2(20, 44);
+        _root.AddChild(_dragHintLabel);
 
         _inventoryPanel = new PanelContainer
         {
@@ -207,7 +217,9 @@ public partial class GameInventoryUI : CanvasLayer
         {
             int slotIndex = i;
             var button = CreateSlotButton(new Vector2(88, 72));
-            button.Pressed += () => _player?.SelectHotbarSlot(slotIndex);
+            button.Configure(slotIndex, true, _inventory?.GetSlot(slotIndex));
+            button.SlotPressed += OnSlotPressed;
+            button.SlotDropped += OnSlotDropped;
             _hotbarButtons.Add(button);
             _hotbarRow.AddChild(button);
         }
@@ -217,15 +229,17 @@ public partial class GameInventoryUI : CanvasLayer
         {
             int slotIndex = i;
             var button = CreateSlotButton(new Vector2(92, 72));
-            button.Pressed += () => _player?.SelectInventorySlot(slotIndex);
+            button.Configure(slotIndex, false, _inventory?.GetSlot(slotIndex));
+            button.SlotPressed += OnSlotPressed;
+            button.SlotDropped += OnSlotDropped;
             _inventoryButtons.Add(button);
             _inventoryGrid.AddChild(button);
         }
     }
 
-    private static Button CreateSlotButton(Vector2 minSize)
+    private static InventorySlotView CreateSlotButton(Vector2 minSize)
     {
-        return new Button
+        return new InventorySlotView
         {
             CustomMinimumSize = minSize,
             ClipText = true,
@@ -238,7 +252,7 @@ public partial class GameInventoryUI : CanvasLayer
         };
     }
 
-    private static void ClearButtons(List<Button> buttons, Node parent)
+    private static void ClearButtons(List<InventorySlotView> buttons, Node parent)
     {
         buttons.Clear();
 
@@ -319,6 +333,11 @@ public partial class GameInventoryUI : CanvasLayer
 
     private void UpdateButtonVisual(Button button, InventoryComponent.Slot slot, int slotIndex, bool isHotbar)
     {
+        if (button is InventorySlotView slotView)
+        {
+            slotView.Configure(slotIndex, isHotbar, slot);
+        }
+
         bool isSelected = _player != null && _player.ActiveSlotIndex == slotIndex;
         button.Modulate = isSelected ? new Color(1.2f, 1.15f, 0.8f) : Colors.White;
         button.Icon = slot?.Item?.Icon;
@@ -334,5 +353,23 @@ public partial class GameInventoryUI : CanvasLayer
         string countText = slot.Item.IsStackable ? $"x{slot.Count}" : "Ready";
         button.Text = $"{prefix}\n{slot.Item.Name}\n{countText}";
         button.TooltipText = slot.Item.GetFullDescription();
+    }
+
+    private void OnSlotPressed(int slotIndex)
+    {
+        _player?.SelectInventorySlot(slotIndex);
+    }
+
+    private void OnSlotDropped(int fromSlotIndex, int toSlotIndex)
+    {
+        if (_inventory == null)
+        {
+            return;
+        }
+
+        if (_inventory.MoveOrMergeSlot(fromSlotIndex, toSlotIndex))
+        {
+            _player?.SelectInventorySlot(toSlotIndex);
+        }
     }
 }

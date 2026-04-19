@@ -21,6 +21,12 @@ public partial class InventoryComponent : BaseComponent
         public int RemainingSpace => Item != null ? Item.MaxStack - Count : 0;
     }
 
+    public sealed class SlotSnapshot
+    {
+        public string ItemId;
+        public int Count;
+    }
+
     [ExportGroup("Inventory Settings")]
     [Export] public int Capacity = 20;
     [Export] public string[] StartingItemIds = System.Array.Empty<string>();
@@ -170,6 +176,45 @@ public partial class InventoryComponent : BaseComponent
         return total;
     }
 
+    public bool MoveOrMergeSlot(int fromIndex, int toIndex)
+    {
+        if (!IsValidSlotIndex(fromIndex) || !IsValidSlotIndex(toIndex) || fromIndex == toIndex)
+        {
+            return false;
+        }
+
+        var fromSlot = Slots[fromIndex];
+        var toSlot = Slots[toIndex];
+        if (fromSlot.IsEmpty)
+        {
+            return false;
+        }
+
+        if (CanMergeSlots(fromSlot, toSlot))
+        {
+            int transfer = System.Math.Min(fromSlot.Count, toSlot.RemainingSpace);
+            if (transfer <= 0)
+            {
+                return false;
+            }
+
+            toSlot.Count += transfer;
+            fromSlot.Count -= transfer;
+            if (fromSlot.Count <= 0)
+            {
+                fromSlot.Item = null;
+                fromSlot.Count = 0;
+            }
+        }
+        else
+        {
+            SwapSlotContents(fromSlot, toSlot);
+        }
+
+        EmitSignal(SignalName.InventoryUpdated);
+        return true;
+    }
+
     public Slot GetSlot(int index)
     {
         if (index < 0 || index >= Slots.Count)
@@ -193,6 +238,58 @@ public partial class InventoryComponent : BaseComponent
         return GetItemCount(item) >= amount;
     }
 
+    public List<SlotSnapshot> CaptureSnapshot()
+    {
+        var snapshots = new List<SlotSnapshot>(Slots.Count);
+        foreach (var slot in Slots)
+        {
+            snapshots.Add(new SlotSnapshot
+            {
+                ItemId = slot.Item?.Id ?? string.Empty,
+                Count = slot.IsEmpty ? 0 : slot.Count,
+            });
+        }
+
+        return snapshots;
+    }
+
+    public void RestoreSnapshot(IReadOnlyList<SlotSnapshot> snapshots)
+    {
+        for (int i = 0; i < Slots.Count; i++)
+        {
+            Slots[i].Item = null;
+            Slots[i].Count = 0;
+        }
+
+        if (snapshots == null)
+        {
+            EmitSignal(SignalName.InventoryUpdated);
+            return;
+        }
+
+        for (int i = 0; i < System.Math.Min(Slots.Count, snapshots.Count); i++)
+        {
+            var snapshot = snapshots[i];
+            if (snapshot == null || string.IsNullOrWhiteSpace(snapshot.ItemId) || snapshot.Count <= 0)
+            {
+                continue;
+            }
+
+            var item = ItemDatabase.Instance?.GetItem(snapshot.ItemId);
+            if (item == null)
+            {
+                GD.PushWarning($"{Name}: 恢复背包时未找到物品 {snapshot.ItemId}");
+                continue;
+            }
+
+            Slots[i].Item = item;
+            Slots[i].Count = System.Math.Min(snapshot.Count, item.MaxStack);
+        }
+
+        _startingItemsApplied = true;
+        EmitSignal(SignalName.InventoryUpdated);
+    }
+
     /// <summary>
     /// 查找空槽位
     /// </summary>
@@ -207,6 +304,25 @@ public partial class InventoryComponent : BaseComponent
         }
 
         return null;
+    }
+
+    private static bool CanMergeSlots(Slot fromSlot, Slot toSlot)
+    {
+        return fromSlot.Item != null &&
+               toSlot.Item == fromSlot.Item &&
+               fromSlot.Item.IsStackable &&
+               toSlot.Count < fromSlot.Item.MaxStack;
+    }
+
+    private static void SwapSlotContents(Slot fromSlot, Slot toSlot)
+    {
+        ItemData tempItem = toSlot.Item;
+        int tempCount = toSlot.Count;
+
+        toSlot.Item = fromSlot.Item;
+        toSlot.Count = fromSlot.Count;
+        fromSlot.Item = tempItem;
+        fromSlot.Count = tempCount;
     }
 
     /// <summary>
