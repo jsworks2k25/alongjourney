@@ -236,4 +236,4 @@ GroundLayer = NodePath("../GoundLayer")
 ObjectLayer = NodePath("../ObjectLayer")
 Subdivisions = 1
 
-[node name="GameInventoryUI" parent="." instance=ExtResource("13_ui")]
+[node name="GameInventoryUI" parent="." unique_id=2100186627 instance=ExtResource("13_ui")]

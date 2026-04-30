@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using AlongJourney.Core;
 
 public partial class BuildingSystem : Node2D
 {
@@ -19,6 +20,8 @@ public partial class BuildingSystem : Node2D
 
     private Node2D _previewIllusion; // 预览的虚影
     private bool _isBuildingMode = false;
+    private int _activePlayerId = GameConstants.InvalidPlayerId;
+    private readonly WorldMutationService _worldMutations = new();
     public bool IsBuildingMode => _isBuildingMode;
     public PackedScene CurrentBuildingTarget => ObjectToPlace;
 
@@ -61,6 +64,11 @@ public partial class BuildingSystem : Node2D
     // 核心方法：设置当前要建造的物体
     public void SetBuildingTarget(PackedScene scene)
     {
+        SetBuildingTargetForPlayer(scene, GameConstants.InvalidPlayerId);
+    }
+
+    public void SetBuildingTargetForPlayer(PackedScene scene, int playerId)
+    {
         if (scene == null)
         {
             CancelBuildingMode();
@@ -74,6 +82,7 @@ public partial class BuildingSystem : Node2D
         }
 
         ObjectToPlace = scene;
+        _activePlayerId = playerId;
         Node instance = scene.Instantiate();
         
         if (instance is Node2D node2d)
@@ -100,6 +109,7 @@ public partial class BuildingSystem : Node2D
     {
         _isBuildingMode = false;
         ObjectToPlace = null;
+        _activePlayerId = GameConstants.InvalidPlayerId;
 
         if (_previewIllusion != null)
         {
@@ -130,15 +140,17 @@ public partial class BuildingSystem : Node2D
             return false;
         }
 
-        // 真正的实例化
-        Node2D newBuilding = ObjectToPlace.Instantiate<Node2D>();
-        
-        // 获取刚才计算好的吸附位置
-        newBuilding.GlobalPosition = _previewIllusion.GlobalPosition;
-        
-        // 将物体添加到场景中（通常添加到 Y-Sort 节点下，而不是 BuildingSystem 下）
-        // 这里假设 GroundLayer 的父节点是主要的 Y-Sort 容器
-        ObjectLayer.AddChild(newBuilding);
+        var request = new PlaceObjectRequest(
+            ObjectToPlace,
+            ObjectLayer,
+            _previewIllusion.GlobalPosition,
+            _activePlayerId);
+
+        if (!_worldMutations.TryPlaceObject(request, out var newBuilding))
+        {
+            return false;
+        }
+
         EmitSignal(SignalName.ObjectPlaced, ObjectToPlace, newBuilding.GlobalPosition);
 
         // 可选：放置后是否退出建造模式？

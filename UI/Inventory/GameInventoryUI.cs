@@ -164,7 +164,7 @@ public partial class GameInventoryUI : CanvasLayer
 
     private void RebindToCurrentPlayer()
     {
-        var nextPlayer = GetTree().GetFirstNodeInGroup(GameConstants.PlayerGroupName) as Player;
+        var nextPlayer = GameManager.Instance?.LocalPlayerContext.CurrentPlayer;
         if (_player == nextPlayer && IsBoundPlayerValid())
         {
             return;

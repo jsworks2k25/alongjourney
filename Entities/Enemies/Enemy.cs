@@ -33,14 +33,23 @@ public partial class Enemy : Actor
             return;
         _target = null;
 
-        var players = GetTree().GetNodesInGroup(GameConstants.PlayerGroupName);
+        var players = GameManager.Instance?.PlayerRegistry.GetPlayers();
+        if (players == null || players.Count == 0)
+        {
+            return;
+        }
 
+        float bestDistanceSquared = float.MaxValue;
         foreach (var player in players)
         {
             if (player is ITargetable targetable && targetable.IsAlive)
             {
-                _target = targetable;
-                break;
+                float distanceSquared = GlobalPosition.DistanceSquaredTo(targetable.GlobalPosition);
+                if (distanceSquared < bestDistanceSquared)
+                {
+                    bestDistanceSquared = distanceSquared;
+                    _target = targetable;
+                }
             }
         }
     }
