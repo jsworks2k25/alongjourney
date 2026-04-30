@@ -9,6 +9,8 @@ using AlongJourney.Entities.Player;
 
 public partial class GameManager : Node
 {
+    public static GameManager Instance { get; private set; }
+
     [ExportGroup("Respawn Settings")]
     [Export] public float RespawnDelay = 3.0f;
 
@@ -20,20 +22,41 @@ public partial class GameManager : Node
     private Vector2 _spawnPosition;
     private uint _playerCollisionLayer;
     private uint _playerCollisionMask;
+    private int _cachedPlayerId = GameConstants.DefaultLocalPlayerId;
+    private bool _cachedIsLocalPlayer = true;
+    private int _cachedInputDeviceId = GameConstants.KeyboardAndMouseDeviceId;
     private bool _respawnInProgress;
     private List<InventoryComponent.SlotSnapshot> _cachedInventorySnapshot;
     private int _cachedActiveSlotIndex = -1;
 
+    public PlayerRegistry PlayerRegistry { get; } = new();
+    public LocalPlayerContext LocalPlayerContext { get; } = new();
+
     public override void _Ready()
     {
+        Instance = this;
         GetTree().NodeAdded += OnNodeAdded;
         GetTree().SceneChanged += OnSceneChanged;
         CallDeferred(nameof(TryInitializeFromScene));
     }
 
+    public override void _ExitTree()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+
+        ClearPlayerSubscription();
+        PlayerRegistry.Clear();
+        LocalPlayerContext.Clear();
+    }
+
     private void OnSceneChanged()
     {
         ClearPlayerSubscription();
+        PlayerRegistry.Clear();
+        LocalPlayerContext.Clear();
         _respawnInProgress = false;
         _cachedInventorySnapshot = null;
         _cachedActiveSlotIndex = -1;
@@ -63,12 +86,46 @@ public partial class GameManager : Node
 
     private Player FindPlayer()
     {
-        return GetTree().GetFirstNodeInGroup(GameConstants.PlayerGroupName) as Player;
+        var localPlayer = PlayerRegistry.GetFirstLocalPlayer();
+        if (localPlayer != null)
+        {
+            return localPlayer;
+        }
+
+        foreach (var node in GetTree().GetNodesInGroup(GameConstants.LocalPlayerGroupName))
+        {
+            if (node is Player player && player.IsAlive)
+            {
+                return player;
+            }
+        }
+
+        foreach (var node in GetTree().GetNodesInGroup(GameConstants.PlayerGroupName))
+        {
+            if (node is Player player && player.IsAlive)
+            {
+                return player;
+            }
+        }
+
+        return null;
     }
 
     private void SetupPlayer(Player player)
     {
+        PlayerRegistry.Register(player);
+
+        if (player.IsLocalPlayer || !LocalPlayerContext.HasValidPlayer)
+        {
+            LocalPlayerContext.Bind(player);
+        }
+
         if (_currentPlayer == player)
+        {
+            return;
+        }
+
+        if (!player.IsLocalPlayer)
         {
             return;
         }
@@ -85,6 +142,9 @@ public partial class GameManager : Node
         _spawnPosition = ResolveSpawnPosition(player);
         _playerCollisionLayer = player.CollisionLayer;
         _playerCollisionMask = player.CollisionMask;
+        _cachedPlayerId = player.PlayerId;
+        _cachedIsLocalPlayer = player.IsLocalPlayer;
+        _cachedInputDeviceId = player.InputDeviceId;
 
         if (_playerScene == null)
         {
@@ -117,6 +177,7 @@ public partial class GameManager : Node
     {
         player.PlayerDied -= OnPlayerDied;
         _currentPlayer = player;
+        LocalPlayerContext.Bind(player);
         player.PlayerDied += OnPlayerDied;
     }
 
@@ -126,6 +187,7 @@ public partial class GameManager : Node
         {
             _currentPlayer.PlayerDied -= OnPlayerDied;
         }
+        LocalPlayerContext.ClearIf(_currentPlayer);
         _currentPlayer = null;
     }
 
@@ -141,6 +203,7 @@ public partial class GameManager : Node
         CacheInventoryState(player);
 
         // 先清理信号订阅，避免在删除过程中触发信号
+        PlayerRegistry.Unregister(player);
         ClearPlayerSubscription();
 
         float delay = RespawnDelay;
@@ -225,6 +288,11 @@ public partial class GameManager : Node
         playerNode.Name = "Player";
 
         Node parent = _playerParent ?? GetTree().CurrentScene ?? this;
+        if (playerNode is Player spawnedPlayer)
+        {
+            spawnedPlayer.ConfigureMultiplayerIdentity(_cachedPlayerId, _cachedIsLocalPlayer, _cachedInputDeviceId);
+        }
+
         parent.AddChild(playerNode);
 
         if (playerNode is Node2D node2D)
@@ -242,7 +310,10 @@ public partial class GameManager : Node
             player.SetHurtboxEnabled(true);
             RestoreInventoryState(player);
 
-            UpdatePhantomCameraFollowTarget(player);
+            if (player.IsLocalPlayer)
+            {
+                UpdatePhantomCameraFollowTarget(player);
+            }
         }
         else
         {

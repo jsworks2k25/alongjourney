@@ -28,6 +28,9 @@ public partial class Player : Actor
 
     [Export] public Marker2D WeaponHolder;
     [Export] public int HotbarSize = 5;
+    [Export] public int PlayerId { get; private set; } = GameConstants.DefaultLocalPlayerId;
+    [Export] public bool IsLocalPlayer { get; private set; } = true;
+    [Export] public int InputDeviceId { get; private set; } = GameConstants.KeyboardAndMouseDeviceId;
 
     [ExportGroup("References")]
     [Export] private SelectionManager _selectionManager;
@@ -42,6 +45,7 @@ public partial class Player : Actor
 
         // 添加到 Player 组
         AddToGroup(GameConstants.PlayerGroupName);
+        UpdateLocalPlayerGroup();
 
         // 订阅 HealthComponent 信号
         if (HealthComponent != null)
@@ -92,7 +96,7 @@ public partial class Player : Actor
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        if (!IsAlive || @event.IsEcho() || GetTree().Paused)
+        if (!CanHandleLocalInput() || !IsInputEventForThisPlayer(@event) || @event.IsEcho() || GetTree().Paused)
         {
             return;
         }
@@ -126,10 +130,51 @@ public partial class Player : Actor
             return;
         }
 
-        HandleWeaponAiming();
+        if (IsLocalPlayer)
+        {
+            HandleWeaponAiming();
+        }
 
         // MovementComponent 和 PlayerInputComponent 会自动处理移动
         base._PhysicsProcess(delta);
+    }
+
+    public void ConfigureMultiplayerIdentity(int playerId, bool isLocalPlayer, int inputDeviceId)
+    {
+        PlayerId = playerId <= GameConstants.InvalidPlayerId
+            ? GameConstants.DefaultLocalPlayerId
+            : playerId;
+        IsLocalPlayer = isLocalPlayer;
+        InputDeviceId = inputDeviceId;
+        UpdateLocalPlayerGroup();
+    }
+
+    public bool CanHandleLocalInput()
+    {
+        return IsAlive && IsLocalPlayer;
+    }
+
+    public bool IsInputEventForThisPlayer(InputEvent @event)
+    {
+        return InputDeviceId == GameConstants.KeyboardAndMouseDeviceId ||
+               @event.Device == InputDeviceId;
+    }
+
+    private void UpdateLocalPlayerGroup()
+    {
+        if (!IsInsideTree())
+        {
+            return;
+        }
+
+        if (IsLocalPlayer)
+        {
+            AddToGroup(GameConstants.LocalPlayerGroupName);
+        }
+        else
+        {
+            RemoveFromGroup(GameConstants.LocalPlayerGroupName);
+        }
     }
 
     private void HandleDied()
@@ -445,7 +490,7 @@ public partial class Player : Actor
 
         if (_activeItem != null && _activeItem.IsPlaceableItem())
         {
-            _buildingSystem?.SetBuildingTarget(_activeItem.Prefab);
+            _buildingSystem?.SetBuildingTargetForPlayer(_activeItem.Prefab, PlayerId);
             return;
         }
 
