@@ -157,7 +157,6 @@ public partial class Actor : CharacterBody2D, ITargetable
     public void SetBlackboardValue(StringName key, Variant value)
     {
         Blackboard[key] = value;
-        // 注意：Signal 依然传递 string key 以保持通用兼容性，或者你也可以把 Signal 改为传 StringName
         EmitSignal(SignalName.BlackboardChanged, key.ToString(), value); 
     }
 
