@@ -1,10 +1,10 @@
-namespace AlongJourney.Entities.Enemies;
+namespace AlongJourney.Entities.NPC;
 
 using Godot;
 using System;
 using AlongJourney.Components;
 
-public partial class Robot0 : Enemy
+public partial class Robot0 : NPC
 {
 	[Export] private Vector2[] _directions = new Vector2[] {
 		// 斜向移动，等距斜率已经被MovementComponent处理

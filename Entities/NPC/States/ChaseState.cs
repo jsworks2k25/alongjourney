@@ -1,4 +1,4 @@
-namespace AlongJourney.Entities.Enemies.States;
+namespace AlongJourney.Entities.NPC.States;
 
 using Godot;
 using AlongJourney.Core;

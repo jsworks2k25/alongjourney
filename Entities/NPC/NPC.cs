@@ -1,13 +1,13 @@
-namespace AlongJourney.Entities.Enemies;
+namespace AlongJourney.Entities.NPC;
 
 using Godot;
 using AlongJourney.Entities;
 using AlongJourney.Interfaces;
 using AlongJourney.Core;
-using AlongJourney.Entities.Enemies.States;
 using AlongJourney.Components;
+using AlongJourney.Entities.NPC.States;
 
-public partial class Enemy : Actor
+public partial class NPC : Actor
 {
     [Export] public float Speed = 50f;
     protected ITargetable _target;
@@ -16,11 +16,10 @@ public partial class Enemy : Actor
     {
         base._Ready();
 
-        // 订阅 HealthComponent 信号
         if (HealthComponent != null)
         {
-            HealthComponent.Died += HandleDied;
-            HealthComponent.HealthChanged += HandleHealthChanged;
+            HealthComponent.Died += OnHealthDied;
+            HealthComponent.HealthChanged += OnHealthChanged;
         }
 
         SetBlackboardValue(Actor.BlackboardKeys.MoveSpeed, Speed);
@@ -95,29 +94,31 @@ public partial class Enemy : Actor
         }
     }
 
-    private void HandleDied()
-    {
-        RequestStateChange<DeadState>();
-        GetTree().CreateTimer(0.5f).Timeout += QueueFree;
-    }
+    private void OnHealthDied() => OnNpcHealthDied();
 
-    private void HandleHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition)
+    private void OnHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition) =>
+        OnNpcHealthChanged(currentHp, maxHp, sourcePosition);
+
+    /// <summary>
+    /// Override for custom death teardown. Default: dead state + delayed free.
+    /// </summary>
+    protected virtual void OnNpcHealthDied()
     {
         if (GetBlackboardBool(Actor.BlackboardKeys.IsDead, false))
         {
             return;
         }
 
-        bool hasSource = !float.IsNaN(sourcePosition.X) && !float.IsNaN(sourcePosition.Y);
-        if (hasSource)
-        {
-            SetBlackboardValue(Actor.BlackboardKeys.HitSource, sourcePosition);
-            RequestStateChange<StaggerState>();
-            SetBlackboardValue(Actor.BlackboardKeys.HitPending, true);
-        }
-        else
-        {
-            SetBlackboardValue(Actor.BlackboardKeys.HitSource, HealthComponent.NoSourcePosition);
-        }
+        Velocity = Vector2.Zero;
+        SetBlackboardValue(Actor.BlackboardKeys.IsDead, true);
+        RequestStateChange<DeadState>();
+        GetTree().CreateTimer(0.5f).Timeout += QueueFree;
+    }
+
+    /// <summary>
+    /// Override to react to HP changes (e.g. stagger, VFX). Base does nothing.
+    /// </summary>
+    protected virtual void OnNpcHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition)
+    {
     }
 }

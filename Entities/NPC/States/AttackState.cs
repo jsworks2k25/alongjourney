@@ -1,34 +1,14 @@
-namespace AlongJourney.Entities.Enemies.States;
+namespace AlongJourney.Entities.NPC.States;
 
 using Godot;
 using AlongJourney.Core;
-using AlongJourney.Components;
+using AlongJourney.Entities;
 
-public partial class StaggerState : State
+public partial class AttackState : State
 {
-    private KnockbackComponent _knockbackComponent;
-
-    public override void Enter()
-    {
-        if (Owner == null)
-        {
-            return;
-        }
-
-        _knockbackComponent = Owner.KnockbackComponent;
-        
-        // 通知 KnockbackComponent 应用击退效果
-        if (_knockbackComponent != null)
-        {
-            Vector2 hitSource = Owner.GetBlackboardVector(Actor.BlackboardKeys.HitSource, HealthComponent.NoSourcePosition);
-            bool hasSource = !float.IsNaN(hitSource.X) && !float.IsNaN(hitSource.Y);
-            if (hasSource)
-            {
-                _knockbackComponent.ApplyKnockback(hitSource);
-            }
-        }
+    public override void Enter(){
+        if (Owner != null) Owner.SetBlackboardValue(Actor.BlackboardKeys.IsAttacking, true);
     }
-
 
     public override void Update(double delta)
     {
@@ -44,11 +24,20 @@ public partial class StaggerState : State
             return;
         }
 
-        if (_knockbackComponent == null || !_knockbackComponent.IsKnockbackActive)
+        // 检查是否有待处理的伤害（需要进入 Stagger 状态）
+        if (Owner.GetBlackboardBool(Actor.BlackboardKeys.HitPending, false))
         {
+            StateMachine.ChangeStateByType<StaggerState>();
+            return;
+        }
+
+        // 检查攻击是否结束
+        if (!Owner.GetBlackboardBool(Actor.BlackboardKeys.IsAttacking, false))
+        {
+            // 攻击结束，根据是否有移动输入决定转换到哪个状态
             Vector2 moveDir = Owner.GetBlackboardVector(Actor.BlackboardKeys.MoveDirection, Vector2.Zero);
             Vector2 inputVector = Owner.GetBlackboardVector(Actor.BlackboardKeys.InputVector, Vector2.Zero);
-
+            
             if (moveDir.LengthSquared() > 0.01f || inputVector.LengthSquared() > 0.01f)
             {
                 StateMachine.ChangeStateByType<ChaseState>();
@@ -57,6 +46,15 @@ public partial class StaggerState : State
             {
                 StateMachine.ChangeStateByType<IdleState>();
             }
+            return;
+        }
+    }
+
+    public override void Exit()
+    {
+        if (Owner != null)
+        {
+            Owner.SetBlackboardValue(Actor.BlackboardKeys.IsAttacking, false);
         }
     }
 }

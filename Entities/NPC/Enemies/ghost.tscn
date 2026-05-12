@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bjmid78a1unwj"]
 
-[ext_resource type="Script" uid="uid://dphbgrg3ophjy" path="res://Entities/Enemies/Ghost.cs" id="1_5mfnq"]
+[ext_resource type="Script" uid="uid://dphbgrg3ophjy" path="res://Entities/NPC/Enemies/Ghost.cs" id="1_5mfnq"]
 [ext_resource type="Texture2D" uid="uid://dpd4reoax0hn8" path="res://Sprites/ghost_move-Sheet.png" id="2_lv6vd"]
 [ext_resource type="Script" uid="uid://cdpj2qq7mig3y" path="res://Components/HurtboxComponent.cs" id="3_sv5gc"]
 [ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://Components/HealthComponent.cs" id="4_wj1r3"]
@@ -10,11 +10,11 @@
 [ext_resource type="Script" uid="uid://bwlybm005er1a" path="res://Components/HitEffectComponent.cs" id="9_4pqta"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="9_seks5"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="11_c10vd"]
-[ext_resource type="Script" uid="uid://dnt0eyy54575i" path="res://Entities/Enemies/States/ChaseState.cs" id="11_tqccv"]
-[ext_resource type="Script" uid="uid://bkicy84jh7kjo" path="res://Entities/Enemies/States/IdleState.cs" id="12_bip5n"]
-[ext_resource type="Script" uid="uid://crnaylmoo0yva" path="res://Entities/Enemies/States/DeadState.cs" id="13_pbjeb"]
-[ext_resource type="Script" uid="uid://gas4t05lyk4c" path="res://Entities/Enemies/States/AttackState.cs" id="14_gtx6n"]
-[ext_resource type="Script" uid="uid://dp8qxqncmuthy" path="res://Entities/Enemies/States/StaggerState.cs" id="15_ljlpa"]
+[ext_resource type="Script" uid="uid://dnt0eyy54575i" path="res://Entities/NPC/States/ChaseState.cs" id="11_tqccv"]
+[ext_resource type="Script" uid="uid://bkicy84jh7kjo" path="res://Entities/NPC/States/IdleState.cs" id="12_bip5n"]
+[ext_resource type="Script" uid="uid://crnaylmoo0yva" path="res://Entities/NPC/States/DeadState.cs" id="13_pbjeb"]
+[ext_resource type="Script" uid="uid://gas4t05lyk4c" path="res://Entities/NPC/States/AttackState.cs" id="14_gtx6n"]
+[ext_resource type="Script" uid="uid://dp8qxqncmuthy" path="res://Entities/NPC/States/StaggerState.cs" id="15_ljlpa"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
 radius = 4.0

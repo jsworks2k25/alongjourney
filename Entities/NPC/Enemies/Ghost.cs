@@ -1,12 +1,11 @@
-namespace AlongJourney.Entities.Enemies;
+namespace AlongJourney.Entities.NPC.Enemies;
 
 using Godot;
 using AlongJourney.Components;
 using AlongJourney.Interfaces;
-using AlongJourney.Core;
-using AlongJourney.Entities.Enemies.States;
+using AlongJourney.Entities.NPC.States;
 
-public partial class Ghost : Enemy
+public partial class Ghost : NPC
 {
     // --- 配置 ---
     [Export] public int DamagePerTick = 10;
@@ -20,15 +19,8 @@ public partial class Ghost : Enemy
 
     public override void _Ready()
     {
-        base._Ready(); // 调用基类初始化
+        base._Ready();
 
-        // 订阅 HealthComponent 信号
-        if (HealthComponent != null)
-        {
-            HealthComponent.Died += HandleDied;
-            HealthComponent.HealthChanged += HandleHealthChanged;
-        }
-        
         if (_detectionArea != null)
         {
             _detectionArea.BodyEntered += OnBodyEnteredDetection;
@@ -125,29 +117,13 @@ public partial class Ghost : Enemy
         // Ghost 使用检测区域控制目标获取，避免自动组搜索
     }
 
-    private void HandleDied()
-    {
-        if (GetBlackboardBool(Actor.BlackboardKeys.IsDead, false))
-        {
-            return;
-        }
-
-        Velocity = Vector2.Zero;
-        SetBlackboardValue(Actor.BlackboardKeys.IsDead, true);
-        RequestStateChange<DeadState>();
-
-        // 延迟销毁，让动画播放完
-        GetTree().CreateTimer(0.5f).Timeout += QueueFree;
-    }
-
-    private void HandleHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition)
+    protected override void OnNpcHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition)
     {
         if (!IsAlive)
         {
             return;
         }
 
-        // 设置受击源位置，让 HitEffectComponent 可以播放闪烁效果
         bool hasSource = !float.IsNaN(sourcePosition.X) && !float.IsNaN(sourcePosition.Y);
         if (hasSource)
         {

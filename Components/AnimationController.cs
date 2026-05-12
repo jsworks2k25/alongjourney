@@ -4,7 +4,7 @@ using Godot;
 using AlongJourney.Entities;
 
 /// <summary>
-/// 动画控制器组件，统一管理动画播放逻辑
+/// 动画控制器组件，管理动画播放逻辑
 /// </summary>
 public partial class AnimationController : BaseComponent
 {

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dsftw85vqphm"]
 
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://Sprites/robot.png" id="1_8kwrt"]
-[ext_resource type="Script" uid="uid://dbuahw42jt40u" path="res://Entities/Enemies/Robot0.cs" id="1_w0dvl"]
+[ext_resource type="Script" uid="uid://dbuahw42jt40u" path="res://Entities/NPC/Robot0.cs" id="1_w0dvl"]
 [ext_resource type="Script" uid="uid://bq7kokxio5iif" path="res://Components/AnimationController.cs" id="2_edo0t"]
 [ext_resource type="Script" uid="uid://cdpj2qq7mig3y" path="res://Components/HurtboxComponent.cs" id="3_jt7hj"]
 [ext_resource type="Script" uid="uid://bmgna558so5yc" path="res://Components/MovementComponent.cs" id="5_wxql2"]
