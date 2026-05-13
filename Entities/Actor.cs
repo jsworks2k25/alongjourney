@@ -13,14 +13,12 @@ public partial class Actor : CharacterBody2D, ITargetable
     // ==========================================
     [Signal]
     public delegate void StateChangedEventHandler(string newStateName);
-
     [Signal]
     public delegate void BlackboardChangedEventHandler(string key, Variant value);
 
     // ==========================================
-    // 2. Blackboard 键定义 (优化为 StringName)
+    // 2. Blackboard 键定义
     // ==========================================
-    // 使用 StringName 在 Godot 中进行字典查找性能更佳
     public static class BlackboardKeys
     {
         public static readonly StringName InputVector = "input_vector";
@@ -40,7 +38,7 @@ public partial class Actor : CharacterBody2D, ITargetable
     }
 
     // ==========================================
-    // 3. 组件引用 (使用 Export 替代 GetNode)
+    // 3. 组件引用 (使用 Export)
     // ==========================================
     [ExportGroup("Core Components")]
     [Export] public StateMachine StateMachine { get; private set; }
@@ -49,32 +47,20 @@ public partial class Actor : CharacterBody2D, ITargetable
     [Export] public HitEffectComponent HitEffectComponent { get; private set; }
     [Export] public KnockbackComponent KnockbackComponent { get; private set; }
     [Export] public HurtboxComponent HurtboxComponent { get; private set; }
-
-    // 碰撞体通常是固定的，可以用 GetNode，或者也 Export
     [Export] public CollisionShape2D CollisionShape { get; private set; }
 
     // ==========================================
     // 4. 数据存储
     // ==========================================
-    // 使用 StringName 作为 Key
     public Dictionary<StringName, Variant> Blackboard { get; } = new();
 
-    /// <summary>
-    /// 获取当前状态名称（用于兼容性检查）
-    /// </summary>
     public string CurrentStateName => StateMachine?.CurrentState?.Name ?? "None";
     
-    /// <summary>
-    /// 检查是否处于指定状态
-    /// </summary>
     public bool IsInState<T>() where T : State
     {
         return StateMachine?.CurrentState is T;
     }
 
-    /// <summary>
-    /// 检查是否存活
-    /// </summary>
     public bool IsAlive => !GetBlackboardBool(BlackboardKeys.IsDead, false);
 
     public override void _EnterTree()
@@ -84,21 +70,10 @@ public partial class Actor : CharacterBody2D, ITargetable
 
     public override void _Ready()
     {
-        // 🛡️ 架构检查：确保必要的组件已连接
         if (StateMachine == null) GD.PushError($"{Name}: StateMachine is not assigned in Inspector!");
         if (HealthComponent == null) GD.PushWarning($"{Name}: HealthComponent is missing!");
+        if (HurtboxComponent == null)GD.PushWarning($"{Name}: HurtboxComponent is missing!");
 
-        if (HurtboxComponent == null)
-        {
-            HurtboxComponent = GetNodeOrNull<HurtboxComponent>("Hurtbox");
-        }
-
-        if (HurtboxComponent == null)
-        {
-            GD.PushWarning($"{Name}: HurtboxComponent is missing (Inspector export or child named Hurtbox).");
-        }
-
-        // 绑定事件
         if (StateMachine != null)
         {
             StateMachine.StateChanged += OnStateMachineStateChanged;
@@ -108,7 +83,6 @@ public partial class Actor : CharacterBody2D, ITargetable
     public override void _PhysicsProcess(double delta)
     {
         if (!IsAlive) return;
-        // 移动由 Movement/Knockback 组件驱动，避免依赖 Actor 本体处理顺序
     }
 
     // ==========================================
@@ -118,7 +92,7 @@ public partial class Actor : CharacterBody2D, ITargetable
     {
         Blackboard[BlackboardKeys.InputVector] = Vector2.Zero;
         Blackboard[BlackboardKeys.MoveDirection] = Vector2.Zero;
-        Blackboard[BlackboardKeys.MoveSpeed] = 0f; // 0 表示使用 MovementComponent 的默认值
+        Blackboard[BlackboardKeys.MoveSpeed] = 0f;
         Blackboard[BlackboardKeys.IsDead] = false;
         Blackboard[BlackboardKeys.IsAttacking] = false;
         Blackboard[BlackboardKeys.State] = "None";
@@ -171,18 +145,12 @@ public partial class Actor : CharacterBody2D, ITargetable
     // 6. 状态机操作封装
     // ==========================================
     
-    /// <summary>
-    /// 请求切换到指定状态（通过状态机，类型安全）
-    /// </summary>
     public void RequestStateChange<T>() where T : State => StateMachine?.ChangeStateByType<T>();
 
     // ==========================================
     // 7. 数据请求方法（不包含业务逻辑）
     // ==========================================
     
-    /// <summary>
-    /// 请求伤害处理（仅设置 Blackboard 数据，不包含业务逻辑）
-    /// </summary>
     public void RequestDamage(int amount, Vector2? sourcePosition = null)
     {
         if (amount <= 0) return;
@@ -202,7 +170,7 @@ public partial class Actor : CharacterBody2D, ITargetable
     
     private void OnStateMachineStateChanged(string newStateName)
     {
-        SetBlackboardValue(BlackboardKeys.State, newStateName); // 同步状态回 Blackboard
+        SetBlackboardValue(BlackboardKeys.State, newStateName);
         EmitSignal(SignalName.StateChanged, newStateName);
     }
 
