@@ -441,9 +441,7 @@ script = ExtResource("21_ke2ow")
 
 [node name="Stagger" type="Node" parent="StateMachine" unique_id=1936291366]
 script = ExtResource("22_ujl30")
-ExitPolicy = 0
 StaggerDuration = 0.25
-ClearMoveIntentOnEnter = true
 
 [node name="Attack" type="Node" parent="StateMachine" unique_id=759954878]
 script = ExtResource("23_4ni07")

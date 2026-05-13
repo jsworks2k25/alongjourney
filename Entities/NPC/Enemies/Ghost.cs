@@ -125,6 +125,10 @@ public partial class Ghost : NPC
         if (hasSource)
         {
             SetBlackboardValue(Actor.BlackboardKeys.HitSource, sourcePosition);
+            if (KnockbackComponent != null)
+            {
+                KnockbackComponent.ApplyKnockback(sourcePosition);
+            }
         }
         else
         {

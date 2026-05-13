@@ -2,26 +2,16 @@ namespace AlongJourney.Entities.States;
 
 using Godot;
 using AlongJourney.Core;
-using AlongJourney.Components;
 using AlongJourney.Entities;
 
-public enum StaggerExitPolicy
-{
-    WhenTimerEnds,
-    WhenKnockbackInactive
-}
-
 /// <summary>
-/// Hit reaction: knockback from <see cref="Actor.BlackboardKeys.HitSource"/>.
-/// Exit either after a fixed time (player-style) or when knockback finishes (NPC-style), configured per scene.
+/// Hit reaction: fixed-duration stagger. Movement intent stays on the blackboard (keyboard or AI);
+/// <see cref="MovementComponent"/> does not apply locomotion while the state node is Stagger.
 /// </summary>
 public partial class StaggerState : State
 {
-    [Export] public StaggerExitPolicy ExitPolicy { get; set; } = StaggerExitPolicy.WhenTimerEnds;
     [Export] public float StaggerDuration { get; set; } = 0.25f;
-    [Export] public bool ClearMoveIntentOnEnter { get; set; } = true;
 
-    private KnockbackComponent _knockbackComponent;
     private float _staggerTimer;
 
     public override void Enter()
@@ -31,34 +21,7 @@ public partial class StaggerState : State
             return;
         }
 
-        _knockbackComponent = Owner.KnockbackComponent
-            ?? Owner.GetNodeOrNull<KnockbackComponent>("CoreComponents/Knockback")
-            ?? Owner.GetNodeOrNull<KnockbackComponent>("Knockback");
-
-        if (ExitPolicy == StaggerExitPolicy.WhenTimerEnds)
-        {
-            _staggerTimer = Mathf.Max(0f, StaggerDuration);
-        }
-        else
-        {
-            _staggerTimer = 0f;
-        }
-
-        if (ClearMoveIntentOnEnter)
-        {
-            Owner.SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, Vector2.Zero);
-            Owner.SetBlackboardValue(Actor.BlackboardKeys.InputVector, Vector2.Zero);
-        }
-
-        if (_knockbackComponent != null)
-        {
-            Vector2 hitSource = Owner.GetBlackboardVector(Actor.BlackboardKeys.HitSource, HealthComponent.NoSourcePosition);
-            bool hasSource = !float.IsNaN(hitSource.X) && !float.IsNaN(hitSource.Y);
-            if (hasSource)
-            {
-                _knockbackComponent.ApplyKnockback(hitSource);
-            }
-        }
+        _staggerTimer = Mathf.Max(0f, StaggerDuration);
     }
 
     public override void Update(double delta)
@@ -74,15 +37,8 @@ public partial class StaggerState : State
             return;
         }
 
-        if (ExitPolicy == StaggerExitPolicy.WhenTimerEnds)
-        {
-            _staggerTimer -= (float)delta;
-            if (_staggerTimer > 0f)
-            {
-                return;
-            }
-        }
-        else if (_knockbackComponent != null && _knockbackComponent.IsKnockbackActive)
+        _staggerTimer -= (float)delta;
+        if (_staggerTimer > 0f)
         {
             return;
         }

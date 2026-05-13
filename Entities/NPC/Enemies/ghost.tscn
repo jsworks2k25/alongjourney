@@ -9,13 +9,14 @@
 [ext_resource type="Script" uid="uid://bmgna558so5yc" path="res://Components/MovementComponent.cs" id="8_wj1r3"]
 [ext_resource type="Script" uid="uid://bwlybm005er1a" path="res://Components/HitEffectComponent.cs" id="9_4pqta"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="9_seks5"]
+[ext_resource type="Script" uid="uid://dhk31wxarmn7" path="res://Components/KnockbackComponent.cs" id="10_ilali"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="11_c10vd"]
-[ext_resource type="Script" path="res://Entities/States/MoveState.cs" id="11_tqccv"]
-[ext_resource type="Script" path="res://Entities/States/IdleState.cs" id="12_bip5n"]
-[ext_resource type="Script" path="res://Entities/States/DeadState.cs" id="13_pbjeb"]
-[ext_resource type="Script" path="res://Entities/States/AttackState.cs" id="14_gtx6n"]
-[ext_resource type="Script" path="res://Entities/States/StaggerState.cs" id="15_ljlpa"]
-[ext_resource type="Script" path="res://Entities/NPC/ChaseTargetMovement.cs" id="16_chase"]
+[ext_resource type="Script" uid="uid://duk0g0q4dptjl" path="res://Entities/States/MoveState.cs" id="11_tqccv"]
+[ext_resource type="Script" uid="uid://ce7o5awws5g72" path="res://Entities/States/IdleState.cs" id="12_bip5n"]
+[ext_resource type="Script" uid="uid://clil3axu6agjw" path="res://Entities/States/DeadState.cs" id="13_pbjeb"]
+[ext_resource type="Script" uid="uid://pfxbe0leq6ls" path="res://Entities/States/AttackState.cs" id="14_gtx6n"]
+[ext_resource type="Script" uid="uid://csod7pldnwijj" path="res://Entities/States/StaggerState.cs" id="15_ljlpa"]
+[ext_resource type="Script" uid="uid://bupk3r05c7ka3" path="res://Entities/NPC/ChaseTargetMovement.cs" id="16_chase"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
 radius = 4.0
@@ -148,7 +149,7 @@ _data = {
 &"move_front": SubResource("Animation_t76o2")
 }
 
-[node name="ghost" type="CharacterBody2D" unique_id=1799617584 node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "CollisionShape")]
+[node name="ghost" type="CharacterBody2D" unique_id=1799617584 node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 0
 collision_mask = 0
@@ -161,6 +162,7 @@ StateMachine = NodePath("StateMachine")
 HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
 HitEffectComponent = NodePath("CoreComponents/HitEffect")
+KnockbackComponent = NodePath("CoreComponents/Knockback")
 HurtboxComponentPath = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
@@ -224,13 +226,13 @@ shape = SubResource("CapsuleShape2D_8ky03")
 collision_layer = 0
 collision_mask = 2
 
-[node name="ChaseTargetMovement" type="Node" parent="." unique_id=91234001]
-script = ExtResource("16_chase")
-UsePlayerRegistry = false
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1271422478]
 scale = Vector2(1, 0.5)
 shape = SubResource("CircleShape2D_lv6vd")
+
+[node name="ChaseTargetMovement" type="Node" parent="." unique_id=91234001]
+script = ExtResource("16_chase")
+UsePlayerRegistry = false
 
 [node name="CoreComponents" type="Node" parent="." unique_id=388181798]
 
@@ -256,6 +258,9 @@ libraries/ = SubResource("AnimationLibrary_l5lq6")
 script = ExtResource("9_4pqta")
 FlashDuration = 0.2
 
+[node name="Knockback" type="Node" parent="CoreComponents" unique_id=1355995846]
+script = ExtResource("10_ilali")
+
 [node name="Shadow" parent="." unique_id=1709244803 instance=ExtResource("9_seks5")]
 scale = Vector2(1, 0.5)
 
@@ -276,5 +281,4 @@ script = ExtResource("14_gtx6n")
 
 [node name="Stagger" type="Node" parent="StateMachine" unique_id=1535659242]
 script = ExtResource("15_ljlpa")
-ExitPolicy = 1
-ClearMoveIntentOnEnter = false
+StaggerDuration = 0.25
