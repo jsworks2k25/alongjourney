@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bo677htw67u60"]
 
-[ext_resource type="Script" uid="uid://cupxusvwfe0po" path="res://Entities/Player/Player.cs" id="1_g2els"]
+[ext_resource type="Script" uid="uid://cupxusvwfe0po" path="res://Entities/Characters/Player/Player.cs" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://dioxj4dtvcfg5" path="res://Sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://d3oensniyq6dx" path="res://Sprites/die-Sheet.png" id="2_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://dumpbq5yp6boy" path="res://Sprites/template-rear-stand-Sheet.png" id="3_tuyoq"]
@@ -16,11 +16,11 @@
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="15_oprun"]
 [ext_resource type="Script" uid="uid://dhk31wxarmn7" path="res://Components/KnockbackComponent.cs" id="16_qfm1y"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="18_a38lo"]
-[ext_resource type="Script" uid="uid://d1h1usnwy8f5q" path="res://Entities/Player/States/RunState.cs" id="19_4ni07"]
-[ext_resource type="Script" uid="uid://bviqnfqsuhf8o" path="res://Entities/Player/States/IdleState.cs" id="20_l71n6"]
-[ext_resource type="Script" uid="uid://dj8mj2ea8x5u4" path="res://Entities/Player/States/DeadState.cs" id="21_ke2ow"]
-[ext_resource type="Script" uid="uid://cxffbk7dra3y7" path="res://Entities/Player/States/StaggerState.cs" id="22_ujl30"]
-[ext_resource type="Script" uid="uid://cux04vlwjftrw" path="res://Entities/Player/States/AttackState.cs" id="23_4ni07"]
+[ext_resource type="Script" uid="uid://duk0g0q4dptjl" path="res://Entities/States/MoveState.cs" id="19_4ni07"]
+[ext_resource type="Script" uid="uid://ce7o5awws5g72" path="res://Entities/States/IdleState.cs" id="20_l71n6"]
+[ext_resource type="Script" uid="uid://clil3axu6agjw" path="res://Entities/States/DeadState.cs" id="21_ke2ow"]
+[ext_resource type="Script" uid="uid://csod7pldnwijj" path="res://Entities/States/StaggerState.cs" id="22_ujl30"]
+[ext_resource type="Script" uid="uid://pfxbe0leq6ls" path="res://Entities/States/AttackState.cs" id="23_4ni07"]
 [ext_resource type="Script" uid="uid://ckedmoevht7w4" path="res://Components/SelectionManager.cs" id="24_u8v8j"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
@@ -352,7 +352,7 @@ _data = {
 &"move_front": SubResource("Animation_d2wvv")
 }
 
-[node name="player" type="CharacterBody2D" unique_id=720218635 node_paths=PackedStringArray("WeaponHolder", "_selectionManager", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "CollisionShape")]
+[node name="player" type="CharacterBody2D" unique_id=720218635 node_paths=PackedStringArray("WeaponHolder", "_selectionManager", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 2
 collision_mask = 28
@@ -366,7 +366,7 @@ HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
 HitEffectComponent = NodePath("CoreComponents/HitEffect")
 KnockbackComponent = NodePath("CoreComponents/Knockback")
-HurtboxComponentPath = NodePath("Hurtbox")
+HurtboxComponent = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=17696463]
@@ -420,6 +420,7 @@ script = ExtResource("14_f1ej7")
 
 [node name="Knockback" type="Node" parent="CoreComponents" unique_id=1466644045]
 script = ExtResource("16_qfm1y")
+KnockbackForce = 150.0
 
 [node name="SelectionManager" type="Node" parent="CoreComponents" unique_id=1334158924]
 script = ExtResource("24_u8v8j")
@@ -430,7 +431,7 @@ scale = Vector2(1, 0.5)
 [node name="StateMachine" type="Node" parent="." unique_id=548797990]
 script = ExtResource("18_a38lo")
 
-[node name="Run" type="Node" parent="StateMachine" unique_id=1258306878]
+[node name="Move" type="Node" parent="StateMachine" unique_id=1258306878]
 script = ExtResource("19_4ni07")
 
 [node name="Idle" type="Node" parent="StateMachine" unique_id=1812659606]

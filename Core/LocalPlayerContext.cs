@@ -2,7 +2,7 @@ namespace AlongJourney.Core;
 
 using System;
 using Godot;
-using AlongJourney.Entities.Player;
+using AlongJourney.Entities.Characters.Player;
 
 /// <summary>
 /// The local presentation context: UI, camera, and local input bind to this

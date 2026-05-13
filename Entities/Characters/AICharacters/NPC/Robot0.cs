@@ -1,10 +1,10 @@
-namespace AlongJourney.Entities.Enemies;
+namespace AlongJourney.Entities.Characters.AICharacters;
 
 using Godot;
 using System;
 using AlongJourney.Components;
 
-public partial class Robot0 : Enemy
+public partial class Robot0 : AICharacter
 {
 	[Export] private Vector2[] _directions = new Vector2[] {
 		// 斜向移动，等距斜率已经被MovementComponent处理
@@ -114,8 +114,8 @@ public partial class Robot0 : Enemy
 	{
 		if (AnimationController != null)
 		{
-			// 使用统一方法，根据 velocity.Y 自动判断方向，自动翻转
-			AnimationController.UpdateAnimation(Velocity);
+			// 与黑板上的移动意图同步（击退时不应改用 Velocity 朝向）
+			AnimationController.UpdateAnimation();
 		}
 	}
 }

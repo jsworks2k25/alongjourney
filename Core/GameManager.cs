@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Godot;
 using System.Collections.Generic;
 using AlongJourney.Components;
-using AlongJourney.Entities.Player;
+using AlongJourney.Entities.Characters.Player;
 
 public partial class GameManager : Node
 {

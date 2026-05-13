@@ -2,7 +2,7 @@ namespace AlongJourney.Components;
 
 using Godot;
 using AlongJourney.Entities;
-using AlongJourney.Entities.Player;
+using AlongJourney.Entities.Characters.Player;
 using AlongJourney.Core;
 
 /// <summary>

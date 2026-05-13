@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bjmid78a1unwj"]
 
-[ext_resource type="Script" uid="uid://dphbgrg3ophjy" path="res://Entities/Enemies/Ghost.cs" id="1_5mfnq"]
+[ext_resource type="Script" uid="uid://dphbgrg3ophjy" path="res://Entities/Characters/AICharacters/Enemies/Ghost.cs" id="1_5mfnq"]
 [ext_resource type="Texture2D" uid="uid://dpd4reoax0hn8" path="res://Sprites/ghost_move-Sheet.png" id="2_lv6vd"]
 [ext_resource type="Script" uid="uid://cdpj2qq7mig3y" path="res://Components/HurtboxComponent.cs" id="3_sv5gc"]
 [ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://Components/HealthComponent.cs" id="4_wj1r3"]
@@ -9,12 +9,14 @@
 [ext_resource type="Script" uid="uid://bmgna558so5yc" path="res://Components/MovementComponent.cs" id="8_wj1r3"]
 [ext_resource type="Script" uid="uid://bwlybm005er1a" path="res://Components/HitEffectComponent.cs" id="9_4pqta"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="9_seks5"]
+[ext_resource type="Script" uid="uid://dhk31wxarmn7" path="res://Components/KnockbackComponent.cs" id="10_ilali"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="11_c10vd"]
-[ext_resource type="Script" uid="uid://dnt0eyy54575i" path="res://Entities/Enemies/States/ChaseState.cs" id="11_tqccv"]
-[ext_resource type="Script" uid="uid://bkicy84jh7kjo" path="res://Entities/Enemies/States/IdleState.cs" id="12_bip5n"]
-[ext_resource type="Script" uid="uid://crnaylmoo0yva" path="res://Entities/Enemies/States/DeadState.cs" id="13_pbjeb"]
-[ext_resource type="Script" uid="uid://gas4t05lyk4c" path="res://Entities/Enemies/States/AttackState.cs" id="14_gtx6n"]
-[ext_resource type="Script" uid="uid://dp8qxqncmuthy" path="res://Entities/Enemies/States/StaggerState.cs" id="15_ljlpa"]
+[ext_resource type="Script" uid="uid://duk0g0q4dptjl" path="res://Entities/States/MoveState.cs" id="11_tqccv"]
+[ext_resource type="Script" uid="uid://ce7o5awws5g72" path="res://Entities/States/IdleState.cs" id="12_bip5n"]
+[ext_resource type="Script" uid="uid://clil3axu6agjw" path="res://Entities/States/DeadState.cs" id="13_pbjeb"]
+[ext_resource type="Script" uid="uid://pfxbe0leq6ls" path="res://Entities/States/AttackState.cs" id="14_gtx6n"]
+[ext_resource type="Script" uid="uid://csod7pldnwijj" path="res://Entities/States/StaggerState.cs" id="15_ljlpa"]
+[ext_resource type="Script" uid="uid://di80ifagk3b8n" path="res://Entities/Characters/AICharacters/ChaseTargetMovement.cs" id="16_chase"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
 radius = 4.0
@@ -147,7 +149,7 @@ _data = {
 &"move_front": SubResource("Animation_t76o2")
 }
 
-[node name="ghost" type="CharacterBody2D" unique_id=1799617584 node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "CollisionShape")]
+[node name="ghost" type="CharacterBody2D" unique_id=1799617584 node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 0
 collision_mask = 0
@@ -160,7 +162,8 @@ StateMachine = NodePath("StateMachine")
 HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
 HitEffectComponent = NodePath("CoreComponents/HitEffect")
-HurtboxComponentPath = NodePath("Hurtbox")
+KnockbackComponent = NodePath("CoreComponents/Knockback")
+HurtboxComponent = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1051568481]
@@ -227,6 +230,10 @@ collision_mask = 2
 scale = Vector2(1, 0.5)
 shape = SubResource("CircleShape2D_lv6vd")
 
+[node name="ChaseTargetMovement" type="Node" parent="." unique_id=91234001]
+script = ExtResource("16_chase")
+UsePlayerRegistry = false
+
 [node name="CoreComponents" type="Node" parent="." unique_id=388181798]
 
 [node name="Health" type="Node" parent="CoreComponents" unique_id=263475603]
@@ -251,13 +258,16 @@ libraries/ = SubResource("AnimationLibrary_l5lq6")
 script = ExtResource("9_4pqta")
 FlashDuration = 0.2
 
+[node name="Knockback" type="Node" parent="CoreComponents" unique_id=1355995846]
+script = ExtResource("10_ilali")
+
 [node name="Shadow" parent="." unique_id=1709244803 instance=ExtResource("9_seks5")]
 scale = Vector2(1, 0.5)
 
 [node name="StateMachine" type="Node" parent="." unique_id=554247358]
 script = ExtResource("11_c10vd")
 
-[node name="Chase" type="Node" parent="StateMachine" unique_id=20016212]
+[node name="Move" type="Node" parent="StateMachine" unique_id=20016212]
 script = ExtResource("11_tqccv")
 
 [node name="Idle" type="Node" parent="StateMachine" unique_id=1546454573]

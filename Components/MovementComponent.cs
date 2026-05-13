@@ -39,7 +39,8 @@ public partial class MovementComponent : BaseComponent
 
         // 状态处理由状态机负责，这里只处理移动
         // 僵直或攻击时不更新速度（由其他组件或状态控制）
-        if (Owner.CurrentStateName == "StaggerState" ||
+        if (Owner.CurrentStateName == "Stagger" ||
+            Owner.CurrentStateName == "StaggerState" ||
             Owner.GetBlackboardBool(Actor.BlackboardKeys.IsAttacking, false))
         {
             return;

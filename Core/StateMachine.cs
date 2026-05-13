@@ -2,7 +2,6 @@ namespace AlongJourney.Core;
 
 using Godot;
 using AlongJourney.Entities;
-using AlongJourney.Entities.Player;
 
 /// <summary>
 /// 状态机组件：管理 Actor 的状态转换

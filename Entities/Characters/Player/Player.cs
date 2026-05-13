@@ -1,9 +1,9 @@
-namespace AlongJourney.Entities.Player;
+namespace AlongJourney.Entities.Characters.Player;
 
 using Godot;
 using AlongJourney.Entities;
 using AlongJourney.Entities.Items;
-using AlongJourney.Entities.Player.States;
+using AlongJourney.Entities.States;
 using AlongJourney.Core;
 using AlongJourney.Components;
 using AlongJourney.Resources.Items;
@@ -202,6 +202,11 @@ public partial class Player : Actor
         if (hasSource)
         {
             SetBlackboardValue(Actor.BlackboardKeys.HitSource, sourcePosition);
+            if (KnockbackComponent != null)
+            {
+                KnockbackComponent.ApplyKnockback(sourcePosition);
+            }
+
             RequestStateChange<StaggerState>();
             SetBlackboardValue(Actor.BlackboardKeys.HitPending, true);
         }
