@@ -352,7 +352,7 @@ _data = {
 &"move_front": SubResource("Animation_d2wvv")
 }
 
-[node name="player" type="CharacterBody2D" unique_id=720218635 node_paths=PackedStringArray("WeaponHolder", "_selectionManager", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "CollisionShape")]
+[node name="player" type="CharacterBody2D" unique_id=720218635 node_paths=PackedStringArray("WeaponHolder", "_selectionManager", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 2
 collision_mask = 28
@@ -366,7 +366,7 @@ HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
 HitEffectComponent = NodePath("CoreComponents/HitEffect")
 KnockbackComponent = NodePath("CoreComponents/Knockback")
-HurtboxComponentPath = NodePath("Hurtbox")
+HurtboxComponent = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=17696463]

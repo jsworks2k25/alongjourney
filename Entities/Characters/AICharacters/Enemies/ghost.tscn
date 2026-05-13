@@ -149,7 +149,7 @@ _data = {
 &"move_front": SubResource("Animation_t76o2")
 }
 
-[node name="ghost" type="CharacterBody2D" unique_id=1799617584 node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "CollisionShape")]
+[node name="ghost" type="CharacterBody2D" unique_id=1799617584 node_paths=PackedStringArray("_detectionArea", "_hitbox", "StateMachine", "HealthComponent", "AnimationController", "HitEffectComponent", "KnockbackComponent", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 0
 collision_mask = 0
@@ -163,7 +163,7 @@ HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
 HitEffectComponent = NodePath("CoreComponents/HitEffect")
 KnockbackComponent = NodePath("CoreComponents/Knockback")
-HurtboxComponentPath = NodePath("Hurtbox")
+HurtboxComponent = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1051568481]

@@ -227,7 +227,7 @@ collision_priority = 3.0
 [node name="ghost" parent="ObjectLayer" unique_id=1184619704 instance=ExtResource("11_cmjf8")]
 position = Vector2(166, -126)
 collision_mask = 1
-HurtboxComponentPath = null
+HurtboxComponent = null
 
 [node name="BuildingSystem" type="Node2D" parent="." unique_id=7709074 node_paths=PackedStringArray("GroundLayer", "ObjectLayer")]
 y_sort_enabled = true

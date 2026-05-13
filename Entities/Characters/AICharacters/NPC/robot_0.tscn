@@ -113,7 +113,7 @@ _data = {
 &"move_front": SubResource("Animation_w0dvl")
 }
 
-[node name="Robot0" type="CharacterBody2D" unique_id=113230676 node_paths=PackedStringArray("_rayCast", "_moveTimer", "StateMachine", "HealthComponent", "AnimationController", "CollisionShape")]
+[node name="Robot0" type="CharacterBody2D" unique_id=113230676 node_paths=PackedStringArray("_rayCast", "_moveTimer", "StateMachine", "HealthComponent", "AnimationController", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 4
 collision_mask = 2
@@ -125,7 +125,7 @@ Speed = 20.0
 StateMachine = NodePath("StateMachine")
 HealthComponent = NodePath("CoreComponents/Health")
 AnimationController = NodePath("CoreComponents/AnimationController")
-HurtboxComponentPath = NodePath("Hurtbox")
+HurtboxComponent = NodePath("Hurtbox")
 CollisionShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1657351058]
