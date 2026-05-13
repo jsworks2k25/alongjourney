@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://crnaylmoo0yva" path="res://Entities/NPC/States/DeadState.cs" id="13_pbjeb"]
 [ext_resource type="Script" uid="uid://gas4t05lyk4c" path="res://Entities/NPC/States/AttackState.cs" id="14_gtx6n"]
 [ext_resource type="Script" uid="uid://dp8qxqncmuthy" path="res://Entities/NPC/States/StaggerState.cs" id="15_ljlpa"]
+[ext_resource type="Script" path="res://Entities/NPC/ChaseTargetMovement.cs" id="16_chase"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
 radius = 4.0
@@ -222,6 +223,10 @@ shape = SubResource("CapsuleShape2D_8ky03")
 [node name="Area2D" type="Area2D" parent="." unique_id=1883011936]
 collision_layer = 0
 collision_mask = 2
+
+[node name="ChaseTargetMovement" type="Node" parent="." unique_id=91234001]
+script = ExtResource("16_chase")
+UsePlayerRegistry = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1271422478]
 scale = Vector2(1, 0.5)

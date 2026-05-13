@@ -16,10 +16,13 @@ public partial class Ghost : NPC
     [Export] private HitboxComponent _hitbox;
 
     private float _damageTimer = 0f;
+    private ChaseTargetMovement _chase;
 
     public override void _Ready()
     {
         base._Ready();
+
+        _chase = GetNodeOrNull<ChaseTargetMovement>("ChaseTargetMovement");
 
         if (_detectionArea != null)
         {
@@ -29,50 +32,36 @@ public partial class Ghost : NPC
 
         // 自动查找组件
         if (_detectionArea == null)
+        {
             _detectionArea = GetNodeOrNull<Area2D>("DetectionArea");
+        }
+
         if (_hitbox == null)
+        {
             _hitbox = GetNodeOrNull<HitboxComponent>("Hitbox");
+        }
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        base._PhysicsProcess(delta); // 复用 Enemy 的目标更新与移动逻辑
+        base._PhysicsProcess(delta);
         UpdateAnimation();
         ProcessContactDamage(delta);
-    }
-
-    // --- 核心移动逻辑改动 ---
-
-    private void ChaseTarget()
-    {
-        var targetPos = GetTargetPosition();
-        if (!targetPos.HasValue)
-        {
-            SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, Vector2.Zero);
-            return;
-        }
-
-        Vector2 direction = (targetPos.Value - GlobalPosition).Normalized();
-        // 写入移动意图到黑板，由 MovementComponent 处理
-        SetBlackboardValue(Actor.BlackboardKeys.MoveDirection, direction);
     }
 
     // --- 动画优化 ---
 
     private void UpdateAnimation()
     {
-		if (AnimationController != null)
-		{
-			// 使用统一方法，根据 velocity.Y 自动判断方向，自动翻转
-			AnimationController.UpdateAnimation(Velocity);
-		}
+        if (AnimationController != null)
+        {
+            AnimationController.UpdateAnimation(Velocity);
+        }
     }
 
-
-    // --- 其他逻辑保持不变 ---
     private void ProcessContactDamage(double delta)
     {
-        if (_hitbox == null || !_hitbox.HasOverlappingAreas()) 
+        if (_hitbox == null || !_hitbox.HasOverlappingAreas())
         {
             _damageTimer = 0;
             return;
@@ -85,10 +74,9 @@ public partial class Ghost : NPC
             {
                 if (area is IDamageable damageable)
                 {
-                    // 传递攻击者的位置（Ghost的全局位置）
                     damageable.TakeDamage(DamagePerTick, GlobalPosition);
-                    _damageTimer = DamageInterval; 
-                    break; // 一次只伤害一个目标
+                    _damageTimer = DamageInterval;
+                    break;
                 }
             }
         }
@@ -96,25 +84,34 @@ public partial class Ghost : NPC
 
     private void OnBodyEnteredDetection(Node2D body)
     {
+        if (_chase == null)
+        {
+            return;
+        }
+
         if (body is ITargetable targetable && targetable.IsAlive)
         {
-            _target = targetable;
+            _chase.SetTarget(targetable);
         }
     }
 
     private void OnBodyExitedDetection(Node2D body)
     {
-        if (_target != null && !GodotObject.IsInstanceValid(_target as GodotObject))
-            _target = null;
-        if (body is ITargetable targetable && targetable == _target)
+        if (_chase == null)
         {
-            _target = null;
+            return;
         }
-    }
 
-    protected override void FindTarget()
-    {
-        // Ghost 使用检测区域控制目标获取，避免自动组搜索
+        if (_chase.Target != null && !GodotObject.IsInstanceValid(_chase.Target as GodotObject))
+        {
+            _chase.SetTarget(null);
+            return;
+        }
+
+        if (body is ITargetable targetable && targetable == _chase.Target)
+        {
+            _chase.SetTarget(null);
+        }
     }
 
     protected override void OnNpcHealthChanged(int currentHp, int maxHp, Vector2 sourcePosition)
