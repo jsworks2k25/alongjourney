@@ -1,10 +1,13 @@
-namespace AlongJourney.Entities.NPC.States;
+namespace AlongJourney.Entities.States;
 
 using Godot;
 using AlongJourney.Core;
 using AlongJourney.Entities;
 
-public partial class ChaseState : State
+/// <summary>
+/// Locomotion: move intent on blackboard (player input, AI, ChaseTargetMovement, etc.).
+/// </summary>
+public partial class MoveState : State
 {
     public override void Update(double delta)
     {
@@ -31,7 +34,7 @@ public partial class ChaseState : State
         if (Owner.GetBlackboardBool(Actor.BlackboardKeys.HitPending, false))
         {
             StateMachine.ChangeStateByType<StaggerState>();
+            return;
         }
     }
-
 }

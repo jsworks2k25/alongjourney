@@ -10,11 +10,11 @@
 [ext_resource type="Script" uid="uid://bwlybm005er1a" path="res://Components/HitEffectComponent.cs" id="9_4pqta"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="9_seks5"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="11_c10vd"]
-[ext_resource type="Script" uid="uid://dnt0eyy54575i" path="res://Entities/NPC/States/ChaseState.cs" id="11_tqccv"]
-[ext_resource type="Script" uid="uid://bkicy84jh7kjo" path="res://Entities/NPC/States/IdleState.cs" id="12_bip5n"]
-[ext_resource type="Script" uid="uid://crnaylmoo0yva" path="res://Entities/NPC/States/DeadState.cs" id="13_pbjeb"]
-[ext_resource type="Script" uid="uid://gas4t05lyk4c" path="res://Entities/NPC/States/AttackState.cs" id="14_gtx6n"]
-[ext_resource type="Script" uid="uid://dp8qxqncmuthy" path="res://Entities/NPC/States/StaggerState.cs" id="15_ljlpa"]
+[ext_resource type="Script" path="res://Entities/States/MoveState.cs" id="11_tqccv"]
+[ext_resource type="Script" path="res://Entities/States/IdleState.cs" id="12_bip5n"]
+[ext_resource type="Script" path="res://Entities/States/DeadState.cs" id="13_pbjeb"]
+[ext_resource type="Script" path="res://Entities/States/AttackState.cs" id="14_gtx6n"]
+[ext_resource type="Script" path="res://Entities/States/StaggerState.cs" id="15_ljlpa"]
 [ext_resource type="Script" path="res://Entities/NPC/ChaseTargetMovement.cs" id="16_chase"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
@@ -262,7 +262,7 @@ scale = Vector2(1, 0.5)
 [node name="StateMachine" type="Node" parent="." unique_id=554247358]
 script = ExtResource("11_c10vd")
 
-[node name="Chase" type="Node" parent="StateMachine" unique_id=20016212]
+[node name="Move" type="Node" parent="StateMachine" unique_id=20016212]
 script = ExtResource("11_tqccv")
 
 [node name="Idle" type="Node" parent="StateMachine" unique_id=1546454573]
@@ -276,3 +276,5 @@ script = ExtResource("14_gtx6n")
 
 [node name="Stagger" type="Node" parent="StateMachine" unique_id=1535659242]
 script = ExtResource("15_ljlpa")
+ExitPolicy = 1
+ClearMoveIntentOnEnter = false

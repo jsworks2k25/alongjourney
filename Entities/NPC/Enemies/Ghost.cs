@@ -3,7 +3,7 @@ namespace AlongJourney.Entities.NPC.Enemies;
 using Godot;
 using AlongJourney.Components;
 using AlongJourney.Interfaces;
-using AlongJourney.Entities.NPC.States;
+using AlongJourney.Entities.States;
 
 public partial class Ghost : NPC
 {

@@ -2,7 +2,7 @@ namespace AlongJourney.Entities.NPC;
 
 using Godot;
 using AlongJourney.Entities;
-using AlongJourney.Entities.NPC.States;
+using AlongJourney.Entities.States;
 
 public partial class NPC : Actor
 {

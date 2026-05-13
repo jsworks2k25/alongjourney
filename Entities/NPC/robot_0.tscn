@@ -8,10 +8,10 @@
 [ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://Components/HealthComponent.cs" id="6_utrwa"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="7_utrwa"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="8_hiucr"]
-[ext_resource type="Script" uid="uid://d1h1usnwy8f5q" path="res://Entities/Player/States/RunState.cs" id="9_28whl"]
-[ext_resource type="Script" uid="uid://bviqnfqsuhf8o" path="res://Entities/Player/States/IdleState.cs" id="10_mv5oq"]
-[ext_resource type="Script" uid="uid://dj8mj2ea8x5u4" path="res://Entities/Player/States/DeadState.cs" id="11_f2n1b"]
-[ext_resource type="Script" uid="uid://cux04vlwjftrw" path="res://Entities/Player/States/AttackState.cs" id="12_28whl"]
+[ext_resource type="Script" path="res://Entities/States/MoveState.cs" id="9_28whl"]
+[ext_resource type="Script" path="res://Entities/States/IdleState.cs" id="10_mv5oq"]
+[ext_resource type="Script" path="res://Entities/States/DeadState.cs" id="11_f2n1b"]
+[ext_resource type="Script" path="res://Entities/States/AttackState.cs" id="12_28whl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0
@@ -181,7 +181,7 @@ scale = Vector2(1, 0.5)
 [node name="StateMachine" type="Node" parent="." unique_id=1792361086]
 script = ExtResource("8_hiucr")
 
-[node name="Run" type="Node" parent="StateMachine" unique_id=314494556]
+[node name="Move" type="Node" parent="StateMachine" unique_id=314494556]
 script = ExtResource("9_28whl")
 
 [node name="Idle" type="Node" parent="StateMachine" unique_id=1293986234]

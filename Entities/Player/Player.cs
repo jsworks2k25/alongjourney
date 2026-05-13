@@ -3,7 +3,7 @@ namespace AlongJourney.Entities.Player;
 using Godot;
 using AlongJourney.Entities;
 using AlongJourney.Entities.Items;
-using AlongJourney.Entities.Player.States;
+using AlongJourney.Entities.States;
 using AlongJourney.Core;
 using AlongJourney.Components;
 using AlongJourney.Resources.Items;
