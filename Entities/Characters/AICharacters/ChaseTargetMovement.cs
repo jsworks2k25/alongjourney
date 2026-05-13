@@ -1,4 +1,4 @@
-namespace AlongJourney.Entities.Characters.NPC;
+namespace AlongJourney.Entities.Characters.AICharacters;
 
 using Godot;
 using AlongJourney.Core;
@@ -7,7 +7,7 @@ using AlongJourney.Interfaces;
 
 /// <summary>
 /// Optional child of an <see cref="Actor"/>: picks a target and writes <see cref="Actor.BlackboardKeys.MoveDirection"/>.
-/// Call <see cref="PhysicsTick"/> from the parent's physics step (NPC does this when this node exists).
+/// Call <see cref="PhysicsTick"/> from the parent's physics step (e.g. <see cref="AICharacter"/> when this node exists).
 /// </summary>
 public partial class ChaseTargetMovement : Node
 {

@@ -1,10 +1,10 @@
-namespace AlongJourney.Entities.Characters.NPC;
+namespace AlongJourney.Entities.Characters.AICharacters;
 
 using Godot;
 using System;
 using AlongJourney.Components;
 
-public partial class Robot0 : NPC
+public partial class Robot0 : AICharacter
 {
 	[Export] private Vector2[] _directions = new Vector2[] {
 		// 斜向移动，等距斜率已经被MovementComponent处理

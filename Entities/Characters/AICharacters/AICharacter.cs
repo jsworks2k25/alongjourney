@@ -1,10 +1,10 @@
-namespace AlongJourney.Entities.Characters.NPC;
+namespace AlongJourney.Entities.Characters.AICharacters;
 
 using Godot;
 using AlongJourney.Entities;
 using AlongJourney.Entities.States;
 
-public partial class NPC : Actor
+public partial class AICharacter : Actor
 {
     [Export] public float Speed = 50f;
     private ChaseTargetMovement _chaseMovement;

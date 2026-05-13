@@ -1,11 +1,11 @@
-namespace AlongJourney.Entities.Characters.NPC;
+namespace AlongJourney.Entities.Characters.AICharacters.Enemies;
 
 using Godot;
 using AlongJourney.Components;
 using AlongJourney.Interfaces;
 using AlongJourney.Entities.States;
 
-public partial class Ghost : NPC
+public partial class Ghost : AICharacter
 {
     // --- 配置 ---
     [Export] public int DamagePerTick = 10;

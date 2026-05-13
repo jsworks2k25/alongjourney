@@ -18,9 +18,9 @@ alongjourney/
 │   └── SelectionManager.cs # 选择管理
 ├── 📂 docs/                # 项目文档 (GDD, Devlog, Reflection)
 ├── 📂 Entities/            # 游戏实体 (场景 + 脚本)
-│   ├── 📂 Characters/      # 角色 (玩家与 NPC)
+│   ├── 📂 Characters/      # 角色 (玩家与 AI 角色)
 │   │   ├── 📂 Player/      # 玩家 (player.tscn, Player.cs)
-│   │   └── 📂 NPC/         # NPC 与敌人 (Ghost, Robot0, ChaseTargetMovement)
+│   │   └── 📂 AICharacters/ # AI 控制角色
 │   ├── 📂 States/          # 实体状态机状态 (Idle, Move, Attack, …)
 │   ├── 📂 Items/           # 物品与掉落物 (Axe, ItemDrop)
 │   └── 📂 Environment/     # 环境装饰 (Tree, TranslucentObstacle)

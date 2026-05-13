@@ -6,10 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://cosktenf140vu" path="res://Sprites/spritesheet.png" id="5_sqig6"]
 [ext_resource type="Texture2D" uid="uid://dpxrbr5nc6c1b" path="res://Sprites/empty.png" id="6_8iwbv"]
 [ext_resource type="PackedScene" uid="uid://bo677htw67u60" path="res://Entities/Characters/Player/player.tscn" id="7_40ovt"]
-[ext_resource type="PackedScene" uid="uid://dsftw85vqphm" path="res://Entities/Characters/NPC/robot_0.tscn" id="8_m5kuc"]
+[ext_resource type="PackedScene" uid="uid://dsftw85vqphm" path="res://Entities/Characters/AICharacters/NPC/robot_0.tscn" id="8_m5kuc"]
 [ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://Entities/Environment/rock.tscn" id="9_rv4ag"]
 [ext_resource type="PackedScene" uid="uid://df01wn734v1rp" path="res://Entities/Environment/tree_0.tscn" id="10_7t5rf"]
-[ext_resource type="PackedScene" uid="uid://bjmid78a1unwj" path="res://Entities/Characters/NPC/Enemies/ghost.tscn" id="11_cmjf8"]
+[ext_resource type="PackedScene" uid="uid://bjmid78a1unwj" path="res://Entities/Characters/AICharacters/Enemies/ghost.tscn" id="11_cmjf8"]
 [ext_resource type="Script" uid="uid://dvq8ka8plnyco" path="res://Core/BuildingSystem.cs" id="12_t15vj"]
 [ext_resource type="PackedScene" path="res://UI/Inventory/game_inventory_ui.tscn" id="13_ui"]
 
