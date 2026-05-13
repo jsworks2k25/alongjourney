@@ -55,7 +55,7 @@ public partial class Ghost : AICharacter
     {
         if (AnimationController != null)
         {
-            AnimationController.UpdateAnimation(Velocity);
+            AnimationController.UpdateAnimation();
         }
     }
 

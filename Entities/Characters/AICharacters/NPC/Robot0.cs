@@ -114,8 +114,8 @@ public partial class Robot0 : AICharacter
 	{
 		if (AnimationController != null)
 		{
-			// 使用统一方法，根据 velocity.Y 自动判断方向，自动翻转
-			AnimationController.UpdateAnimation(Velocity);
+			// 与黑板上的移动意图同步（击退时不应改用 Velocity 朝向）
+			AnimationController.UpdateAnimation();
 		}
 	}
 }
