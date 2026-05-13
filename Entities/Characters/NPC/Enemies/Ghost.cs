@@ -1,4 +1,4 @@
-namespace AlongJourney.Entities.NPC.Enemies;
+namespace AlongJourney.Entities.Characters.NPC;
 
 using Godot;
 using AlongJourney.Components;

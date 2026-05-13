@@ -20,7 +20,7 @@ Added constants for:
 - `DefaultLocalPlayerId`
 - `KeyboardAndMouseDeviceId`
 
-### `Entities/Player/Player.cs`
+### `Entities/Characters/Player/Player.cs`
 
 Added multiplayer-prep metadata:
 

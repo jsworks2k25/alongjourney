@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Godot;
 using AlongJourney.Components;
 using AlongJourney.Core;
-using AlongJourney.Entities.Player;
+using AlongJourney.Entities.Characters.Player;
 using AlongJourney.Resources.Items;
 
 public partial class GameInventoryUI : CanvasLayer

@@ -18,10 +18,12 @@ alongjourney/
 │   └── SelectionManager.cs # 选择管理
 ├── 📂 docs/                # 项目文档 (GDD, Devlog, Reflection)
 ├── 📂 Entities/            # 游戏实体 (场景 + 脚本)
-│   ├── 📂 Player/          # 玩家相关 (Player.tscn, States)
-│   ├── 📂 Enemies/         # 敌人相关 (Ghost, Robot)
+│   ├── 📂 Characters/      # 角色 (玩家与 NPC)
+│   │   ├── 📂 Player/      # 玩家 (player.tscn, Player.cs)
+│   │   └── 📂 NPC/         # NPC 与敌人 (Ghost, Robot0, ChaseTargetMovement)
+│   ├── 📂 States/          # 实体状态机状态 (Idle, Move, Attack, …)
 │   ├── 📂 Items/           # 物品与掉落物 (Axe, ItemDrop)
-│   └── 📂 Environment/     # 环境装饰 (Tree, Rock)
+│   └── 📂 Environment/     # 环境装饰 (Tree, TranslucentObstacle)
 ├── 📂 Interfaces/          # C# 接口定义 (IDamageable, IInteractable)
 ├── 📂 Resources/           # Godot 资源文件 (.tres, .gd)
 │   └── 📂 Items/           # 物品数据库与数据定义

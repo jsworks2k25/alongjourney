@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bjmid78a1unwj"]
 
-[ext_resource type="Script" uid="uid://dphbgrg3ophjy" path="res://Entities/NPC/Enemies/Ghost.cs" id="1_5mfnq"]
+[ext_resource type="Script" uid="uid://dphbgrg3ophjy" path="res://Entities/Characters/NPC/Enemies/Ghost.cs" id="1_5mfnq"]
 [ext_resource type="Texture2D" uid="uid://dpd4reoax0hn8" path="res://Sprites/ghost_move-Sheet.png" id="2_lv6vd"]
 [ext_resource type="Script" uid="uid://cdpj2qq7mig3y" path="res://Components/HurtboxComponent.cs" id="3_sv5gc"]
 [ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://Components/HealthComponent.cs" id="4_wj1r3"]
@@ -16,7 +16,7 @@
 [ext_resource type="Script" uid="uid://clil3axu6agjw" path="res://Entities/States/DeadState.cs" id="13_pbjeb"]
 [ext_resource type="Script" uid="uid://pfxbe0leq6ls" path="res://Entities/States/AttackState.cs" id="14_gtx6n"]
 [ext_resource type="Script" uid="uid://csod7pldnwijj" path="res://Entities/States/StaggerState.cs" id="15_ljlpa"]
-[ext_resource type="Script" uid="uid://bupk3r05c7ka3" path="res://Entities/NPC/ChaseTargetMovement.cs" id="16_chase"]
+[ext_resource type="Script" uid="uid://di80ifagk3b8n" path="res://Entities/Characters/NPC/ChaseTargetMovement.cs" id="16_chase"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l5lq6"]
 radius = 4.0
@@ -281,4 +281,3 @@ script = ExtResource("14_gtx6n")
 
 [node name="Stagger" type="Node" parent="StateMachine" unique_id=1535659242]
 script = ExtResource("15_ljlpa")
-StaggerDuration = 0.25

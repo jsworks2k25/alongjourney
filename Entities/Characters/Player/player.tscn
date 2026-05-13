@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bo677htw67u60"]
 
-[ext_resource type="Script" uid="uid://cupxusvwfe0po" path="res://Entities/Player/Player.cs" id="1_g2els"]
+[ext_resource type="Script" uid="uid://cupxusvwfe0po" path="res://Entities/Characters/Player/Player.cs" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://dioxj4dtvcfg5" path="res://Sprites/template-front-stand-Sheet.png" id="2_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://d3oensniyq6dx" path="res://Sprites/die-Sheet.png" id="2_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://dumpbq5yp6boy" path="res://Sprites/template-rear-stand-Sheet.png" id="3_tuyoq"]
@@ -16,11 +16,11 @@
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="15_oprun"]
 [ext_resource type="Script" uid="uid://dhk31wxarmn7" path="res://Components/KnockbackComponent.cs" id="16_qfm1y"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="18_a38lo"]
-[ext_resource type="Script" path="res://Entities/States/MoveState.cs" id="19_4ni07"]
-[ext_resource type="Script" path="res://Entities/States/IdleState.cs" id="20_l71n6"]
-[ext_resource type="Script" path="res://Entities/States/DeadState.cs" id="21_ke2ow"]
-[ext_resource type="Script" path="res://Entities/States/StaggerState.cs" id="22_ujl30"]
-[ext_resource type="Script" path="res://Entities/States/AttackState.cs" id="23_4ni07"]
+[ext_resource type="Script" uid="uid://duk0g0q4dptjl" path="res://Entities/States/MoveState.cs" id="19_4ni07"]
+[ext_resource type="Script" uid="uid://ce7o5awws5g72" path="res://Entities/States/IdleState.cs" id="20_l71n6"]
+[ext_resource type="Script" uid="uid://clil3axu6agjw" path="res://Entities/States/DeadState.cs" id="21_ke2ow"]
+[ext_resource type="Script" uid="uid://csod7pldnwijj" path="res://Entities/States/StaggerState.cs" id="22_ujl30"]
+[ext_resource type="Script" uid="uid://pfxbe0leq6ls" path="res://Entities/States/AttackState.cs" id="23_4ni07"]
 [ext_resource type="Script" uid="uid://ckedmoevht7w4" path="res://Components/SelectionManager.cs" id="24_u8v8j"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tuyoq"]
@@ -420,6 +420,7 @@ script = ExtResource("14_f1ej7")
 
 [node name="Knockback" type="Node" parent="CoreComponents" unique_id=1466644045]
 script = ExtResource("16_qfm1y")
+KnockbackForce = 150.0
 
 [node name="SelectionManager" type="Node" parent="CoreComponents" unique_id=1334158924]
 script = ExtResource("24_u8v8j")
@@ -441,7 +442,6 @@ script = ExtResource("21_ke2ow")
 
 [node name="Stagger" type="Node" parent="StateMachine" unique_id=1936291366]
 script = ExtResource("22_ujl30")
-StaggerDuration = 0.25
 
 [node name="Attack" type="Node" parent="StateMachine" unique_id=759954878]
 script = ExtResource("23_4ni07")

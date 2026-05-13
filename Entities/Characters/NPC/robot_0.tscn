@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://dsftw85vqphm"]
 
 [ext_resource type="Texture2D" uid="uid://ce2ynpmy6e6al" path="res://Sprites/robot.png" id="1_8kwrt"]
-[ext_resource type="Script" uid="uid://dbuahw42jt40u" path="res://Entities/NPC/Robot0.cs" id="1_w0dvl"]
+[ext_resource type="Script" uid="uid://dbuahw42jt40u" path="res://Entities/Characters/NPC/Robot0.cs" id="1_w0dvl"]
 [ext_resource type="Script" uid="uid://bq7kokxio5iif" path="res://Components/AnimationController.cs" id="2_edo0t"]
 [ext_resource type="Script" uid="uid://cdpj2qq7mig3y" path="res://Components/HurtboxComponent.cs" id="3_jt7hj"]
 [ext_resource type="Script" uid="uid://bmgna558so5yc" path="res://Components/MovementComponent.cs" id="5_wxql2"]
 [ext_resource type="Script" uid="uid://c36x6ft31psxx" path="res://Components/HealthComponent.cs" id="6_utrwa"]
 [ext_resource type="PackedScene" uid="uid://co8hoc0oc4bbb" path="res://Entities/shadow.tscn" id="7_utrwa"]
 [ext_resource type="Script" uid="uid://e760loqgo1xv" path="res://Core/StateMachine.cs" id="8_hiucr"]
-[ext_resource type="Script" path="res://Entities/States/MoveState.cs" id="9_28whl"]
-[ext_resource type="Script" path="res://Entities/States/IdleState.cs" id="10_mv5oq"]
-[ext_resource type="Script" path="res://Entities/States/DeadState.cs" id="11_f2n1b"]
-[ext_resource type="Script" path="res://Entities/States/AttackState.cs" id="12_28whl"]
+[ext_resource type="Script" uid="uid://duk0g0q4dptjl" path="res://Entities/States/MoveState.cs" id="9_28whl"]
+[ext_resource type="Script" uid="uid://ce7o5awws5g72" path="res://Entities/States/IdleState.cs" id="10_mv5oq"]
+[ext_resource type="Script" uid="uid://clil3axu6agjw" path="res://Entities/States/DeadState.cs" id="11_f2n1b"]
+[ext_resource type="Script" uid="uid://pfxbe0leq6ls" path="res://Entities/States/AttackState.cs" id="12_28whl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0

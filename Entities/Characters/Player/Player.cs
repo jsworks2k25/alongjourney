@@ -1,4 +1,4 @@
-namespace AlongJourney.Entities.Player;
+namespace AlongJourney.Entities.Characters.Player;
 
 using Godot;
 using AlongJourney.Entities;

@@ -2,7 +2,7 @@ namespace AlongJourney.Core;
 
 using System.Collections.Generic;
 using Godot;
-using AlongJourney.Entities.Player;
+using AlongJourney.Entities.Characters.Player;
 
 /// <summary>
 /// Tracks players by stable local ids. This is intentionally network-free; peer
