@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfjnx5ftj1jel"
-path="res://.godot/imported/rock.png-452459abe115d9c157b550a0a19ea60e.ctex"
+uid="uid://d2jrjqooup2hf"
+path="res://.godot/imported/template-rear-stand-Sheet.png-df0dafc7de677da551258bdff6d20d3a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/rock.png"
-dest_files=["res://.godot/imported/rock.png-452459abe115d9c157b550a0a19ea60e.ctex"]
+source_file="res://Sprites/template-rear-stand-Sheet.png"
+dest_files=["res://.godot/imported/template-rear-stand-Sheet.png-df0dafc7de677da551258bdff6d20d3a.ctex"]
 
 [params]
 

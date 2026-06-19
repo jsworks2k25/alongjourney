@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://dn7g7y5rj061w"]
+
+[ext_resource type="Texture2D" uid="uid://dgtpa1sjyvts1" path="res://Sprites/cannon.png" id="1_cannon"]
+[ext_resource type="Script" uid="uid://d4myvi38npjan" path="res://Entities/Environment/CannonTower.cs" id="2_script"]
+[ext_resource type="Script" uid="uid://ctw367l0bf7om" path="res://Components/BuildingFootprint.cs" id="3_footprint"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_footprint"]
+radius = 12.0
+height = 50.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_range"]
+radius = 120.0
+
+[node name="CannonTower" type="StaticBody2D" unique_id=1847293105 node_paths=PackedStringArray("_rangeArea", "_sprite")]
+y_sort_enabled = true
+collision_layer = 8
+collision_mask = 0
+collision_priority = 3.0
+script = ExtResource("2_script")
+_rangeArea = NodePath("RangeArea")
+_sprite = NodePath("Sprite2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=912847651]
+y_sort_enabled = true
+texture_filter = 1
+texture = ExtResource("1_cannon")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=-447676240]
+position = Vector2(0, 12)
+rotation = -1.5707964
+shape = SubResource("CapsuleShape2D_footprint")
+
+[node name="BuildingFootprint" type="Node" parent="." unique_id=-1447774240]
+script = ExtResource("3_footprint")
+Tiles = Vector2i(2, 2)
+
+[node name="RangeArea" type="Area2D" parent="." unique_id=1334136551]
+collision_layer = 0
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeArea" unique_id=-1298886030]
+shape = SubResource("CircleShape2D_range")

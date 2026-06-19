@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cqblmfm7y7nr8"]
 
 [ext_resource type="Texture2D" uid="uid://4grxu08rrs20" path="res://Sprites/table0.png" id="1_ieov4"]
+[ext_resource type="Script" uid="uid://bldfootprint01" path="res://Components/BuildingFootprint.cs" id="2_footprint"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v3n4c"]
 radius = 3.0
@@ -18,3 +19,7 @@ offset = Vector2(0, -8)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=315585755]
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_v3n4c")
+
+[node name="BuildingFootprint" type="Node" parent="." unique_id=1378618976]
+script = ExtResource("2_footprint")
+Tiles = Vector2i(1, 1)

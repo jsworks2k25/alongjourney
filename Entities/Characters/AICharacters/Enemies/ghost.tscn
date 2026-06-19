@@ -193,7 +193,7 @@ metadata/_aseprite_wizard_config_ = {
 "player": "AnimationPlayer",
 "scale": "1.0",
 "slice": "",
-"source": "res://sprites/ghost_45back.aseprite",
+"source": "res://Sprites/ghost_45back.aseprite",
 "source_uid": 1830734069883474141
 }
 

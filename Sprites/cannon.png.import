@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3oensniyq6dx"
-path="res://.godot/imported/die-Sheet.png-941674a2653fd2ace7b13bf58a69563e.ctex"
+uid="uid://dgtpa1sjyvts1"
+path="res://.godot/imported/cannon.png-78041ff26400794dee06505687821633.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/die-Sheet.png"
-dest_files=["res://.godot/imported/die-Sheet.png-941674a2653fd2ace7b13bf58a69563e.ctex"]
+source_file="res://Sprites/cannon.png"
+dest_files=["res://.godot/imported/cannon.png-78041ff26400794dee06505687821633.ctex"]
 
 [params]
 

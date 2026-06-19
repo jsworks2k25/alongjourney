@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bi46nx5h1fl8w"
-path="res://.godot/imported/template-rear-run-Sheet.png-2fe7b8579cae92512794d8fd5fc800bf.ctex"
+uid="uid://cov0qd3hxsgpp"
+path="res://.godot/imported/spritesheet.png-8d1e45e7c563b1fc59afddcd8efeb8ef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/template-rear-run-Sheet.png"
-dest_files=["res://.godot/imported/template-rear-run-Sheet.png-2fe7b8579cae92512794d8fd5fc800bf.ctex"]
+source_file="res://Sprites/spritesheet.png"
+dest_files=["res://.godot/imported/spritesheet.png-8d1e45e7c563b1fc59afddcd8efeb8ef.ctex"]
 
 [params]
 

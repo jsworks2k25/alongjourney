@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ce2ynpmy6e6al"
-path="res://.godot/imported/robot.png-76da536eef95e5b76be8d1b90128b52d.ctex"
+uid="uid://dkqoh1xg07isi"
+path="res://.godot/imported/die-Sheet.png-941674a2653fd2ace7b13bf58a69563e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/robot.png"
-dest_files=["res://.godot/imported/robot.png-76da536eef95e5b76be8d1b90128b52d.ctex"]
+source_file="res://Sprites/die-Sheet.png"
+dest_files=["res://.godot/imported/die-Sheet.png-941674a2653fd2ace7b13bf58a69563e.ctex"]
 
 [params]
 
