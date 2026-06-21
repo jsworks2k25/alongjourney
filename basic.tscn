@@ -10,11 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://dgl0m2dggs3ef" path="res://Entities/Environment/rock.tscn" id="9_rv4ag"]
 [ext_resource type="PackedScene" uid="uid://df01wn734v1rp" path="res://Entities/Environment/tree_0.tscn" id="10_7t5rf"]
 [ext_resource type="PackedScene" uid="uid://bjmid78a1unwj" path="res://Entities/Characters/AICharacters/Enemies/ghost.tscn" id="11_cmjf8"]
-[ext_resource type="Script" uid="uid://xu314j1ccu3" path="res://Core/BuildingSystem.cs" id="12_t15vj"]
+[ext_resource type="Script" uid="uid://dvq8ka8plnyco" path="res://Core/BuildingSystem.cs" id="12_t15vj"]
 [ext_resource type="PackedScene" path="res://UI/Inventory/game_inventory_ui.tscn" id="13_ui"]
-[ext_resource type="PackedScene" uid="uid://dn7g7y5rj061w" path="res://Entities/Environment/cannon_tower.tscn" id="14_cannon"]
 [ext_resource type="PackedScene" uid="uid://bv7w50a7e6hhv" path="res://Entities/Environment/bonfire.tscn" id="15_bonfire"]
-[ext_resource type="Script" uid="uid://c8mgwao4oj8nt" path="res://Core/NavigationGrid.cs" id="16_navgrid"]
+[ext_resource type="Script" uid="uid://chjwksos0a53t" path="res://Core/NavigationGrid.cs" id="16_navgrid"]
 
 [sub_resource type="Resource" id="Resource_tglyx"]
 script = ExtResource("4_o6kd5")
@@ -190,7 +189,7 @@ top_level = true
 scale = Vector2(2, 2)
 script = ExtResource("3_71jiy")
 priority = 10
-follow_mode = 2
+follow_mode = 5
 follow_target = NodePath("../ObjectLayer/Player")
 zoom = Vector2(3, 3)
 tween_resource = SubResource("Resource_tglyx")
@@ -199,7 +198,7 @@ dead_zone_width = 0.02
 dead_zone_height = 0.01
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
-[node name="GoundLayer" type="TileMapLayer" parent="." unique_id=1292698329]
+[node name="GroundLayer" type="TileMapLayer" parent="." unique_id=1292698329]
 z_index = -1
 y_sort_enabled = true
 texture_filter = 1
@@ -234,19 +233,16 @@ collision_priority = 3.0
 position = Vector2(166, -126)
 collision_mask = 1
 
-[node name="CannonTower" parent="ObjectLayer" unique_id=592801858 instance=ExtResource("14_cannon")]
-position = Vector2(48, -32)
-
 [node name="BuildingSystem" type="Node2D" parent="." unique_id=7709074 node_paths=PackedStringArray("GroundLayer", "ObjectLayer")]
 y_sort_enabled = true
 script = ExtResource("12_t15vj")
-GroundLayer = NodePath("../GoundLayer")
+GroundLayer = NodePath("../GroundLayer")
 ObjectLayer = NodePath("../ObjectLayer")
 
 [node name="NavigationGrid" type="Node2D" parent="." unique_id=1471158076 node_paths=PackedStringArray("GroundLayer", "ObjectLayer")]
 z_index = 10
 script = ExtResource("16_navgrid")
-GroundLayer = NodePath("../GoundLayer")
+GroundLayer = NodePath("../GroundLayer")
 ObjectLayer = NodePath("../ObjectLayer")
 
 [node name="GameInventoryUI" parent="." unique_id=2100186627 instance=ExtResource("13_ui")]
