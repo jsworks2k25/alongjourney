@@ -8,12 +8,14 @@ public partial class AICharacter : Actor
 {
     [Export] public float Speed = 50f;
     private ChaseTargetMovement _chaseMovement;
+    private GridChaseMovement _gridChaseMovement;
 
     public override void _Ready()
     {
         base._Ready();
 
         _chaseMovement = GetNodeOrNull<ChaseTargetMovement>("ChaseTargetMovement");
+        _gridChaseMovement = GetNodeOrNull<GridChaseMovement>("GridChaseMovement");
 
         if (HealthComponent != null)
         {
@@ -26,7 +28,15 @@ public partial class AICharacter : Actor
 
     public override void _PhysicsProcess(double delta)
     {
-        _chaseMovement?.PhysicsTick(delta);
+        if (_gridChaseMovement != null)
+        {
+            _gridChaseMovement.PhysicsTick(delta);
+        }
+        else
+        {
+            _chaseMovement?.PhysicsTick(delta);
+        }
+
         base._PhysicsProcess(delta);
     }
 

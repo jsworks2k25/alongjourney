@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://ce7o5awws5g72" path="res://Entities/States/IdleState.cs" id="10_mv5oq"]
 [ext_resource type="Script" uid="uid://clil3axu6agjw" path="res://Entities/States/DeadState.cs" id="11_f2n1b"]
 [ext_resource type="Script" uid="uid://pfxbe0leq6ls" path="res://Entities/States/AttackState.cs" id="12_28whl"]
+[ext_resource type="Script" uid="uid://gridchasemv01" path="res://Entities/Characters/AICharacters/GridChaseMovement.cs" id="13_gridchase"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0dvl"]
 radius = 4.0
@@ -113,14 +114,12 @@ _data = {
 &"move_front": SubResource("Animation_w0dvl")
 }
 
-[node name="Robot0" type="CharacterBody2D" unique_id=113230676 node_paths=PackedStringArray("_rayCast", "_moveTimer", "StateMachine", "HealthComponent", "AnimationController", "HurtboxComponent", "CollisionShape")]
+[node name="Robot0" type="CharacterBody2D" unique_id=113230676 node_paths=PackedStringArray("StateMachine", "HealthComponent", "AnimationController", "HurtboxComponent", "CollisionShape")]
 y_sort_enabled = true
 collision_layer = 4
 collision_mask = 2
 safe_margin = 0.2
 script = ExtResource("1_w0dvl")
-_rayCast = NodePath("RayCast2D")
-_moveTimer = NodePath("Timer")
 Speed = 20.0
 StateMachine = NodePath("StateMachine")
 HealthComponent = NodePath("CoreComponents/Health")
@@ -148,12 +147,9 @@ position = Vector2(0, -3)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_osokj")
 
-[node name="RayCast2D" type="RayCast2D" parent="." unique_id=555715957]
-position = Vector2(0, 7)
-collision_mask = 3
-
-[node name="Timer" type="Timer" parent="." unique_id=328474611]
-autostart = true
+[node name="GridChaseMovement" type="Node" parent="."]
+script = ExtResource("13_gridchase")
+UseBonfireGroup = true
 
 [node name="CoreComponents" type="Node" parent="." unique_id=710835562]
 
